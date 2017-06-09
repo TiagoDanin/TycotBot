@@ -11,8 +11,7 @@ def handle(msg):
     pnome = str(msg['from']['first_name'])#Primeiro nome
     chat_id = msg['chat']['id']#id do grupo
     chat_type = msg['chat']['type']
-    id_criador = str(73250866)
-
+    
     try:
         chat_title = str(msg['chat']['title'])
     except:
