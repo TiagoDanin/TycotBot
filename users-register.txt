@@ -1,0 +1,6 @@
+log [9/6/2017][0:15:23] | Username: dansenpir | ID: 186027472 | Comando usado: /start | Chat: private
+log [9/6/2017][0:17:40] | Username: dansenpir | ID: 186027472 | Comando usado: /start | Chat: private
+log [9/6/2017][0:17:40] | Username: chcdc | ID: 26720868 | Comando usado: /start | Chat: private
+log [9/6/2017][0:17:40] | Username:  | ID: 342612950 | Comando usado: /start | Chat: private
+log [9/6/2017][0:17:40] | Username: jairtontf | ID: 160589704 | Comando usado: /start | Chat: private
+log [9/6/2017][0:23:36] | Username: dansenpir | ID: 186027472 | Comando usado: /start | Chat: private
