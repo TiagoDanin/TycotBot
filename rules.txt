@@ -1,0 +1,24 @@
+GUIA DE CONDUTA:
+
+O membro levará BAN, caso:
+
+0. Induza membros, de alguma maneira, a não seguirem os itens a seguir;
+
+1. Divulgue materiais piratas, EHI, NetFree, Carding ou coisas semelhantes;
+1.1. Falar nisso, mesmo sem se aprofundar no assunto, algo como "baixei por torrent tal curso", também estará infringindo este item;
+
+2. Desrespeite algum membro;
+
+3. Envie SPAM (pornografia, correntes, etc...);
+ 
+O membro que levará WARN, caso:
+
+4. Divulgue qualquer conteúdo sem a autorização de um admin;
+
+5. Fale sobre assuntos que não condizem com o propósito do grupo;
+
+O membro levará KICK, caso:
+
+6. Floode (mais de 5 mensagens seguidas de um mesmo usuário no chat);
+
+7. Se torne um membro inativo;
