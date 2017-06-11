@@ -5,7 +5,7 @@ from telepot.loop import MessageLoop
 import json
 
 now = datetime.now()
-bot = telepot.Bot("386146227:AAHZX_y7hw4TQV3rAdaxtgJYKJ6ygGiaXfY")
+bot = telepot.Bot(input("TOKEN> "))
 updates = bot.getUpdates()
 print(updates)
 
