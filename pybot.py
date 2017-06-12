@@ -2,8 +2,6 @@ import telepot
 import time
 from datetime import datetime
 from telepot.loop import MessageLoop
-import json
-from html import escape
 
 now = datetime.now()
 bot = telepot.Bot("TOKEN")
@@ -12,15 +10,8 @@ print(updates)
 
 print("Bot inicializado!")
 
-
-def handle(msg): #Ainda faltam alguns dados a serem adicionados#
-    #Dados do usuário/bot
-    user_id = float(msg['from']['id']) #ID do usuário ou bot
-    first_name = str(msg['from']['first_name']) #Primeiro nome
-    #Dados do Chat
-    chat_id = float(msg['chat']['id']) #ID do chat
-    chat_type = str(msg['chat']['type']) #Tipo do bate-papo (privado, grupo...)
-
+def handle(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
 
     try:
         chat_title = str(msg['chat']['title'])
@@ -35,17 +26,25 @@ def handle(msg): #Ainda faltam alguns dados a serem adicionados#
     except:
         message_id = None
     try:
+        user_id = float(msg['from']['id'])
+    except:
+        user_id = 0.0
+    try:
+        first_name = str(msg['from']['first_name'])
+    except:
+        first_name = ''
+    try:
+        last_name = str(msg['from']['last_name'])
+    except:
+        last_name = ''
+    try:
         username = str(msg['from']['username'])
     except:
         username = ""
     try:
-        last_name = str(msg['from']['last_name'])
+        new_member = msg['new_chat_member']['first_name']
     except:
-        last_name = ""
-    try:
-        new_member = msg['new_chat_members']['first_name'+ ' last_name']
-    except:
-        new_member = ''
+        new_member = 'Novo Membro'
 
     day = str(now.day)
     month = str(now.month)
@@ -58,9 +57,13 @@ def handle(msg): #Ainda faltam alguns dados a serem adicionados#
     users = open('users-register.txt', 'a')
     log = open('log_comands.txt', 'a')
 
-    #welcome
-    if(content_type == 'new_chat_members'):
-         bot.sendMessage(chat_id,'welcome')
+    #boas-vindas
+    #corrigir o bug que ele dá boas vindas a si mesmo
+    if( content_type == 'new_chat_member'):
+        if('new_chat_member' == "@PygrameirosBot"):
+            bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
+        else:
+         bot.sendMessage(chat_id,'Seja bem vindo ao Pygrameiros, '+new_member+'!')
 
     if(chat_type == 'private'):
         if(text == '/start' or '/start@PygrameirosBot'):
@@ -71,18 +74,26 @@ def handle(msg): #Ainda faltam alguns dados a serem adicionados#
             users.write(str(" | Username: " + username + " | ID: " + str(user_id) + " | Comando usado: " + text + " | Chat: " + chat_type + "\n"))
             users.close()
             print("@"+username + " ("+ first_name + " " + last_name + ") " + " Iniciou o Bot - Dados salvos!")
-    elif(text == '/info' or text == '/info@PygrameirosBot'):
+    if(text == '/info' or text == '/info@PygrameirosBot'):
+        print(username + " usou o comando /info em: " + time)
         bot.sendMessage(str(chat_id), str("ID INFO \n\n NOME: " + username + " \n ID: " + str(user_id) + " \n NOME DO GRUPO: " + chat_title + " \n ID GROUP: " + str(chat_id)) ,reply_to_message_id=str(message_id))
         log.write(str("log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
         log.write(str(" | Username: " + username + " | ID: " + str(user_id) + " | Comando usado: " + text + " | ChatType: " + chat_type + " | Chat ID: " + str(chat_id) + "\n"))
         log.close()
         print("@"+username + " ("+ first_name + " " + last_name + ") " + " Usou o Bot! - Dados salvos!")
 
-    elif(text == '/members'):
-        members = getChatMembersCount()
-        bot.sendMessage(chat_id, members)
-    """elif texto == '/ban': #TheGrillo que fez, corrigir nome das variáveis depois#
-        nome = msg['reply_to_message_id']['from']['first_name'] reply_to_message_id = msg['reply_to_message']['from']['id']
+    if(text == '/link' or text == '/link@PygrameirosBot'):
+        print(username + " usou o comando /link em: " + time)
+        bot.sendMessage(chat_id, 'Nosso link é: https://goo.gl/m0h2eQ')
+
+    if(text == '/help' or text == '/help@PygrameirosBot'):
+        print(username + " usou o comando /help em: " + time)
+        bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info -> Informações do grupo\n/link -> Link do grupo')
+
+
+    if text == '/ban': #TheGrillo que fez, corrigir nome das variáveis depois#
+        print(username + " usou o comando /ban em: " + time)
+        """nome = msg['reply_to_message_id']['from']['first_name'] reply_to_message_id = msg['reply_to_message']['from']['id']
         admins = bot.getChatAdministrators(chat_id)
         adm_list = [adm['user']['id']
         for adm in admins]
