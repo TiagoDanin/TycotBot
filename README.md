@@ -1,12 +1,12 @@
 # Pygrameiros_bot
 
-# Descrição
+# DescriÃ§Ã£o
 
-Bot para funções administrativas de grupos do Telegram.
+Bot para funÃ§Ãµes administrativas de grupos do Telegram.
 
-# Grupo de desenvolvimento
+# Framework usada
 
-https://goo.gl/viQ9K0 
+telepot
 
 # Pygrameiros
 
