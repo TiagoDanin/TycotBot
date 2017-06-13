@@ -2,9 +2,10 @@ import telepot
 import time
 from datetime import datetime
 from telepot.loop import MessageLoop
+from pprint import pprint
 
 now = datetime.now()
-bot = telepot.Bot("TOKEN")
+bot = telepot.Bot("386146227:AAF4N7STU1GiaUw0WufAafiwN4KDnsG4AOw")
 updates = bot.getUpdates()
 print(updates)
 
@@ -57,13 +58,17 @@ def handle(msg):
     users = open('users-register.txt', 'a')
     log = open('log_comands.txt', 'a')
 
+
     #boas-vindas
     #corrigir o bug que ele dá boas vindas a si mesmo
     if( content_type == 'new_chat_member'):
-        if('new_chat_member' == "@PygrameirosBot"):
+        get_bot_name = bot.getMe()
+        bot_name = get_bot_name['first_name']
+        #bot_username = '@{}'.format(get_bot_name['username'])
+        if(new_member == bot_name):
             bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
         else:
-         bot.sendMessage(chat_id,'Seja bem vindo ao Pygrameiros, '+new_member+'!')
+            bot.sendMessage(chat_id,'Seja bem vindo ao Pygrameiros, '+new_member+'!')
 
     if(chat_type == 'private'):
         if(text == '/start' or '/start@PygrameirosBot'):
