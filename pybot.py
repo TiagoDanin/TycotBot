@@ -5,11 +5,31 @@ from telepot.loop import MessageLoop
 from pprint import pprint
 
 now = datetime.now()
-bot = telepot.Bot("386146227:AAF4N7STU1GiaUw0WufAafiwN4KDnsG4AOw")
+bot = telepot.Bot('TOKEN')
 updates = bot.getUpdates()
 print(updates)
 
 print("Bot inicializado!")
+def rules(msg):
+    if('/setrules' in (msg['text'])):
+        get_admins = bot.getChatAdministrators(msg['chat']['id'])
+        #admins_list = get_admins(['status'])
+        print(get_admins)
+        print('=====\n')
+        print(msg['chat']['id'])
+
+        """if('ChatMember' == "creator"):
+            print(username + " usou o comando /rules em: " + time)
+            text = text.replace("/setrules ", "")
+            rules = open('rules.txt', 'w')
+            rules.write(text)
+            rules.close()
+            bot.sendMessage(msg['chat']['id'], "As novas regras foram salvas com sucesso!")"""
+
+    if((msg['text']) == "/rules"):
+        rules = open('rules.txt', 'r')
+        rules = rules.read()
+        bot.sendMessage(msg['chat']['id'], rules)
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -46,6 +66,10 @@ def handle(msg):
         new_member = msg['new_chat_member']['first_name']
     except:
         new_member = 'Novo Membro'
+    try:
+        chat_member = str(msg['chat_member']['status'])
+    except:
+        chat_member = "member"
 
     day = str(now.day)
     month = str(now.month)
@@ -58,7 +82,7 @@ def handle(msg):
     users = open('users-register.txt', 'a')
     log = open('log_comands.txt', 'a')
 
-
+    rules(msg)
     #boas-vindas
     #corrigir o bug que ele dá boas vindas a si mesmo
     if( content_type == 'new_chat_member'):
@@ -94,17 +118,6 @@ def handle(msg):
     if(text == '/help' or text == '/help@PygrameirosBot'):
         print(username + " usou o comando /help em: " + time)
         bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info -> Informações do grupo\n/link -> Link do grupo')
-
-
-    if text == '/ban': #TheGrillo que fez, corrigir nome das variáveis depois#
-        print(username + " usou o comando /ban em: " + time)
-        """nome = msg['reply_to_message_id']['from']['first_name'] reply_to_message_id = msg['reply_to_message']['from']['id']
-        admins = bot.getChatAdministrators(chat_id)
-        adm_list = [adm['user']['id']
-        for adm in admins]
-        if (chat_id in adm_list):
-            if reply_to_message_id not in adm_list:
-                bot.sendMessage(chat_id, "*%s* foi banido" %(nome), parse_mode="Markdown") bot.kickChatMember(chat_id, reply_id) else: bot.sendMessage(chat_id, '*%s* é adm do grupo' %(nome), "Markdown" ) elif from_id not in adm_list: bot.sendMessage(chat_id, 'não quelu 😆')"""
 
 MessageLoop(bot, handle).run_as_thread()
 while 1:
