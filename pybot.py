@@ -5,7 +5,7 @@ from telepot.loop import MessageLoop
 from pprint import pprint
 
 now = datetime.now()
-bot = telepot.Bot(str(input('TOKEN> ')))
+bot = telepot.Bot(input('TOKEN> '))
 updates = bot.getUpdates()
 print(updates)
 
