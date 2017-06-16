@@ -98,7 +98,7 @@ def commands(msg):
         bot.sendMessage(str(chat_id), str("ID INFO \n\n NOME: " + str(msg['from']['username']) + " \n ID: " + str(msg['from']['id']) + " \n NOME DO GRUPO: " + str(msg['chat']['title']) + " \n ID GROUP: " + str(chat_id)))
 
     if(text == '/link' or text == '/link@PygrameirosBot'):
-        bot.sendMessage(chat_id, 'Nosso link é: https://goo.gl/m0h2eQ')
+        bot.sendMessage(chat_id, 'Aqui está o [link do bot](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)', parse_mode="Markdown")
         log(msg)
 
     if(text == '/help' or text == '/help@PygrameirosBot'):
