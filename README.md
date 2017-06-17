@@ -8,6 +8,6 @@ Bot para funções administrativas de grupos do Telegram.
 
 telepot
 
-# Pygrameiros
+# Pygrameiros no Telegram
 
 https://goo.gl/m0h2eQ 
