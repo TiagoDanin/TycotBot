@@ -4,7 +4,7 @@ from datetime import datetime
 from telepot.loop import MessageLoop
 
 now = datetime.now()
-bot = telepot.Bot("TOKEN")
+bot = telepot.Bot("435414159:AAGGST7VegBfad_3MIVjoIe53FDGkOuMfG0")
 updates = bot.getUpdates()
 print(updates)
 
@@ -60,7 +60,7 @@ def handle(msg):
     #boas-vindas
     #corrigir o bug que ele dá boas vindas a si mesmo
     if( content_type == 'new_chat_member'):
-        if('new_chat_member' == "@PygrameirosBot"):
+        if('new_chat_member' == "@Dialup_bot"):
             bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
         else:
          bot.sendMessage(chat_id,'Seja bem vindo ao Pygrameiros, '+new_member+'!')
