@@ -196,7 +196,6 @@ def commands(msg):
 		else:
 			bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')"""
 
-
 def handle(msg):
 	log(msg)
 	commands(msg)
