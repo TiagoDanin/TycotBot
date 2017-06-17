@@ -1,3 +1,9 @@
+'''
+    * Install python3+++
+    * Use Teleport API
+    * Configure seu bot
+'''
+
 import telepot
 import time
 from datetime import datetime
