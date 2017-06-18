@@ -2,10 +2,9 @@ import telepot
 import time
 from datetime import datetime
 from telepot.loop import MessageLoop
-from pprint import pprint
 
 now = datetime.now()
-bot = telepot.Bot(input('TOKEN> '))
+bot = telepot.Bot('TOKEN')
 updates = bot.getUpdates()
 print(updates)
 
@@ -14,7 +13,7 @@ print("Bot inicializado!")
 
 def welcome(msg):  # AJUSTAR AS BOAS-VINDAS
     content_type, chat_type, chat_id = telepot.glance(msg)
-    text = str(msg['text'])
+    text = msg['text']
     try:
         new_member = msg['new_chat_member']['first_name']
     except:
@@ -42,7 +41,7 @@ def welcome(msg):  # AJUSTAR AS BOAS-VINDAS
 
 
 def rules(msg):
-    text = str(msg['text'])
+    text = msg['text']
     if(text[0:9] == "/setrules"):
         user_id = msg['from']['id']
         admins = bot.getChatAdministrators(msg['chat']['id'])
@@ -75,7 +74,8 @@ def log(msg):
 
     if(text == '/start' or text == '/start@PygrameirosBot'):
         users_register.write("log [{day}/{month}/{year}][{hour}:{minute}:{second}]"
-                             .format(day, month, year, hour, minute, second))
+                             .format(day=day, month=month, year=year,
+                                     hour=hour, minute=minute, second=second))
 
         users_register.write(" | Username: {user} | ID: {id} | Comando usado: {comando}\n"
                              .format(user=msg['from']['username'], id=msg['from']['id'],
@@ -86,7 +86,8 @@ def log(msg):
 
     else:
         log.write("log [{day}/{month}/{year}][{hour}:{minute}:{second}]"
-                  .format(day, month, year, hour, minute, second))
+                  .format(day=day, month=month, year=year,
+                          hour=hour, minute=minute, second=second))
 
         log.write(" | Username: {user} | ID: {id} | Comando usado: {comando}\n"
                   .format(user=msg['from']['username'], id=msg['from']['id'], comando=msg['text']))
