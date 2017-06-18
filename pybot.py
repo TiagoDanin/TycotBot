@@ -4,7 +4,7 @@ from datetime import datetime
 from telepot.loop import MessageLoop
 
 now = datetime.now()
-bot = telepot.Bot(input('TOKEN> '))
+bot = telepot.Bot('TOKEN')
 updates = bot.getUpdates()
 print(updates)
 
@@ -196,11 +196,58 @@ def commands(msg):
 		else:
 			bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')"""
 
+    """if('/warn' in text): #AJUSTAR ESSA LÓGICA
+        user_id = msg['from']['id']
+        user = msg['reply_to_message']['from']['first_name']
+        reply_id = msg['reply_to_message']['from']['id']
+        admins = bot.getChatAdministrators(chat_id)
+        adm_list = [adm['user']['id'] for adm in admins]
+        if (user_id in adm_list):
+            if(reply_id not in adm_list):
+                with open('warn.txt', 'r') as file:
+                    add = False
+                    line = 0
+                    warn = file.read()
+                    x = conteudo.split('\n')
+                    line_count = 0
+                    for line in x:
+                        line_count += 1
+                        if line.split('|') == str(user_id):
+                            count = int(line.split('|')
+                            add = True
+                            break
+                    file.close()
+                    if not add:
+                        with open('warn.txt', 'a') as file:
+                            file.write(str(user_id) + '|' + user + '|0\n')
+                            file.close()
+                            return
+                with open('warn.txt', 'w') as file:
+                    if add == True:
+                        count += 1
+                    else:
+                        count -= 1
+                        line_count1 = 0
+                    for line in x:
+                        line_count1 += 1
+                        if line_count == line_count1:
+                            x[line_count1 - 1] = str(line.split('|')[0]) + '|' + str(line.split('|')[1]) + '|' + str(count)
+                            content = ''
+                            for item in x:
+                                content += item + '\n'
+                                file.write(content)
+            else:
+                bot.sendMessage(chat_id, '*%s* é um dos administradores. Não tenho poderes para advertir ele.' % (user), "Markdown" )
+        else:
+            bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')"""
+
+
 def handle(msg):
 	log(msg)
 	commands(msg)
 	welcome(msg)
 	rules(msg)
+
 
 MessageLoop(bot, handle).run_as_thread()
 while 1:
