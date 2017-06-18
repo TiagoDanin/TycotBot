@@ -11,7 +11,8 @@ print(updates)
 
 print("Bot inicializado!")
 
-def welcome(msg): #AJUSTAR AS BOAS-VINDAS
+
+def welcome(msg):  # AJUSTAR AS BOAS-VINDAS
     content_type, chat_type, chat_id = telepot.glance(msg)
     text = str(msg['text'])
     try:
@@ -22,11 +23,11 @@ def welcome(msg): #AJUSTAR AS BOAS-VINDAS
     if(content_type == 'new_chat_member'):
         get_bot_name = bot.getMe()
         bot_name = get_bot_name['first_name']
-        #bot_username = '@{}'.format(get_bot_name['username'])
+        # bot_username = '@{}'.format(get_bot_name['username'])
         if(new_member == bot_name):
             bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
         else:
-            bot.sendMessage(chat_id,'Seja bem vindo ao Pygrameiros, '+new_member+'!')
+            bot.sendMessage(chat_id, 'Seja bem vindo ao Pygrameiros, {}!'.format(new_member))
 
     if(text[0:8] == "/welcome"):
         user_id = msg['from']['id']
@@ -38,6 +39,7 @@ def welcome(msg): #AJUSTAR AS BOAS-VINDAS
             welcome.write(text)
             welcome.close()
             bot.sendMessage(chat_id, "As novas mensagens de boas-vindas foram alteradas com sucesso!")
+
 
 def rules(msg):
     text = str(msg['text'])
@@ -57,6 +59,7 @@ def rules(msg):
             rules = rules.read()
             bot.sendMessage(msg['chat']['id'], rules)
 
+
 def log(msg):
     day = str(now.day)
     month = str(now.month)
@@ -71,16 +74,26 @@ def log(msg):
     text = str(msg['text'])
 
     if(text == '/start' or text == '/start@PygrameirosBot'):
-        users_register.write(str("log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
-        users_register.write(str(" | Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + str(msg['text']) + "\n"))
+        users_register.write("log [{day}/{month}/{year}][{hour}:{minute}:{second}]"
+                             .format(day, month, year, hour, minute, second))
+
+        users_register.write(" | Username: {user} | ID: {id} | Comando usado: {comando}\n"
+                             .format(user=msg['from']['username'], id=msg['from']['id'],
+                                     comando=msg['text']))
         users_register.close()
-        print("@"+ str(msg['from']['username']) + " Iniciou o Bot - Dados salvos!")
+
+        print("@{user} Iniciou o Bot - Dados salvos!".format(user=msg['from']['username']))
 
     else:
-        log.write(str("log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
-        log.write(str(" | Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + str(msg['text']) + " | ChatType: " + str(chat_type) + " | Chat ID: " + str(chat_id) + "\n"))
+        log.write("log [{day}/{month}/{year}][{hour}:{minute}:{second}]"
+                  .format(day, month, year, hour, minute, second))
+
+        log.write(" | Username: {user} | ID: {id} | Comando usado: {comando}\n"
+                  .format(user=msg['from']['username'], id=msg['from']['id'], comando=msg['text']))
+
         log.close()
-        print("@"+ str(msg['from']['username']) + " Usou o Bot! - Dados salvos!")
+        print("@{user} Usou o Bot - Dados salvos!".format(user=msg['from']['username']))
+
 
 def commands(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -91,20 +104,28 @@ def commands(msg):
 
     if(chat_type == 'private'):
         if(text == '/start' or text == '/start@PygrameirosBot'):
-            bot.sendMessage(chat_id, "Olá, eu sou o PygrameirosBot!\nFui criado pela galera do Pygrameiros para te ajudar a administrar teu grupo!")
-            #log(msg)
+            bot.sendMessage(chat_id, ("Olá, eu sou o PygrameirosBot!"
+                                      "\nFui criado pela galera do Pygrameiros para te ajudar"
+                                      " a administrar teu grupo!"))
+            # log(msg)
 
     if(text == '/info' or text == '/info@PygrameirosBot'):
-        bot.sendMessage(str(chat_id), str("ID INFO \n\n NOME: " + str(msg['from']['username']) + " \n ID: " + str(msg['from']['id']) + " \n NOME DO GRUPO: " + str(msg['chat']['title']) + " \n ID GROUP: " + str(chat_id)))
+        bot.sendMessage(chat_id, ("ID INFO \n\n NOME: {nome} "
+                                  "\n ID: {id} \n NOME DO GRUPO: {nomeGrupo} "
+                                  "\n ID GROUP: {idGrupo}").format(nome=msg['from']['username'],
+                                                                   id=msg['from']['id'],
+                                                                   nomeGrupo=msg['chat']['title'],
+                                                                   idGrupo=chat_id))
 
     if(text == '/link' or text == '/link@PygrameirosBot'):
         bot.sendMessage(chat_id, 'Nosso link é: https://goo.gl/m0h2eQ')
         log(msg)
 
     if(text == '/help' or text == '/help@PygrameirosBot'):
-        bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info -> Informações do grupo\n/link -> Link do grupo')
+        bot.sendMessage(chat_id, ('Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n'
+                                  '/info -> Informações do grupo\n/link -> Link do grupo'))
         log(msg)
-    ###ADMINS COMMANDS###
+    ###  ADMINS COMMANDS  ###
     if(text == '/ban' or text == '/ban@PygrameirosBot'):
         user_id = msg['from']['id']
         user = msg['reply_to_message']['from']['first_name']
@@ -113,10 +134,10 @@ def commands(msg):
         adm_list = [adm['user']['id'] for adm in admins]
         if (user_id in adm_list):
             if reply_id not in adm_list:
-                bot.sendMessage(chat_id, "*%s* foi banido" %(user), parse_mode="Markdown")
+                bot.sendMessage(chat_id, "*{}* foi banido".format(user), parse_mode="Markdown")
                 bot.kickChatMember(chat_id, reply_id)
             else:
-                bot.sendMessage(chat_id, '*%s* é adm do grupo' % (user), "Markdown" )
+                bot.sendMessage(chat_id, '*{}* é adm do grupo'.format(user), "Markdown")
         else:
             bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')
 
@@ -128,18 +149,21 @@ def commands(msg):
             adm_list = [adm['user']['id'] for adm in admins]
             if (user_id in adm_list):
                 if reply_id not in adm_list:
-                    bot.sendMessage(chat_id, "*%s* foi retirado do grupo." %(user), parse_mode="Markdown")
+                    bot.sendMessage(chat_id, "*{}* foi retirado do grupo.".format(user),
+                                    parse_mode="Markdown")
                     bot.kickChatMember(chat_id, reply_id)
                 else:
-                    bot.sendMessage(chat_id, '*%s* é adm do grupo' % (user), "Markdown" )
+                    bot.sendMessage(chat_id, '*{}* é adm do grupo'.format(user), "Markdown")
             else:
                 bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')
+
 
 def handle(msg):
     log(msg)
     commands(msg)
     welcome(msg)
     rules(msg)
+
 
 MessageLoop(bot, handle).run_as_thread()
 while 1:
