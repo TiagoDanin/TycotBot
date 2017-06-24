@@ -1,56 +1,59 @@
-#importando as libs necessárias para o funcionamento do bot
-import telepot #framework utilizada
+
+import telepot
 import time
+import logging
+import sys
 from datetime import datetime
 from telepot.loop import MessageLoop
 
-now = datetime.now() #setando o horário no momento
-bot = telepot.Bot(input('TOKEN> ')) #fazendo a comunicação com a API do Telegram via TOKEN
-updates = bot.getUpdates() #Recebendo updates de mensagens recebidas enquanto o bot estava offline
-print(updates) #exibindo os updates
+now = datetime.now()
 
-print("Bot inicializado!") #mensagem exibida ao iniciar o bot
+TOKEN = sys.argv[1]
+bot = telepot.Bot(TOKEN) #fazendo a comunicação com a API do Telegram via TOKEN
+updates = bot.getUpdates()
+print(updates)
 
-def welcome(msg): #função de boas-vindas
-	chat_id = telepot.glance(msg) #definindo o chat_id
-	#tratamento para o text; devido a alguns erros, tive que definir desta forma
+print("Bot inicializado!")
+
+def welcome(msg):
+	chat_id = telepot.glance(msg)
 	try:
 		text = str(msg['text'])
 	except:
 		text = ''
 
-	if(text.startswith('/welcome')): #caso o text inicie com /welcome...
-		first_name = str(msg['from']['first_name']) #pegando o primeiro nome do usuário que enviou o 'text'
-		user_id = msg['from']['id'] #pegando o ID do usuário que enviou o 'text'
-		admins = bot.getChatAdministrators(msg['chat']['id']) #pegando os admins do grupo
-		adm_list = [adm['user']['id'] for adm in admins] #rodando a lista dos admins...
-		if (user_id in adm_list): #caso o ID do usuário esteja na lista dos admins, este código entra em execução
-			text = text.replace("/welcome ", "") #retirando o '/welcome' do início do 'text'...
-			welcome = open('welcome.txt', 'w') #abrindo o arquivo onde é salvo as boas-vindas
-			welcome.write(text) #gravando o 'text' no arquivo que abrimos
-			welcome.close() #fechando o arquivo
-			bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!") #o bot envia uma mensagem que foi concluido com sucesso ao grupo
-		else: #caso o usuário não esteja na lista de admins...
-			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.") #o bot envia uma mensagem falando que o usuário não tem poderes para tal comando
+	if(text.startswith('/welcome')):
+		first_name = str(msg['from']['first_name'])
+		user_id = msg['from']['id']
+		admins = bot.getChatAdministrators(msg['chat']['id'])
+		adm_list = [adm['user']['id'] for adm in admins]
+		if (user_id in adm_list):
+			text = text.replace("/welcome ", "")
+			welcome = open('welcome.txt', 'w')
+			welcome.write(text)
+			welcome.close()
+			bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
+		else:
+			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.")
 
-	if ('new_chat_member' in msg): #caso nas mensagens do grupo esteja um novo membro...
-		user_first_name = msg['new_chat_member']['first_name'] #pegando o primeiro nome do novo membro
-		user_last_name = msg['new_chat_member']['last_name'] #pegando o último nome do novo membro
+	if ('new_chat_member' in msg):
+		user_first_name = msg['new_chat_member']['first_name']
+		user_last_name = msg['new_chat_member']['last_name']
 		#username = '@{}'.format(msg['new_chat_member']['username'])
-		get_bot_name = bot.getMe() #pegando os dados do bot
-		bot_name = get_bot_name['first_name'] #pegando o primeiro nome do bot
+		get_bot_name = bot.getMe()
+		bot_name = get_bot_name['first_name']
 		#bot_username = '@{}'.format(get_bot_name['username'])
-		if(user_first_name == bot_name): #caso o o novo membro seja o próprio bot...
-			bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!') #o bot envia uma mensagem de "hello"
-		else: #caso não seja o bot o novo membro...
-			welcome = open('welcome.txt', 'r') #abrindo o arquivo de boas-vindas
-			welcome = welcome.read() #salvando o arquivo numa string
-			welcome = welcome.replace("$name", user_first_name) #trocando $name pelo primeiro nome do novo membro
-			welcome = welcome.replace('$surname', user_last_name) #trocando o $surname pelo último nome do novo membro
+		if(user_first_name == bot_name):
+			bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
+		else:
+			welcome = open('welcome.txt', 'r')
+			welcome = welcome.read()
+			welcome = welcome.replace("$name", user_first_name)
+			welcome = welcome.replace('$surname', user_last_name)
 			#welcome = welcome.replace('$username', username)
-			bot.sendMessage(msg['chat']['id'], welcome) #enviando as mensagens de boas-vindas ao novo membro
+			bot.sendMessage(msg['chat']['id'], welcome)
 
-def rules(msg): #função responsável pela definição e exibição das regras
+def rules(msg):
 	try:
 		text = str(msg['text'])
 	except:
@@ -74,7 +77,6 @@ def rules(msg): #função responsável pela definição e exibição das regras
 		bot.sendMessage(msg['chat']['id'], rules)
 
 def log(msg):
-	#definindo a data e horário
 	day = str(now.day)
 	month = str(now.month)
 	year = str(now.year)
@@ -89,20 +91,22 @@ def log(msg):
 		text = str(msg['text'])
 	except:
 		text = ''
-	#caso seja usado o comando '/start', é salvo um log de quando o usuário iniciou o bot
-	if(text.startswith('/start')):
-		users_register.write(str("log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
-		users_register.write(str(" | Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + text + "\n"))
-		users_register.close()
-		print("@"+ str(msg['from']['username']) + " Iniciou o Bot - Dados salvos!")
 
-	else:
-		log.write(str("log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
-		log.write(str(" | Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + text + " | ChatType: " + str(chat_type) + " | Chat ID: " + str(chat_id) + "\n"))
+	if(text.startswith('/start')):
+		logging.basicConfig(filename='users_register.log', filemode='w', level=logging.INFO)
+		logging.info(str(" log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
+		logging.info(str("| Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + text + "\n"))
+		"""users_register.close()
+		print("@"+ str(msg['from']['username']) + " Iniciou o Bot - Dados salvos!")"""
+
+	elif(text.startswith('/') and text != '/start'):
+		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
+		logging.info(str(" log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
+		logging.info(str("| Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + text + " | ChatType: " + str(chat_type) + " | Chat ID: " + str(chat_id) + "\n"))
 		log.close()
 		print("@"+ str(msg['from']['username']) + " Usou o Bot! - Dados salvos!")
 
-def commands(msg): #função para interação com membros de grupos
+def commands(msg):
 	content_type, chat_type, chat_id = telepot.glance(msg)
 	try:
 		text = str(msg['text'])
@@ -150,7 +154,7 @@ def commands(msg): #função para interação com membros de grupos
 		else:
 			bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')
 
-def handle(msg): #função principal, responsável por rodar todas as demais
+def handle(msg):
 	try:
 		text = msg['text']
 	except:
