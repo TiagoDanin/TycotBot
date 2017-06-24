@@ -103,7 +103,6 @@ def log(msg):
 		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
 		logging.info(str(" log [" + day + "/" + month + "/" + year + "][" + hour + ":" + minute + ":" + second + "]"))
 		logging.info(str("| Username: " + str(msg['from']['username']) + " | ID: " + str(msg['from']['id']) + " | Comando usado: " + text + " | ChatType: " + str(chat_type) + " | Chat ID: " + str(chat_id) + "\n"))
-		log.close()
 		print("@"+ str(msg['from']['username']) + " Usou o Bot! - Dados salvos!")
 
 def commands(msg):
