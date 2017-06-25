@@ -47,7 +47,12 @@ def welcome(msg):
 				welcome = welcome.replace('$surname', user_last_name)
 				#welcome = welcome.replace('$username', username)
 				bot.sendMessage(msg['chat']['id'], welcome)
-
+				
+def goodbye(msg):
+    if('left_chat_member' in msg):
+        user_first_name = str(msg['left_chat_member']['first_name'])
+        bot.sendMessage(msg['chat']['id'], "Tchau, %s" %user_first_name)
+        bot.sendVideo(msg['chat']['id'], "https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4")
 
 def rules(msg):
 	try:
@@ -185,6 +190,7 @@ def handle(msg):
 	log(msg)
 	commands(msg)
 	welcome(msg)
+	goodbye(msg)
 	rules(msg)
 
 MessageLoop(bot, handle).run_as_thread()
