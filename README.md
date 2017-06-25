@@ -11,9 +11,9 @@ Bot para funções administrativas de grupos do Telegram.
 --
 
 ### Instalação de modulos necessarios
-sh
+```sh
 $ pip3 install -r requirements.txt
-
+```
 
 --
 **Grupo Telegram**
