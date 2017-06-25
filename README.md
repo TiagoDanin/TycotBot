@@ -4,19 +4,15 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
 
-### Introdução
+### IntroduÃ§Ã£o
+Bot para funÃ§Ãµes administrativas de grupos do Telegram.
 
-Bot para funções administrativas de grupos do Telegram.
-
----
-
-### Instalação de modulos necessarios
+### InstalaÃ§Ã£o de modulos necessarios
 ```sh
 $ pip3 install -r requirements.txt
 ```
 
 ---
-
 **Grupo Telegram**
 
 https://goo.gl/m0h2eQ
