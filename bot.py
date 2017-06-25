@@ -6,15 +6,16 @@ from datetime import datetime
 from telepot.loop import MessageLoop
 
 now = datetime.now()
+
 TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
+
 updates = bot.getUpdates()
 print(updates)
 
 print("Bot inicializado!")
 
-
-def welcome(msg):  # AJUSTAR AS BOAS-VINDAS
+def welcome(msg): 
     chat_id = telepot.glance(msg)
     try:
         text = msg['text']
@@ -178,7 +179,6 @@ def handle(msg):
     commands(msg)
     welcome(msg)
     rules(msg)
-
 
 MessageLoop(bot, handle).run_as_thread()
 while 1:
