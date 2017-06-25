@@ -1,8 +1,5 @@
 
-import telepot
-import time
-import logging
-import sys
+import telepot, time, logging, sys
 from datetime import datetime
 from telepot.loop import MessageLoop
 
@@ -29,9 +26,8 @@ def welcome(msg):
 		adm_list = [adm['user']['id'] for adm in admins]
 		if (user_id in adm_list):
 			text = text.replace("/welcome ", "")
-			welcome = open('welcome.txt', 'w')
-			welcome.write(text)
-			welcome.close()
+			with open('welcome.txt', 'w') as welcome:
+				welcome.write(text)
 			bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
 		else:
 			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.")
@@ -46,12 +42,12 @@ def welcome(msg):
 		if(user_first_name == bot_name):
 			bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
 		else:
-			welcome = open('welcome.txt', 'r')
-			welcome = welcome.read()
-			welcome = welcome.replace("$name", user_first_name)
-			welcome = welcome.replace('$surname', user_last_name)
-			#welcome = welcome.replace('$username', username)
-			bot.sendMessage(msg['chat']['id'], welcome)
+			with open('welcome.txt', 'r') as welcome:
+				welcome = welcome.read()
+				welcome = welcome.replace("$name", user_first_name)
+				welcome = welcome.replace('$surname', user_last_name)
+				#welcome = welcome.replace('$username', username)
+				bot.sendMessage(msg['chat']['id'], welcome)
 
 def rules(msg):
 	try:
@@ -64,17 +60,15 @@ def rules(msg):
 		adm_list = [adm['user']['id'] for adm in admins]
 		if (user_id in adm_list):
 			text = text.replace("/defregras ", "")
-			rules = open('regras.txt', 'w')
-			rules.write(text)
-			rules.close()
+			with open('regras.txt', 'w') as rules:
+				rules.write(text)
 			bot.sendMessage(msg['chat']['id'], "As novas regras foram salvas com sucesso!")
 		else:
 			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.")
 
 	if(text.startswith('/regras')):
-		rules = open('regras.txt', 'r')
-		rules = rules.read()
-		bot.sendMessage(msg['chat']['id'], rules)
+		with open('regras.txt', 'r') as rules:
+			bot.sendMessage(msg['chat']['id'], rules.read())
 
 def log(msg):
 	day = str(now.day)
@@ -133,7 +127,8 @@ def commands(msg):
 		log(msg)
 
 	if(text.startswith('/ajuda')):
-		bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info -> Informações do grupo\n/link -> Link do grupo')
+		arrow = u'\U000027A1'#u'\U00027A1'
+		bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info '+ arrow + ' Informações do grupo\n/link '+ arrow + '  Link do grupo')
 		log(msg)
 
 	if(text.startswith('/leave')):
