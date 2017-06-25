@@ -104,7 +104,7 @@ def log(msg):
 
 	elif(text.startswith('/') and text != '/start'):
 		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
-		logging.info("log [{}/{}/{}][{}:{}:{}]" .format('day','month','year','hour','minute','second'))
+		logging.info("log [{}/{}/{}][{}:{}:{}]" .format(day,month,year,hour,minute,second))
 
 		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,userid,comando))
 
