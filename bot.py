@@ -132,9 +132,9 @@ def commands(msg):
 
 	if(text.startswith('/info')):
 		if chat_type == 'private':
-			bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + msg['from']['username'] + "\n ID: " + msg['from']['id']+ "."))
+			bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) + "."))
 		else:
-			bot.sendMessage(chat_id, ("ID INFO \n NOME: " + msg['from']['username'] + "\n ID: " + msg['from']['id']+" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
+			bot.sendMessage(chat_id, ("ID INFO \n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) +" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
 
 	if(text.startswith('/link')):
 		bot.sendMessage(chat_id, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',
