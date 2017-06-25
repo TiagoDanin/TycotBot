@@ -143,8 +143,8 @@ def commands(msg):
 
 	if(text.startswith('/ajuda')):
 		arrow = u'\U000027A1'#u'\U00027A1'
-		bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info '+ arrow + ' Informações do grupo\n/link '+ arrow + '  Link do grupo')
 		bot.sendMessage(chat_id, ('''
+Olá, sou o PygrameirosBot!
 Segue minha lista de comandos:
 /info -> informações do grupo
 /link -> link do grupo
@@ -156,7 +156,7 @@ Segue minha lista de comandos:
 	if(text.startswith('/leave')):
 		chat_id = msg['chat']['id']
 		user_id = msg['from']['id']
-		bot.sendMessage(chat_id, "Tem certeza que deseja sair do grupo?\nEnvie sim' ou 'não'.")
+		bot.sendMessage(chat_id, "Tem certeza que deseja sair do grupo?\nEnvie 'sim' ou 'não'.")
 		if(text == 'sim'):
 			bot.kickChatMember(chat_id, user_id)
 
