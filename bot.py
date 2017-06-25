@@ -31,7 +31,7 @@ def welcome(msg):
 			bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
 
 		else:
-			bot.sendMessage(msg['chat']['id'], "Comando restrito aos adminstradores.")
+			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.")
 
 	if ('new_chat_member' in msg):
 		user_first_name = msg['new_chat_member']['first_name']
@@ -47,7 +47,7 @@ def welcome(msg):
 				welcome = welcome.replace('$surname', user_last_name)
 				#welcome = welcome.replace('$username', username)
 				bot.sendMessage(msg['chat']['id'], welcome)
-				
+
 def goodbye(msg):
     if('left_chat_member' in msg):
         user_first_name = str(msg['left_chat_member']['first_name'])
@@ -96,19 +96,19 @@ def log(msg):
 
 	if(text.startswith('/start')):
 		logging.basicConfig(filename='users_register.log', filemode='w', level=logging.INFO)
-		logging.info(f"log [{day}/{month}/{year}][{hour}:{minute}:{second}]")
+		logging.info("log [{}/{}/{}][{}:{}:{}]".format(day,month,year,hour,minute,second))
 
-		logging.info(f" | Username: {user} | ID: {userid} | Comando usado: {comando}\n")
+		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,userid, comando))
 
-		print(f"@{user} Iniciou o Bot - Dados salvos!")
+		print("@{} Iniciou o Bot - Dados salvos!".format(user))
 
 	elif(text.startswith('/') and text != '/start'):
 		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
-		logging.info(f"log [{day}/{month}/{year}][{hour}:{minute}:{second}]")
+		logging.info("log [{}/{}/{}][{}:{}:{}]" .format('day','month','year','hour','minute','second'))
 
-		logging.info(f" | Username: {user} | ID: {userid} | Comando usado: {comando}\n")
+		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,userid,comando))
 
-		print(f"@{user} Usou o Bot - Dados salvos!")
+		print("@{} Usou o Bot - Dados salvos!".format(user))
 
 
 def commands(msg):
@@ -132,12 +132,9 @@ def commands(msg):
 
 	if(text.startswith('/info')):
 		if chat_type == 'private':
-			bot.sendMessage(chat_id, (f"ID INFO \n\n NOME: {msg['from']['username']} "
-								f"\n ID: {msg['from']['id']}"))
+			bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + msg['from']['username'] + "\n ID: " + msg['from']['id']+ "."))
 		else:
-			bot.sendMessage(chat_id, (f"ID INFO \n NOME: {msg['from']['username']} "
-								f"\n ID: {msg['from']['id']} \nNOME DO GRUPO: {msg['chat']['title']} "
-								f"\n ID GROUP: {chat_id}"))
+			bot.sendMessage(chat_id, ("ID INFO \n NOME: " + msg['from']['username'] + "\n ID: " + msg['from']['id']+" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
 
 	if(text.startswith('/link')):
 		bot.sendMessage(chat_id, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',
@@ -172,11 +169,10 @@ Segue minha lista de comandos:
 		adm_list = [adm['user']['id'] for adm in admins]
 		if (user_id in adm_list):
 			if reply_id not in adm_list:
-				bot.sendMessage(chat_id, f"*{user}* foi retirado do grupo.", parse_mode="Markdown")
+				bot.sendMessage(chat_id, "*{}* foi retirado do grupo.", parse_mode="Markdown".format(user))
 				bot.kickChatMember(chat_id, reply_id)
 			else:
-				bot.sendMessage(chat_id, f'*{user}* é um dos administradores. Não posso remover administradores.',
-										"Markdown")
+				bot.sendMessage(chat_id, '*{}* é um dos administradores. Não posso remover administradores.', parse_mode="Markdown".format(user))
 		else:
 			bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')
 
