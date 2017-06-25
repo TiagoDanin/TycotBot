@@ -28,10 +28,10 @@ def welcome(msg):
 			text = text.replace("/welcome ", "")
 			with open('welcome.txt', 'w') as welcome:
 				welcome.write(text)
-        	bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
+        		bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
 
 		else:
-				bot.sendMessage(msg['chat']['id'], "Comando restrito aos adminstradores.")
+			bot.sendMessage(msg['chat']['id'], "Comando restrito aos adminstradores.")
 
 	if ('new_chat_member' in msg):
 		user_first_name = msg['new_chat_member']['first_name']
