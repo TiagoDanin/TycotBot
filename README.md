@@ -1,13 +1,21 @@
 # Pygrameiros_bot
+----
+[![PyPI](https://img.shields.io/badge/python-3.6-blue.svg)]()
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-# Descrição
+
+### Introdução
 
 Bot para funções administrativas de grupos do Telegram.
 
-# Grupo de desenvolvimento
+--
 
-https://goo.gl/viQ9K0 
+### Instalação de modulos necessarios
+sh
+$ pip3 install -r requirements.txt
 
-# Pygrameiros
 
-https://goo.gl/m0h2eQ 
+--
+**Grupo Telegram**
+
+https://goo.gl/m0h2eQ
