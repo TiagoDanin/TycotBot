@@ -1,7 +1,4 @@
-import telepot
-import time
-import logging
-import sys
+import telepot, time, logging, sys
 from datetime import datetime
 from telepot.loop import MessageLoop
 
@@ -31,7 +28,8 @@ def welcome(msg):
 			text = text.replace("/welcome ", "")
 			with open('welcome.txt', 'w') as welcome:
 				welcome.write(text)
-				bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
+        bot.sendMessage(msg['chat']['id'], "As mensagens de boas-vindas foram alteradas com sucesso!")
+
 		else:
 				bot.sendMessage(msg['chat']['id'], "Comando restrito aos adminstradores.")
 
@@ -45,8 +43,9 @@ def welcome(msg):
 		else:
 			with open('welcome.txt', 'r') as welcome:
 				welcome = welcome.read()
-				welcome = welcome.replace("$user", user_first_name)
+				welcome = welcome.replace("$name", user_first_name)
 				welcome = welcome.replace('$surname', user_last_name)
+				#welcome = welcome.replace('$username', username)
 				bot.sendMessage(msg['chat']['id'], welcome)
 
 
@@ -70,6 +69,7 @@ def rules(msg):
 
 	if(text.startswith('/regras')):
 		with open('regras.txt', 'r') as rules:
+			bot.sendMessage(msg['chat']['id'], rules.read())
 			rules = rules.read()
 			bot.sendMessage(msg['chat']['id'], rules)
 
@@ -140,6 +140,8 @@ def commands(msg):
 		log(msg)
 
 	if(text.startswith('/ajuda')):
+		arrow = u'\U000027A1'#u'\U00027A1'
+		bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!\nSegue a minha lista de comandos:\n/info '+ arrow + ' Informações do grupo\n/link '+ arrow + '  Link do grupo')
 		bot.sendMessage(chat_id, ('''
 Segue minha lista de comandos:
 /info -> informações do grupo
@@ -147,6 +149,7 @@ Segue minha lista de comandos:
 /regras -> regras do grupo
 /leave -> sair do grupo
 							'''))
+
 		log(msg)
 	if(text.startswith('/leave')):
 		chat_id = msg['chat']['id']
