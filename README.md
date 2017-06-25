@@ -7,7 +7,7 @@
 ### Introdução
 Bot para funções administrativas de grupos do Telegram.
 
-### Instalação de modulos necessarios
+### Instalação de módulos necessarios
 ```sh
 $ pip3 install -r requirements.txt
 ```
