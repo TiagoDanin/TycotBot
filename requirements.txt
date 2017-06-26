@@ -3,7 +3,6 @@ async-timeout==1.2.1
 chardet==3.0.4
 DateTime==4.2
 multidict==3.0.0
-pkg-resources==0.0.0
 pytz==2017.2
 telepot==12.0
 urllib3==1.21.1
