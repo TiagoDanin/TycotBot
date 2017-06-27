@@ -172,7 +172,7 @@ Segue minha lista de comandos:
 				bot.sendMessage(chat_id, "*{}* foi retirado do grupo.", parse_mode="Markdown".format(user))
 				bot.kickChatMember(chat_id, reply_id)
 			else:
-				bot.sendMessage(chat_id, '*{}* é um dos administradores. Não posso remover administradores.', parse_mode="Markdown".format(user))
+				bot.sendMessage(chat_id, '*{}* é um dos administradores. Não posso remover administradores.'.format(user), parse_mode="Markdown")
 		else:
 			bot.sendMessage(chat_id, 'Apenas administradores podem usar este comando.')
 
