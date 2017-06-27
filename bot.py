@@ -169,7 +169,7 @@ Segue minha lista de comandos:
 		adm_list = [adm['user']['id'] for adm in admins]
 		if (user_id in adm_list):
 			if reply_id not in adm_list:
-				bot.sendMessage(chat_id, "*{}* foi retirado do grupo.", parse_mode="Markdown".format(user))
+				bot.sendMessage(chat_id, "*{user}* foi retirado do grupo.", parse_mode="Markdown".format(user))
 				bot.kickChatMember(chat_id, reply_id)
 			else:
 				bot.sendMessage(chat_id, '*{}* é um dos administradores. Não posso remover administradores.'.format(user), parse_mode="Markdown")
