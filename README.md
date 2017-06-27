@@ -1,4 +1,4 @@
-# Pygrameiros_bot
+# TycotBot
 ----
 [![PyPI](https://img.shields.io/badge/python-3.6-blue.svg)]()
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
