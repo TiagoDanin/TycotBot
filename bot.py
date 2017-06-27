@@ -39,7 +39,7 @@ def welcome(msg):
 		get_bot_name = bot.getMe()
 		bot_name = get_bot_name['first_name']
 		if(user_first_name == bot_name):
-			bot.sendMessage(chat_id, 'Olá, sou o PygrameirosBot!')
+			bot.sendMessage(chat_id, 'Olá, sou o Tycot!')
 		else:
 			with open('welcome.txt', 'r') as welcome:
 				welcome = welcome.read()
@@ -120,7 +120,7 @@ def commands(msg):
 
 	if(chat_type == 'private'):
 		if(text.startswith('/start')):
-			bot.sendMessage(chat_id, ("Olá, eu sou o PygrameirosBot!"
+			bot.sendMessage(chat_id, ("Olá, eu sou o Tycot!!"
 									"\nFui criado pela galera do Pygrameiros para te ajudar"
 									" a administrar teu grupo!"))
 			log(msg)
@@ -144,7 +144,7 @@ def commands(msg):
 	if(text.startswith('/ajuda')):
 		arrow = u'\U000027A1'#u'\U00027A1'
 		bot.sendMessage(chat_id, ('''
-Olá, sou o PygrameirosBot!
+Olá, sou o Tycot!
 Segue minha lista de comandos:
 /info -> informações do grupo
 /link -> link do grupo
