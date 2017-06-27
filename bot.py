@@ -120,7 +120,7 @@ def commands(msg):
 
 	if(chat_type == 'private'):
 		if(text.startswith('/start')):
-			bot.sendMessage(chat_id, ("Olá, eu sou o Tycot!"
+			bot.sendMessage(chat_id, ("Olá, eu sou o Tycot!!"
 									"\nFui criado pela galera do Pygrameiros para te ajudar"
 									" a administrar teu grupo!"))
 			log(msg)
