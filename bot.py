@@ -131,20 +131,19 @@ def commands(msg):
 									" Bots funcionam apenas desta forma."))
 			log(msg)
 
-	if(text.startswith('/info')):
-		if chat_type == 'private':
-			bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) + "."))
-		else:
-			bot.sendMessage(user_id234, ("ID INFO \n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) +" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
+	try:
+		if(text.startswith('/info')):
+			if chat_type == 'private':
+				bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) + "."))
+			else:
+				bot.sendMessage(user_id234, ("ID INFO \n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) +" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
 
-	if(text.startswith('/link')):
-		bot.sendMessage(user_id234, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',
-						parse_mode='Markdown')
-		log(msg)
+		if(text.startswith('/link')):
+			bot.sendMessage(user_id234, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',parse_mode='Markdown')
+			log(msg)
 
-	if(text.startswith('/ajuda')):
-		arrow = u'\U000027A1'#u'\U00027A1'
-		bot.sendMessage(user_id234, ('''
+		if(text.startswith('/ajuda')):
+			bot.sendMessage(user_id234, ('''
 Olá, sou o Tycot!
 Segue minha lista de comandos:
 /info -> informações do grupo
@@ -152,8 +151,10 @@ Segue minha lista de comandos:
 /regras -> regras do grupo
 /leave -> sair do grupo
 							'''))
-
 		log(msg)
+	except:
+		bot.sendMessage(chat_id, 'Por favor, inicie uma conversa comigo e tente novamente.')
+
 	if(text.startswith('/leave')):
 		chat_id = msg['chat']['id']
 		user_id = msg['from']['id']
