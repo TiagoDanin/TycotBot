@@ -112,6 +112,7 @@ def log(msg):
 
 
 def commands(msg):
+	user_id234 = msg['from']['id']
 	content_type, chat_type, chat_id = telepot.glance(msg)
 	try:
 		text = msg['text']
@@ -134,16 +135,16 @@ def commands(msg):
 		if chat_type == 'private':
 			bot.sendMessage(chat_id, ("ID INFO \n\n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) + "."))
 		else:
-			bot.sendMessage(chat_id, ("ID INFO \n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) +" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
+			bot.sendMessage(user_id234, ("ID INFO \n NOME: " + str(msg['from']['username']) + "\n ID: " + str(msg['from']['id']) +" \nNOME DO GRUPO: " + msg['chat']['title'] + "\n ID GROUP: {}".format(chat_id)))
 
 	if(text.startswith('/link')):
-		bot.sendMessage(chat_id, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',
+		bot.sendMessage(user_id234, '[Pygrameiros](https://t.me/joinchat/AAAAAEOnjcIiD2WH_TD8Vg)',
 						parse_mode='Markdown')
 		log(msg)
 
 	if(text.startswith('/ajuda')):
 		arrow = u'\U000027A1'#u'\U00027A1'
-		bot.sendMessage(chat_id, ('''
+		bot.sendMessage(user_id234, ('''
 Olá, sou o Tycot!
 Segue minha lista de comandos:
 /info -> informações do grupo
