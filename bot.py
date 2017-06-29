@@ -34,8 +34,8 @@ def welcome(msg):
 			bot.sendMessage(msg['chat']['id'], "Comando restrito aos administradores.")
 
 	if ('new_chat_member' in msg):
-		user_first_name = msg['new_chat_member']['first_name']
-		user_last_name = msg['new_chat_member']['last_name']
+		user_first_name = str(msg['new_chat_member']['first_name'])
+		#user_last_name = str(msg['new_chat_member']['last_name'])
 		get_bot_name = bot.getMe()
 		bot_name = get_bot_name['first_name']
 		if(user_first_name == bot_name):
@@ -44,7 +44,7 @@ def welcome(msg):
 			with open('welcome.txt', 'r') as welcome:
 				welcome = welcome.read()
 				welcome = welcome.replace("$name", user_first_name)
-				welcome = welcome.replace('$surname', user_last_name)
+				#welcome = welcome.replace('$surname', user_last_name)
 				#welcome = welcome.replace('$username', username)
 				bot.sendMessage(msg['chat']['id'], welcome)
 
@@ -86,7 +86,7 @@ def log(msg):
 	hour = str(now.hour)
 	minute = str(now.minute)
 	second = str(now.second)
-	user, userid, comando = msg['from']['username'], msg['from']['id'], msg['text']
+	user, user_id = msg['from']['username'], msg['from']['id']
 
 	content_type, chat_type, chat_id = telepot.glance(msg)
 	try:
@@ -98,7 +98,7 @@ def log(msg):
 		logging.basicConfig(filename='users_register.log', filemode='w', level=logging.INFO)
 		logging.info("log [{}/{}/{}][{}:{}:{}]".format(day,month,year,hour,minute,second))
 
-		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,userid, comando))
+		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,user_id, text))
 
 		print("@{} Iniciou o Bot - Dados salvos!".format(user))
 
@@ -106,7 +106,7 @@ def log(msg):
 		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
 		logging.info("log [{}/{}/{}][{}:{}:{}]" .format(day,month,year,hour,minute,second))
 
-		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,userid,comando))
+		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,user_id,comando))
 
 		print("@{} Usou o Bot - Dados salvos!".format(user))
 
@@ -121,7 +121,7 @@ def commands(msg):
 
 	if(chat_type == 'private'):
 		if(text.startswith('/start')):
-			bot.sendMessage(chat_id, ("Olá, eu sou o Tycot!!"
+			bot.sendMessage(chat_id, ("Olá, eu sou o Tycot!"
 									"\nFui criado pela galera do Pygrameiros para te ajudar"
 									" a administrar teu grupo!"))
 			log(msg)
