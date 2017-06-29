@@ -106,7 +106,7 @@ def log(msg):
 		logging.basicConfig(filename='log.log', filemode='w', level=logging.INFO)
 		logging.info("log [{}/{}/{}][{}:{}:{}]" .format(day,month,year,hour,minute,second))
 
-		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,user_id,comando))
+		logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(user,user_id,text))
 
 		print("@{} Usou o Bot - Dados salvos!".format(user))
 
