@@ -181,10 +181,10 @@ Segue minha lista de comandos:
 	
 	
 	# set chat title
-	if (text.startswith(/title):
+	if (text.startswith('/title'):
 	    title = msg['text'].split(' ', 1)[1]
 	    r = requests.post('https://api.telegram.org/bot{}/setChatTitle?chat_id{}&title={}'.format(TOKEN,chat_id,title)
-	    requests.post('https://api.telegram.org/bot{}/sendMessage?chat_id={}&text=*{}*&parse_mode="Markdown".format(TOKEN,chat_id,title)
+	    requests.post('https://api.telegram.org/bot{}/sendMessage?chat_id={}&text=*{}*&parse_mode=Markdown'.format(TOKEN,chat_id,title)
 	         
 		
 
