@@ -1,6 +1,7 @@
 import telepot, time, logging, sys
 from datetime import datetime
 from telepot.loop import MessageLoop
+import requests
 
 now = datetime.now()
 
