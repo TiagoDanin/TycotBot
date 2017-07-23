@@ -1,7 +1,7 @@
-import telepot, logging, sys
+import telepot, logging
 from datetime import datetime
-from telepot.loop import MessageLoop
-import requests
+
+
 
 class control:
 
@@ -107,14 +107,6 @@ class control:
                     self.bot.sendMessage(self.chat_id, '*{}* é um dos administradores. Não posso remover administradores.'.format(user), parse_mode="Markdown")
             else:
                 self.bot.sendMessage(self.chat_id, 'Apenas administradores podem usar este comando.')
-
-        '''
-	    if (text.startswith('/title')):
-	        title = msg['text'].split(' ', 1)[1]
-	        r = requests.post('https://api.telegram.org/bot{}/setChatTitle?chat_id{}&title={}'.format(TOKEN,chat_id,title)
-	        requests.post('https://api.telegram.org/bot{}/sendMessage?chat_id={}&text=*{}*&parse_mode=Markdown'.format(TOKEN,chat_id,title)  
-        '''
-
     
     def log(self):
 
