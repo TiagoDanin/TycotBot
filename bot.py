@@ -1,10 +1,10 @@
 import telepot
+import sys
 from control_bot import control
 
 
-TOKEN = 'token'
+TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
-
 
 def handle(msg):
     control(msg, bot)
