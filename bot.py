@@ -7,8 +7,13 @@ TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
 
 def handle(msg):
-    control(msg, bot)
-
+    use_bot = control(msg, bot)
+    
+    use_bot.log()
+    use_bot.commands()
+    use_bot.goodbye()
+    use_bot.rules()
+    use_bot.welcome()
 
 bot.message_loop(handle)
 
