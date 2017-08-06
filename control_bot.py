@@ -22,7 +22,7 @@ class control:
 
 			#get admin
 			self.adm_list = [adm['user']['id'] for adm in self.admins]
-	
+
 		except:
 			pass
 		try:
@@ -30,7 +30,7 @@ class control:
 		except:
 			self.text = ''
 
-		
+
 
 	def commands(self):
 
@@ -39,17 +39,17 @@ class control:
 			if self.text.startswith('/start'):
 				self.bot.sendMessage(self.chat_id, ('Olá, eu sou o Tycot!\nFui criado pela galera do Pygrameiros para te ajudar a administrar teu grupo!'))
 			self.log()
-            
+
 		elif self.text.startswith('/start'):
 			self.bot.sendMessage(self.chat_id, ("Oi! Por favor, inicie uma conversa privada."
                                                 " Bots funcionam apenas desta forma."))
 			self.log()
 
-        
+
 		try:
 			if self.text.startswith('/info'):
 				if self.chat_type == 'private':
-                    
+
 					self.bot.sendMessage(chat_id=self.chat_id, parse_mode='Markdown', text='''*ID INFO*\n`NOME`: {0}\n`ID`: {1}'''.format(self.user, self.user_id))
 				else:
 
@@ -76,22 +76,22 @@ class control:
 			self.bot.sendMessage(self.chat_id, 'Por favor, inicie uma conversa comigo e tente novamente.')
 
 		if self.text.startswith('/leave'):
-            
+
 			self.bot.sendMessage(self.chat_id, "Tem certeza que deseja sair do grupo?\nEnvie 'sim' ou 'não'.")
-            
+
 			if(self.text == 'sim'):
 				self.bot.kickChatMember(self.chat_id, self.user_id)
-        
+
 
         	###  ADMINS COMMANDS  ###
 		if(self.text.startswith('/ban')) or (self.text.startswith('/kick')):
 
 			user = self.msg['reply_to_message']['from']['first_name']
-			reply_id = self.msg['reply_to_message']['from']['id']            
+			reply_id = self.msg['reply_to_message']['from']['id']
 			adm_list = [adm['user']['id'] for adm in self.admins]
 
 			if self.user_id in adm_list:
-                
+
 				if reply_id not in adm_list:
 					self.bot.sendMessage(self.chat_id, "*{user}* foi retirado do grupo.".format(user), parse_mode="Markdown")
 					self.bot.kickChatMember(self.chat_id, reply_id)
@@ -100,7 +100,7 @@ class control:
 					self.bot.sendMessage(self.chat_id, '*{}* é um dos administradores. Não posso remover administradores.'.format(user), parse_mode="Markdown")
 			else:
 				self.bot.sendMessage(self.chat_id, 'Apenas administradores podem usar este comando.')
-    
+
 		#warn falta alguns ajustes ainda.
 		if self.text.startswith('/warn'):
 			user = self.msg['reply_to_message']['from']['username']
@@ -109,7 +109,7 @@ class control:
 			user1 = self.msg['reply_to_message']['from']['first_name']
 
 			if (self.user_id in self.adm_list):
-    				
+
 				if self.user_reply_id not in self.adm_list:
 					self.bot.sendMessage(self.chat_id,'{user} *has been warned* ({advs}/3).'.format(user=user1, advs=advs+1), parse_mode="Markdown", reply_markup=self.keyboard())
 					sql.advertir(self.chat_id, self.user_reply_id)
@@ -134,7 +134,7 @@ class control:
 			advs = int(sql.procurar(self.chat_id, self.user_reply_id)[1])
 
 			if self.user_id in self.adm_list:
-						
+
 				if self.user_reply_id not in self.adm_list:
 					self.bot.sendMessage(self.chat_id,'*{}* batizado.'.format(user1), parse_mode='Markdown')
 					sql.desadvertir(self.chat_id, self.user_reply_id, advs)
@@ -166,21 +166,20 @@ class control:
 
 
 	def goodbye(self):
-        
+
 		if('left_chat_member' in self.msg):
 			user_first_name = str(self.msg['left_chat_member']['first_name'])
 			self.bot.sendMessage(self.chat_id, "Tchau, {}".format(user_first_name))
 			self.bot.sendVideo(self.chat_id, "https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4")
-    
+
 
 	def rules(self):
 
 		if(self.text.startswith('/defregras')):
-            
+
 			adm_list = [adm['user']['id'] for adm in self.admins]
 			if (self.user_id in adm_list):
 				text = self.text.replace("/defregras ", "")
-                
 				with open('regras.txt', 'w') as rules:
 					rules.write(text)
 
@@ -189,16 +188,16 @@ class control:
 				return self.bot.sendMessage(self.chat_id, "Comando restrito aos administradores.")
 
 		if(self.text.startswith('/regras')):
-            
+
 			with open('regras.txt', 'r') as rules:
 				rules = rules.read()
 			return self.bot.sendMessage(self.chat_id, rules)
 
-    
+
 	def welcome(self):
 
 		if self.text.startswith('/welcome'):
-                        
+
 			if self.user_id in self.adm_list:
 				text = self.text.replace("/welcome ", "")
 
@@ -210,7 +209,7 @@ class control:
 				self.bot.sendMessage(self.msg['chat']['id'], "Comando restrito aos administradores.")
 
 		if 'new_chat_member' in self.msg:
-            
+
 			user_first_name = str(self.msg['new_chat_member']['first_name'])
 			get_bot_name = self.bot.getMe()
 			bot_name = get_bot_name['first_name']
@@ -219,7 +218,7 @@ class control:
 				self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
 				sql.criar_table(self.chat_id)
 			else:
-                    
+
 				with open('welcome.txt', 'r') as welcome:
 					welcome = welcome.read()
 					welcome = welcome.replace('$name', user_first_name)
@@ -229,14 +228,14 @@ class control:
 
 	def keyboard(self):
 
-		if self.text == '/warn': 
+		if self.text == '/warn':
 			return InlineKeyboardMarkup(inline_keyboard=[
                             [InlineKeyboardButton(text="Remove warn", callback_data='d')]
                     ])
-
 
 	def add(self):
 		if sql.procurar(self.chat_id, self.msg['from']['id']) == 'erro ao procurar':
 			sql.inserir(self.chat_id, self.msg['from']['id'])
 		else:
 			pass
+

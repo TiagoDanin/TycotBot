@@ -5,7 +5,10 @@
 
 
 ### Introdução
-Bot para funções administrativas de grupos do Telegram.
+Bot para funções administrativas de grupos sobre programação do Telegram.
+
+### Como contribuir
+Crie um fork do repositório e ajude nas issues propostas.
 
 ### Instalação de módulos necessarios
 ```sh
