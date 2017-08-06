@@ -95,6 +95,7 @@ class control:
 				if reply_id not in adm_list:
 					self.bot.sendMessage(self.chat_id, "*{user}* foi retirado do grupo.".format(user), parse_mode="Markdown")
 					self.bot.kickChatMember(self.chat_id, reply_id)
+					sql.delete(self.chat_id, reply_id)
 				else:
 					self.bot.sendMessage(self.chat_id, '*{}* é um dos administradores. Não posso remover administradores.'.format(user), parse_mode="Markdown")
 			else:
@@ -104,18 +105,18 @@ class control:
 		if self.text.startswith('/warn'):
 			user = self.msg['reply_to_message']['from']['username']
 			self.user_reply_id = self.msg['reply_to_message']['from']['id'] #Esse valor será usado para remover o warn pelo botão tbm na função keyboard que irar retornar o id quando pressionado...
-			advs = int(sql.procurar(self.chat_id, user)[1])
+			advs = int(sql.procurar(self.chat_id, self.user_reply_id)[1])
 			user1 = self.msg['reply_to_message']['from']['first_name']
 
 			if (self.user_id in self.adm_list):
     				
 				if self.user_reply_id not in self.adm_list:
 					self.bot.sendMessage(self.chat_id,'{user} *has been warned* ({advs}/3).'.format(user=user1, advs=advs+1), parse_mode="Markdown", reply_markup=self.keyboard())
-					sql.advertir(self.chat_id, user)
+					sql.advertir(self.chat_id, self.user_reply_id)
 					if advs >= 3:
 						self.bot.sendMessage(self.chat_id, '*{}* expulso por atingir o limite de advertencias.'.format(user1), parse_mode="Markdown")
 						self.bot.kickChatMember(self.chat_id, self.user_reply_id)
-						sql.delete(self.chat_id, user)
+						sql.delete(self.chat_id, self.user_reply_id)
 					else:
 						pass
 
@@ -130,13 +131,13 @@ class control:
 			user = self.msg['reply_to_message']['from']['username']
 			user1 = self.msg['reply_to_message']['from']['first_name']
 			self.user_reply_id = self.msg['reply_to_message']['from']['id']
-			advs = int(sql.procurar(self.chat_id, user)[1])
+			advs = int(sql.procurar(self.chat_id, self.user_reply_id)[1])
 
 			if self.user_id in self.adm_list:
 						
 				if self.user_reply_id not in self.adm_list:
 					self.bot.sendMessage(self.chat_id,'*{}* batizado.'.format(user1), parse_mode='Markdown')
-					sql.desadvertir(self.chat_id, user, advs-1)
+					sql.desadvertir(self.chat_id, self.user_reply_id, advs)
 				else:
 					self.bot.sendMessage(self.chat_id,'administradores não possuem advertencias.')
 
@@ -180,7 +181,7 @@ class control:
 			if (self.user_id in adm_list):
 				text = self.text.replace("/defregras ", "")
                 
-				with open('regras.txt', 'a') as rules:
+				with open('regras.txt', 'w') as rules:
 					rules.write(text)
 
 				return self.bot.sendMessage(self.chat_id, "As novas regras foram salvas com sucesso!")
@@ -202,7 +203,7 @@ class control:
 				text = self.text.replace("/welcome ", "")
 
 				with open('welcome.txt', 'w') as welcome:
-					welcome.write(text[1])
+					welcome.write(text)
 
 				self.bot.sendMessage(self.chat_id, "As mensagens de boas-vindas foram alteradas com sucesso!")
 			else:
@@ -232,3 +233,10 @@ class control:
 			return InlineKeyboardMarkup(inline_keyboard=[
                             [InlineKeyboardButton(text="Remove warn", callback_data='d')]
                     ])
+
+
+	def add(self):
+		if sql.procurar(self.chat_id, self.msg['from']['id']) == 'erro ao procurar':
+			sql.inserir(self.chat_id, self.msg['from']['id'])
+		else:
+			pass

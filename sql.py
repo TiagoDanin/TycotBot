@@ -30,7 +30,7 @@ def inserir(table, name):
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("INSERT INTO {} (nome) VALUES ('{}');".format(str(table).replace('-', 'T'), name))
+		cursor.execute("INSERT INTO {} (nome) VALUES ('{}');".format(str(table).replace('-', 'T'), str(name)))
 		conn.commit()
 		return 'inserido'
 	except:
@@ -73,12 +73,13 @@ def procurar(table, nome):
 	try:
 		cursor.execute("SELECT * FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
 		for busca in cursor.fetchall():
+			print(busca)
 			user = busca[0]
 			advs = busca[1]
 		cadastro = [user, advs]
 		return cadastro
-	except (TypeError, RuntimeError, ValueError):
-		print('')
+	except:
+		return('erro ao procurar')
 	conn.close()
 
 def advertir(table, nome):
