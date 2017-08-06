@@ -14,8 +14,9 @@ def handle(msg):
     use_bot.goodbye()
     use_bot.rules()
     use_bot.welcome()
+    use_bot.add()
 
 bot.message_loop(handle)
 
-while 1: 
+while 1:
 	pass
