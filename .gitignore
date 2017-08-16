@@ -102,3 +102,4 @@ ENV/
 token
 *.txt
 *.log
+*.db
