@@ -238,8 +238,8 @@ class control:
 
 		if self.text.startswith('/warn'):
 			return InlineKeyboardMarkup(inline_keyboard=[
-                            [InlineKeyboardButton(text="Remove warn", callback_data='d')]
-                    ])
+				[InlineKeyboardButton(text="Remove warn", callback_data='d')]
+			])
 
 
 	def add(self):
