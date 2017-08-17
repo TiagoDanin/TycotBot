@@ -42,7 +42,7 @@ class control:
 
 		elif self.text.startswith('/start'):
 			self.bot.sendMessage(self.chat_id, ("Oi! Por favor, inicie uma conversa privada."
-                                                " Bots funcionam apenas desta forma."))
+												" Bots funcionam apenas desta forma."))
 			self.log()
 
 
@@ -80,7 +80,7 @@ class control:
 			self.bot.kickChatMember(self.chat_id, self.user_id)
 
 
-        	###  ADMINS COMMANDS  ###
+	###  ADMINS COMMANDS  ###
 		if(self.text.startswith('/ban')) or (self.text.startswith('/kick')):
 
 			user = self.msg['reply_to_message']['from']['first_name']
@@ -188,7 +188,7 @@ class control:
 			if (self.user_id in adm_list):
 				text = self.text.replace("/defregras ", "")
 
-				with open('regras.txt', 'w') as rules:
+				with open('regras' + str(self.chat_id) + '.txt', 'w') as rules:
 					rules.write(text)
 
 				return self.bot.sendMessage(self.chat_id, "As novas regras foram salvas com sucesso!")
@@ -197,8 +197,11 @@ class control:
 
 		if(self.text.startswith('/regras')):
 
-			with open('regras.txt', 'r') as rules:
-				rules = rules.read()
+			try:
+				with open('regras' + str(self.chat_id) + '.txt', 'r') as rules:
+					rules = rules.read()
+			except FileNotFoundError:
+				rules = 'Sem regras!'
 			return self.bot.sendMessage(self.chat_id, rules)
 
 
@@ -209,7 +212,7 @@ class control:
 			if self.user_id in self.adm_list:
 				text = self.text.replace("/welcome ", "")
 
-				with open('welcome.txt', 'w') as welcome:
+				with open('welcome' + str(self.chat_id) + '.txt', 'w') as welcome:
 					welcome.write(text)
 
 				self.bot.sendMessage(self.chat_id, "As mensagens de boas-vindas foram alteradas com sucesso!")
@@ -227,19 +230,22 @@ class control:
 				sql.criar_table(self.chat_id)
 			else:
 
-				with open('welcome.txt', 'r') as welcome:
-					welcome = welcome.read()
-					welcome = welcome.replace('$name', user_first_name)
-					self.bot.sendMessage(self.chat_id, welcome)
-					sql.inserir(self.chat_id, self.msg['new_chat_member']['username'])
+				try:
+					with open('welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
+						welcome = welcome.read()
+						welcome = welcome.replace('$name', user_first_name)
+						self.bot.sendMessage(self.chat_id, welcome)
+						sql.inserir(self.chat_id, self.msg['new_chat_member']['username'])
+				except FileNotFoundError:
+					print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
 
 
 	def keyboard(self):
 
 		if self.text.startswith('/warn'):
 			return InlineKeyboardMarkup(inline_keyboard=[
-                            [InlineKeyboardButton(text="Remove warn", callback_data='d')]
-                    ])
+				[InlineKeyboardButton(text="Remove warn", callback_data='d')]
+			])
 
 
 	def add(self):
