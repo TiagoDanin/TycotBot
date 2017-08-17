@@ -13,6 +13,7 @@ def handle(msg):
 	use_bot.commands()
 	use_bot.goodbye()
 	use_bot.rules()
+	use_bot.link()
 	use_bot.welcome()
 	use_bot.add()
 
