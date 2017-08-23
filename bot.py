@@ -26,30 +26,26 @@ def handle(msg):
 			ctext = None
 
 		admin_commands = {
-	
-								'/ban':       inst_command_admin.ban,
-								'/warn':      inst_command_admin.warn,
-								'/unwarn':    inst_command_admin.unwarn,
-								'/deflink':	  inst_command_admin.deflink,
-								'/defregras': inst_command_admin.defregras,
-								'/welcome':	  inst_command_admin.defwelcome,
-								'/addb':      inst_command_admin.add
-				}
+			'/ban'        :inst_command_admin.ban,
+			'/warn'       :inst_command_admin.warn,
+			'/unwarn'     :inst_command_admin.unwarn,
+			'/deflink'	  :inst_command_admin.deflink,
+			'/defregras'  :inst_command_admin.defregras,
+			'/welcome'	  :inst_command_admin.defwelcome,
+			'/addb'       :inst_command_admin.add
+		}
 
 		user_command = {
-
-								'/start':       inst_commnand_user.start,
-								'/info':        inst_commnand_user.info,
-								'/ajuda':       inst_commnand_user.ajuda,
-								'/link':        inst_commnand_user.link,
-								'/regras':      inst_commnand_user.regras
-				}
+			'/start'      :inst_commnand_user.start,
+			'/info'       :inst_commnand_user.info,
+			'/ajuda'      :inst_commnand_user.ajuda,
+			'/link'       :inst_commnand_user.link,
+			'/regras'     :inst_commnand_user.regras
+		}
 
 		others = {
-
-								'left_chat_member':      inst_commnand_user.goodbye,
-								'new_chat_member':   inst_commnand_user.new_member
-
+			'left_chat_member' :inst_commnand_user.goodbye,
+			'new_chat_member'  :inst_commnand_user.new_member
 		}
 
 		if admin_commands.get(ctext):
@@ -64,14 +60,11 @@ def handle(msg):
 
 		elif user_command.get(ctext):
 			user_command[ctext]()
-		
+
 		if msg.get('left_chat_member'):
 			others['left_chat_member']()
 		elif msg.get('new_chat_member'):
 			others['new_chat_member']()
-		
-
-		
 
 if __name__ == '__main__':
 	MessageLoop(bot, handle).run_as_thread()
