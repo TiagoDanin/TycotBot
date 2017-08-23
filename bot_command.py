@@ -5,57 +5,60 @@ import sql
 
 
 class command_user(control, keyboard):
-		
+
 	@log
 	def start(self):
-		self.bot.sendMessage(
-				self.chat_id,
-				('Oi! Por favor, inicie uma conversa privada.'
-				' Bots funcionam apenas desta forma.'),
-				reply_markup=self.start_key())
-	
+		return self.bot.sendMessage(
+			self.chat_id,
+			('Oi! Por favor, inicie uma conversa privada.'
+			' Bots funcionam apenas desta forma.'),
+			reply_markup=self.start_key()
+		)
 
 	@decor_info_ajuda
 	def info(self):
 		if self.chat_type == 'private':
-			self.bot.sendMessage(
-								chat_id=self.chat_id,
-								parse_mode='HTML',
-								text='''<b>ID INFO</b>\n<code>NOME</code>: {0}\n<code>ID</code>: {1}'''.format(
-								self.user,
-								self.UserID
-							)
-						)
+			return self.bot.sendMessage(
+				chat_id=self.chat_id,
+				parse_mode='HTML',
+				text='''<b>ID INFO</b>\n<code>NOME</code>: {0}\n<code>ID</code>: {1}'''.format(
+					self.user,
+					self.UserID
+				)
+			)
 		else:
 			info_chat = self.msg['chat']['title']
-			self.bot.sendMessage(
-								chat_id=self.UserID,
-								parse_mode='HTML',
-								text='<b>ID INFO</b>\n<code>NOME</code>: {0}\n<code>ID</code>: {1}\n<code>NOME DO GRUPO</code>: {2}\n<code>ID GROUP</code>: {3}'.format(
-								self.user,
-								self.UserID,
-								info_chat,
-								self.chat_id
-							)
-						)
+			return self.bot.sendMessage(
+				chat_id=self.UserID,
+				parse_mode='HTML',
+				text='<b>ID INFO</b>\n<code>NOME</code>: {0}\n<code>ID</code>: {1}\n<code>NOME DO GRUPO</code>: {2}\n<code>ID GROUP</code>: {3}'.format(
+					self.user,
+					self.UserID,
+					info_chat,
+					self.chat_id
+				)
+			)
 
 	@decor_info_ajuda
 	def ajuda(self):
-		self.bot.sendMessage(self.UserID, ('''
-							Olá, sou o Tycot!
-							Segue minha lista de comandos:
-							/info -> informações do grupo
-							/link -> link do grupo
-							/regras -> regras do grupo
-							/leave -> sair do grupo
-														'''))
-	
+		return self.bot.sendMessage(
+			self.UserID, ('''
+			Olá, sou o Tycot!
+			Segue minha lista de comandos:
+			/info -> informações do grupo
+			/link -> link do grupo
+			/regras -> regras do grupo
+			/leave -> sair do grupo
+			''')
+		)
+
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
 			user_first_name = str(self.msg['left_chat_member']['first_name'])
 			self.bot.sendMessage(self.chat_id, "Tchau, {}".format(user_first_name))
 			self.bot.sendVideo(self.chat_id, "https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4")
+			return True
 
 	def regras(self):
 		try:
@@ -73,16 +76,17 @@ class command_user(control, keyboard):
 		if(user_first_name == bot_name):
 			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
 			sql.criar_table(self.chat_id)
-		
 		else:
 			try:
 				with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
 					welcome = welcome.read()
 					welcome = welcome.replace('$name', user_first_name)
 					self.bot.sendMessage(self.chat_id, welcome)
-					sql.inserir(self.chat_id, self.msg['new_chat_member']['username'])
+					if 'username' in msg['new_chat_member']:
+						sql.inserir(self.chat_id, self.msg['new_chat_member']['username'])
 			except FileNotFoundError:
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
+		return True
 
 	def link(self):
 		info_chat = self.msg['chat']['title']
@@ -94,28 +98,29 @@ class command_user(control, keyboard):
 		link_msg = '<a href="' + str(link_tg) + '">' + str(info_chat) + '</a>'
 		return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
 
-class command_admin(control,keyboard):
-		
+class command_admin(control, keyboard):
+
 	@admin
 	def ban(self):
 		first_name_reply = self.msg['reply_to_message']['from']['first_name']
 		reply_id = self.msg['reply_to_message']['from']['id']
-		self.bot.kickChatMember(self.chat_id, reply_id)
-		self.bot.sendMessage(
-						self.chat_id,
-						'<b>{user}</b> foi retirado do grupo.'.format(first_name_reply),
-						parse_mode='HTML'
-					)
-		try:
-			sql.delete(self.chat_id, reply_id)
-		except:
-			pass
-
+		if reply_id not in self.get_admin_list(user_reply=True):
+			self.bot.kickChatMember(self.chat_id, reply_id)
+			self.bot.sendMessage(
+				self.chat_id,
+				'<b>{}</b> foi retirado do grupo.'.format(first_name_reply),
+				parse_mode='HTML'
+			)
+			try:
+				sql.delete(self.chat_id, reply_id)
+			except:
+				pass
+			return True
 		else:
-			self.bot.sendMessage(self.chat_id,
-								'<b>{}</b> é um dos administradores. Não posso remover administradores.'.format(first_name_reply),
-								parse_mode='HTML'
-							)     
+			return self.bot.sendMessage(self.chat_id,
+				'<b>{}</b> é um dos administradores. Não posso remover administradores.'.format(first_name_reply),
+				parse_mode='HTML'
+			)
 
 	@admin
 	@log
@@ -124,7 +129,6 @@ class command_admin(control,keyboard):
 		user_reply_id = self.msg['reply_to_message']['from']['id']
 
 		if user_reply_id not in self.get_admin_list(user_reply=True):
-				
 			try:
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 			except:
@@ -132,30 +136,31 @@ class command_admin(control,keyboard):
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 
 			self.bot.sendMessage(
-					self.chat_id,
-					'{user} <b>has been warned</b> ({advs}/3).'.format(
-					user=first_name_reply, advs=advs+1),
-					parse_mode='HTML',
-					reply_markup=self.keyboard_warn(user_reply_id)
-				)
+				self.chat_id,
+				'{user} <b>has been warned</b> ({advs}/3).'.format(
+					user=first_name_reply,
+					advs=advs+1
+				),
+				parse_mode='HTML',
+				reply_markup=self.keyboard_warn(user_reply_id)
+			)
 			sql.advertir(self.chat_id, user_reply_id)
 			if advs >= 3:
 				self.bot.sendMessage(
-						self.chat_id,
-						'<b>{}</b> expulso por atingir o limite de advertencias.'.format(first_name_reply),
-						parse_mode='HTML'
-					)
+					self.chat_id,
+					'<b>{}</b> expulso por atingir o limite de advertencias.'.format(first_name_reply),
+					parse_mode='HTML'
+				)
 				self.bot.kickChatMember(self.chat_id, user_reply_id)
 				sql.delete(self.chat_id, user_reply_id)
 			else:
 				pass
-
 		else:
-			self.bot.sendMessage(
-					self.chat_id,
-					'<b>{}</b> é um dos administradores. Não posso advertir administradores.'.format(first_name_reply),
-					parse_mode='HTML'
-				)
+			return self.bot.sendMessage(
+				self.chat_id,
+				'<b>{}</b> é um dos administradores. Não posso advertir administradores.'.format(first_name_reply),
+				parse_mode='HTML'
+			)
 
 
 	@admin
@@ -170,37 +175,32 @@ class command_admin(control,keyboard):
 			advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 		except:
 			pass
-		print(data)
+
 		if data != None:
 			int(data)
 			sql.desadvertir(self.chat_id,data, advs)
-		
 		else:
-			
 			if user_reply_id not in self.get_admin_list(user_reply=True):
-				
 				self.bot.sendMessage(
-							self.chat_id,
-							'<b>{}</b> perdoado.'.format(first_name_reply),
-							parse_mode='HTML'
-						)
+					self.chat_id,
+					'<b>{}</b> perdoado.'.format(first_name_reply),
+					parse_mode='HTML'
+				)
 				sql.desadvertir(self.chat_id, user_reply_id, advs)
 			else:
-				self.bot.sendMessage(self.chat_id,'Administradores não possuem advertências.')
+				return self.bot.sendMessage(self.chat_id,'Administradores não possuem advertências.')
 
-		
+
 	@admin
 	@log
 	def deflink(self, text):
 		text = text.replace("/deflink ", "")
-
 		with open('.tmp/link' + str(self.chat_id) + '.txt', 'w') as link_:
 			link_.write(text)
-
 		return self.bot.sendMessage(
-				self.chat_id,
-				'O novo link foi salvou com sucesso!'
-			)
+			self.chat_id,
+			'O novo link foi salvou com sucesso!'
+		)
 
 
 	@admin
@@ -221,9 +221,9 @@ class command_admin(control,keyboard):
 			rules.write(text)
 
 		return self.bot.sendMessage(
-					self.chat_id,
-					'As novas regras foram salvas com sucesso!'
-				)
+			self.chat_id,
+			'As novas regras foram salvas com sucesso!'
+		)
 
 
 	@admin
@@ -232,7 +232,7 @@ class command_admin(control,keyboard):
 		text = text.replace("/welcome ", "")
 		with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'w') as welcome:
 			welcome.write(text)
-			self.bot.sendMessage(
-				self.chat_id,
-				'As mensagens de boas-vindas foram alteradas com sucesso!'
-			)
+		return self.bot.sendMessage(
+			self.chat_id,
+			'As mensagens de boas-vindas foram alteradas com sucesso!'
+		)
