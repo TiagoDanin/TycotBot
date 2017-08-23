@@ -1,12 +1,10 @@
 import telepot
 import logging
 import sql
-from datetime import datetime
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class control:
-	day_date_hour = datetime.now().strftime('%c')
 	def __init__(self, msg, bot):
 		self.bot = bot
 		if msg.get('data'):
@@ -19,13 +17,14 @@ class control:
 			self.content_type, self.chat_type, self.chat_id = telepot.glance(msg)
 			self.msg_id = msg['message_id']
 
-			self.user = msg['from']['first_name']
-			if 'username' in msg['from']:
-				self.username = msg['from']['username']
-			else:
-				self.username = '[Sem username]'
-			self.UserID = msg['from']['id']
-			self.msg = msg
+		if 'username' in msg['from']:
+			self.username = msg['from']['username']
+		else:
+			self.username = '[Sem username]'
+		self.user = msg['from']['first_name']
+		self.UserID = msg['from']['id']
+		self.msg = msg
+
 
 
 	def get_admin_list(self, query=False, user_reply=False):
