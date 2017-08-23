@@ -1,12 +1,10 @@
 import telepot
 import logging
 import sql
-from datetime import datetime
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class control:
-	day_date_hour = datetime.now().strftime('%c')
 	def __init__(self, msg, bot):
 		self.bot = bot
 		if msg.get('data'):
