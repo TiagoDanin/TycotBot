@@ -2,7 +2,7 @@ from control_bot import control
 from keyboard import keyboard
 from decorators import *
 import sql
-
+import telepot
 
 class command_user(control, keyboard):
 
@@ -69,9 +69,11 @@ class command_user(control, keyboard):
 		return self.bot.sendMessage(self.chat_id, rules, parse_mode='HTML')
 
 	def new_member(self):
-		user_first_name = str(self.msg['new_chat_member']['first_name'])
-		get_bot_name = self.bot.getMe()
-		bot_name = get_bot_name['first_name']
+		user_first_name = self.msg['new_chat_member']['first_name']
+		user_username   = self.msg['new_chat_member']['username']
+		id_user         = self.msg['new_chat_member']['id']
+		get_bot_name    = self.bot.getMe()
+		bot_name        = get_bot_name['first_name']
 
 		if(user_first_name == bot_name):
 			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
@@ -79,13 +81,20 @@ class command_user(control, keyboard):
 		else:
 			try:
 				with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
-					welcome = welcome.read()
+					welcome = welcome.read()	
 					welcome = welcome.replace('$name', user_first_name)
 					self.bot.sendMessage(self.chat_id, welcome)
 					if 'username' in msg['new_chat_member']:
-						sql.inserir(self.chat_id, self.msg['new_chat_member']['username'])
+						sql.inserir(self.chat_id, user_username)
 			except FileNotFoundError:
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
+			except telepot.exception.TelegramError:
+				self.bot.sendMessage(chat_id=self.chat_id, 
+									 parse_mode='Markdown', 
+									 text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
+									 disable_web_page_preview=True
+								)
+
 		return True
 
 	def link(self):
