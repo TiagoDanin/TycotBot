@@ -9,10 +9,10 @@ class command_user(control, keyboard):
 		if self.chat_type=='private':
 			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
 		else:
-			if(sql.procurar(self.chat_id,usuario)=='erro ao procurar'):
+			if(sql.procurarUserNome(self.chat_id,usuario)=='erro ao procurar'):
 				print('usuário não existe')
 			else:
-				resultado = sql.procurar(self.chat_id,usuario)
+				resultado = sql.procurarUserNome(self.chat_id,usuario)
 				if resultado[3] == 1:
 					return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
 
@@ -68,7 +68,7 @@ class command_user(control, keyboard):
 		if self.chat_type=='private':
 			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
 		else:
-			if(sql.procurar(self.chat_id,self.user)=='erro ao procurar'):
+			if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
 				retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
 				if(retornoIns=='erro ao inserir'):
 					print('erro ao inserir')
@@ -87,7 +87,7 @@ class command_user(control, keyboard):
 			if self.chat_type=='private':
 				return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
 			else:
-				if(sql.procurar(self.chat_id,self.user)=='erro ao procurar'):
+				if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
 					retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
 					if(retornoIns=='erro ao inserir'):
 						print('erro ao remover')
@@ -191,9 +191,9 @@ class command_admin(control, keyboard):
 			try:
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 			except:
-				sql.inserir(self.chat_id, user_reply_id)
+				sql.inserir(self.chat_id, first_name_reply, user_reply_id)
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
-
+			sql.advertir(self.chat_id, user_reply_id)
 			self.bot.sendMessage(
 				self.chat_id,
 				'{user} <b>has been warned</b> ({advs}/3).'.format(
@@ -203,7 +203,6 @@ class command_admin(control, keyboard):
 				parse_mode='HTML',
 				reply_markup=self.keyboard_warn(user_reply_id)
 			)
-			sql.advertir(self.chat_id, user_reply_id)
 			if advs >= 3:
 				self.bot.sendMessage(
 					self.chat_id,
@@ -267,7 +266,7 @@ class command_admin(control, keyboard):
 	def add(self):
 		sql.criar_table(self.chat_id)
 		if sql.procurar(self.chat_id, self.msg['from']['id']) == 'erro ao procurar':
-			sql.inserir(self.chat_id, self.msg['from']['id'])
+			sql.inserir(self.chat_id, self.msg['from']['first_name'], self.msg['from']['id'])
 		else:
 			pass
 
