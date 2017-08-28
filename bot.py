@@ -22,9 +22,9 @@ def handle(msg):
 	else:
 		try:
 			frase = msg['text']
-			result = re.search('(?<=@)\w+',frase)
-			if(result != None):
-				usuario=result.group(0)
+			result = re.search('(?<=@)\w+', frase)
+			if(result is not None):
+				usuario = result.group(0)
 				inst_commnand_user.buscarAlerta(usuario=usuario)
 
 			text = msg['text'].split(' ')
@@ -49,14 +49,9 @@ def handle(msg):
 			'/ajuda'      :inst_command_user.ajuda,
 			'/link'       :inst_command_user.link,
 			'/regras'     :inst_command_user.regras,
-			'/verifybook' :inst_command_user.verify_book
-			'/alertoff'   :inst_commnand_user.remAlerta,
-			'/alert'      :inst_commnand_user.aceitarAlerta,
-			'/start'      :inst_commnand_user.start,
-			'/info'       :inst_commnand_user.info,
-			'/ajuda'      :inst_commnand_user.ajuda,
-			'/link'       :inst_commnand_user.link,
-			'/regras'     :inst_commnand_user.regras
+			'/verifybook' :inst_command_user.verify_book,
+			'/alertoff'   :inst_command_user.remAlerta,
+			'/alert'      :inst_command_user.aceitarAlerta,
 		}
 
 		others = {
