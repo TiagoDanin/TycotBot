@@ -16,7 +16,7 @@ def criar_table(table):
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(nome VARCHAR(50) NOT NULL PRIMARY KEY, advs INT NOT NULL DEFAULT 0);""".format(str(table).replace('-', 'T')))
+		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(nome VARCHAR(50) NOT NULL, advs INT NOT NULL DEFAULT 0, Id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT, alert INT DEFAULT 0);""".format(str(table).replace('-', 'T')))
 		conn.commit()
 		return 'Table {} criado'.format(str(table).replace('-', 'T'))
 	except:
@@ -24,17 +24,41 @@ def criar_table(table):
 		exit()
 	conn.close()
 
+def alterar_table(table):
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		cursor.execute("ALTER TABLE {} RENAME TO sqlitestudio_temp_table;".format(str(table)))
+		conn.commit()
+		cursor.execute("CREATE TABLE {} (nome VARCHAR (50) NOT NULL, advs INT NOT NULL DEFAULT 0, Id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT, alert INT DEFAULT 0);".format(str(table)))
+		conn.commit()
+		cursor.execute("INSERT INTO {} (nome, advs) SELECT nome, advs FROM sqlitestudio_temp_table;".format(str(table)))
+		conn.commit()
+		cursor.execute("DROP TABLE sqlitestudio_temp_table;")
+		conn.commit()
+		print('banco alterado com sucesso')
+		conn.close()
+	except:
+		print('erro')
 
-def inserir(table, name):
+def inserir(table, nome, user_id):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("INSERT INTO {} (nome) VALUES ('{}');".format(str(table).replace('-', 'T'), str(name)))
+		cursor.execute("INSERT INTO {} (nome, user_id) VALUES ('{}','{}');".format(str(table).replace('-', 'T'), str(nome), str(user_id)))
 		conn.commit()
 		return 'inserido'
 	except:
-		return 'erro ao inserir'
+		retorno = 'erro ao inserir'
+		try:
+			alterar_table(format(str(table).replace('-','T')))
+			cursor.execute("INSERT INTO {} (nome, user_id) VALUES ('{}','{}');".format(str(table).replace('-', 'T'), str(nome), str(user_id)))
+			conn.commit()
+			retorno = 'Tabela alterada. Dados inseridos'
+		except:
+			retorno = 'não foi possível alterar tabela'
+		return retorno
 	conn.close()
 
 
@@ -54,61 +78,94 @@ def mostrar(table):
 		return 'erro ao buscar.'
 	conn.close()
 
-def delete(table, nome):
+def delete(table, user_id):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("DELETE FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
+		cursor.execute("DELETE FROM {} WHERE user_id = {};".format(str(table).replace('-', 'T'), user_id))
 		conn.commit()
 		return 'deletado'
 	except:
 		return 'erro ao deletar'
 	conn.close()
 
-def procurar(table, nome):
+def procurarUserNome(table, nome):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
 		cursor.execute("SELECT * FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
 		for busca in cursor.fetchall():
-			print(busca)
 			user = busca[0]
 			advs = busca[1]
-		cadastro = [user, advs]
+			user_id = busca[3]
+			alerta = busca[4]
+		cadastro = [user, advs, user_id, alerta]
 		return cadastro
 	except:
 		return('erro ao procurar')
 	conn.close()
 
-def advertir(table, nome):
+def procurar(table, user_id):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		advs = procurar(table, nome)[1]
-		cursor.execute("""UPDATE {table}
-SET nome = '{nome}',
-advs = {advs}
-WHERE nome = '{nome}';
-""".format(table=str(table).replace('-', 'T'), nome=nome, advs=advs+1))
+		cursor.execute("SELECT * FROM {} WHERE user_id = '{}';".format(str(table).replace('-', 'T'), user_id))
+		for busca in cursor.fetchall():
+			user = busca[0]
+			advs = busca[1]
+			user_id = busca[3]
+			alerta = busca[4]
+		cadastro = [user, advs, user_id, alerta]
+		return cadastro
+	except:
+		return('erro ao procurar')
+	conn.close()
+
+def alerta(table, user_id):
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		cursor.execute("UPDATE {} SET alert=1 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
+		conn.commit()
+		conn.close()
+	except:
+		return 'erro ao inserir alerta'
+
+def remAlerta(table, user_id):
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		cursor.execute("UPDATE {} SET alert=0 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
+		conn.commit()
+		conn.close()
+	except:
+		return 'erro ao remover alerta'	
+
+def advertir(table, user_id):
+
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		advs = procurar(table, user_id)[1]
+		advs += 1
+		cursor.execute("""UPDATE {} SET advs = {} WHERE user_id = {};""".format(str(table).replace('-', 'T'), advs, user_id))
 		conn.commit()
 		return 'alterado'
 	except:
 		return 'erro ao alterar'
 	conn.close
 
-def desadvertir(table, nome, quantidade):
+def desadvertir(table, user_id, quantidade):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		advs = procurar(table, nome)[1]
-		cursor.execute("""UPDATE {table}
-SET nome = '{nome}',
-advs = {advs} 
-WHERE nome = '{nome}'; """.format(table=str(table).replace('-', 'T'), nome=nome, advs=advs-quantidade))
+		advs = procurar(table, user_id)[1]
+		advs -= quantidade
+		cursor.execute("""UPDATE {} SET advs = {} WHERE user_id = {};""".format(str(table).replace('-', 'T'), advs, user_id))
 		conn.commit()
 		return 'alterado'
 	except:
