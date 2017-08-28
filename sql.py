@@ -42,7 +42,6 @@ def alterar_table(table):
 		print('erro')
 
 def inserir(table, nome, user_id):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -60,7 +59,6 @@ def inserir(table, nome, user_id):
 			retorno = 'não foi possível alterar tabela'
 		return retorno
 	conn.close()
-
 
 def mostrar(table):
 
