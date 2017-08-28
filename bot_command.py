@@ -14,7 +14,8 @@ class command_user(control, keyboard):
 			else:
 				resultado = sql.procurarUserNome(self.chat_id,usuario)
 				if resultado[3] == 1:
-					return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
+					user = resultado[2]
+					return self.bot.sendMessage(user,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
 
 	@log
 	def start(self):
