@@ -74,10 +74,10 @@ def procurar(table, nome):
 		cursor.execute("SELECT * FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
 		for busca in cursor.fetchall():
 			print(busca)
-			user = busca[0]
-			user_id = busca[1]
-			advs = busca[2]
-			alerta = busca[3]
+			user = busca[1]
+			user_id = busca[2]
+			advs = busca[3]
+			alerta = busca[4]
 		cadastro = [user, user_id, advs, alerta]
 		return cadastro
 	except:

@@ -12,7 +12,9 @@ class command_user(control, keyboard):
 			if(sql.procurar(self.chat_id,usuario)=='erro ao procurar'):
 				print('usuário não existe')
 			else:
-				return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
+				resultado = sql.procurar(self.chat_id,usuario)
+				if resultado[3] == 1:
+					return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
 
 	@log
 	def start(self):
