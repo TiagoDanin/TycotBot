@@ -3,6 +3,11 @@ from keyboard import keyboard
 from decorators import *
 import sql
 import telepot
+try:
+	from bs4 import BeautifulSoup
+except:
+	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+import urllib.request as urllib
 
 class command_user(control, keyboard):
 	def buscarAlerta(self,usuario=None):
@@ -64,6 +69,7 @@ class command_user(control, keyboard):
 			/link -> link do grupo
 			/regras -> regras do grupo
 			/leave -> sair do grupo
+			/verifybook -> verifica o ultimo livro do packtpub
 			''')
 		)
 	def aceitarAlerta(self):
@@ -142,9 +148,9 @@ class command_user(control, keyboard):
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
 			except telepot.exception.TelegramError:
 				self.bot.sendMessage(chat_id=self.chat_id, 
-									 parse_mode='Markdown', 
-									 text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
-									 disable_web_page_preview=True
+                                                     parse_mode='Markdown', 
+                                                     text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
+                                                     disable_web_page_preview=True
 								)
 
 		return True
@@ -156,8 +162,25 @@ class command_user(control, keyboard):
 				link_tg = link_.read()
 		except FileNotFoundError:
 			link_tg = 'Sem link!'
-		link_msg = '<a href="' + str(link_tg) + '">' + str(info_chat) + '</a>'
+		link_msg = '<a href="{}">{}</a>'.format(link_tg, info_chat)
 		return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
+
+	def _book_info(self):
+		'''
+	    Retorna a url da imagem do livro, o nome do livro e o link
+		'''
+		packt = 'https://www.packtpub.com/packt/offers/free-learning'
+		page = urllib.urlopen(packt)
+		soup = BeautifulSoup(page)
+
+		book_url_image = soup.find('img', class_='bookimage imagecache imagecache-dotd_main_image')
+		book_title = soup.find('div', class_='dotd-title').h2.text
+		return book_url_image.attrs['src'], book_title.strip(), packt
+
+	def verify_book(self):
+		book_url_image, book_title, packt_url = self._book_info()
+		self.bot.sendPhoto(self.UserID, 'http:{}'.format(book_url_image), '{}:{}'.format(book_title,
+                                                                                             packt_url))
 
 class command_admin(control, keyboard):
 

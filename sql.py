@@ -185,4 +185,3 @@ def tabelas():
 	except:
 		return 'erro ao achar tabelas'
 	conn.close()
-

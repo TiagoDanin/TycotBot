@@ -6,12 +6,13 @@ from bot_command import *
 from time import sleep
 import re
 
-TOKEN = sys.argv[1]
+TOKEN = sys.argv[1] 
 bot = telepot.Bot(TOKEN)
 
 def handle(msg):
+	print(msg)
 	main = control(msg, bot)
-	inst_commnand_user = command_user(msg=msg, bot=bot)
+	inst_command_user = command_user(msg=msg, bot=bot)
 	inst_command_admin = command_admin(msg=msg, bot=bot)
 
 	if msg.get('data'):
@@ -21,9 +22,9 @@ def handle(msg):
 	else:
 		try:
 			frase = msg['text']
-			result = re.search('(?<=@)\w+',frase)
-			if(result != None):
-				usuario=result.group(0)
+			result = re.search('(?<=@)\w+', frase)
+			if(result is not None):
+				usuario = result.group(0)
 				inst_commnand_user.buscarAlerta(usuario=usuario)
 
 			text = msg['text'].split(' ')
@@ -43,18 +44,19 @@ def handle(msg):
 		}
 
 		user_command = {
-			'/alertoff'   :inst_commnand_user.remAlerta,
-			'/alert'						:inst_commnand_user.aceitarAlerta,
-			'/start'      :inst_commnand_user.start,
-			'/info'       :inst_commnand_user.info,
-			'/ajuda'      :inst_commnand_user.ajuda,
-			'/link'       :inst_commnand_user.link,
-			'/regras'     :inst_commnand_user.regras
+			'/start'      :inst_command_user.start,
+			'/info'       :inst_command_user.info,
+			'/ajuda'      :inst_command_user.ajuda,
+			'/link'       :inst_command_user.link,
+			'/regras'     :inst_command_user.regras,
+			'/verifybook' :inst_command_user.verify_book,
+			'/alertoff'   :inst_command_user.remAlerta,
+			'/alert'      :inst_command_user.aceitarAlerta,
 		}
 
 		others = {
-			'left_chat_member' :inst_commnand_user.goodbye,
-			'new_chat_member'  :inst_commnand_user.new_member
+			'left_chat_member' :inst_command_user.goodbye,
+			'new_chat_member'  :inst_command_user.new_member
 		}
 
 		if admin_commands.get(ctext):
