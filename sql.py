@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import sqlite3, sys
 db = 'banco.db'
 
@@ -154,7 +153,6 @@ def tabelas():
 		return 'erro ao achar tabelas'
 	conn.close()
 
-=======
 import sqlite3, sys
 db = 'banco.db'
 
@@ -298,4 +296,3 @@ def tabelas():
 		return 'erro ao achar tabelas'
 	conn.close()
 
->>>>>>> 2233a5225477d08b7889288881b621213968719e
