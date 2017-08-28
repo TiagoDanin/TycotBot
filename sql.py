@@ -16,7 +16,7 @@ def criar_table(table):
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(Id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) NOT NULL, user_id INT, advs INT NOT NULL DEFAULT 0, alert INT DEFAULT 0);""".format(str(table).replace('-', 'T')))
+		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(nome VARCHAR(50) NOT NULL, advs INT NOT NULL DEFAULT 0, Id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT, alert INT DEFAULT 0);""".format(str(table).replace('-', 'T')))
 		conn.commit()
 		return 'Table {} criado'.format(str(table).replace('-', 'T'))
 	except:
@@ -73,9 +73,9 @@ def procurar(table, nome):
 	try:
 		cursor.execute("SELECT * FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
 		for busca in cursor.fetchall():
-			user = busca[1]
-			user_id = busca[2]
-			advs = busca[3]
+			user = busca[0]
+			user_id = busca[3]
+			advs = busca[1]
 			alerta = busca[4]
 		cadastro = [user, user_id, advs, alerta]
 		return cadastro
