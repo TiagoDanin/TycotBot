@@ -14,7 +14,7 @@ class command_user(control, keyboard):
 			else:
 				resultado = sql.procurarUserNome(self.chat_id,usuario)
 				if resultado[3] == 1:
-          user = resultado[2]
+					user = resultado[2]
 					msg = int(self.msg['message_id'])
 					return self.bot.forwardMessage(user, self.chat_id, msg)
 
