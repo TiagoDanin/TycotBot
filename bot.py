@@ -5,12 +5,13 @@ from control_bot import control
 from bot_command import *
 from time import sleep
 
-TOKEN = sys.argv[1]
+TOKEN = '429814041:AAGePqKGQ5PJ-e20hisEOe8shYtJjpxDM_4'
 bot = telepot.Bot(TOKEN)
 
 def handle(msg):
+	print(msg)
 	main = control(msg, bot)
-	inst_commnand_user = command_user(msg=msg, bot=bot)
+	inst_command_user = command_user(msg=msg, bot=bot)
 	inst_command_admin = command_admin(msg=msg, bot=bot)
 
 	if msg.get('data'):
@@ -36,16 +37,17 @@ def handle(msg):
 		}
 
 		user_command = {
-			'/start'      :inst_commnand_user.start,
-			'/info'       :inst_commnand_user.info,
-			'/ajuda'      :inst_commnand_user.ajuda,
-			'/link'       :inst_commnand_user.link,
-			'/regras'     :inst_commnand_user.regras
+			'/start'      :inst_command_user.start,
+			'/info'       :inst_command_user.info,
+			'/ajuda'      :inst_command_user.ajuda,
+			'/link'       :inst_command_user.link,
+			'/regras'     :inst_command_user.regras,
+			'/verifybook' :inst_command_user.verify_book
 		}
 
 		others = {
-			'left_chat_member' :inst_commnand_user.goodbye,
-			'new_chat_member'  :inst_commnand_user.new_member
+			'left_chat_member' :inst_command_user.goodbye,
+			'new_chat_member'  :inst_command_user.new_member
 		}
 
 		if admin_commands.get(ctext):
