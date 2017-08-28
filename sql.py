@@ -16,7 +16,7 @@ def criar_table(table):
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(Id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) NOT NULL, user_id INT, advs INT NOT NULL DEFAULT 0, alert INT DEFAULT 0);""".format(str(table).replace('-', 'T')))
+		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(nome VARCHAR(50) NOT NULL PRIMARY KEY, advs INT NOT NULL DEFAULT 0);""".format(str(table).replace('-', 'T')))
 		conn.commit()
 		return 'Table {} criado'.format(str(table).replace('-', 'T'))
 	except:
@@ -25,12 +25,12 @@ def criar_table(table):
 	conn.close()
 
 
-def inserir(table, nome, user_id):
+def inserir(table, name):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("INSERT INTO {} (nome, user_id) VALUES ('{}','{}');".format(str(table).replace('-', 'T'), str(nome), str(user_id)))
+		cursor.execute("INSERT INTO {} (nome) VALUES ('{}');".format(str(table).replace('-', 'T'), str(name)))
 		conn.commit()
 		return 'inserido'
 	except:
@@ -73,35 +73,14 @@ def procurar(table, nome):
 	try:
 		cursor.execute("SELECT * FROM {} WHERE nome = '{}';".format(str(table).replace('-', 'T'), nome))
 		for busca in cursor.fetchall():
-			user = busca[1]
-			user_id = busca[2]
-			advs = busca[3]
-			alerta = busca[4]
-		cadastro = [user, user_id, advs, alerta]
+			print(busca)
+			user = busca[0]
+			advs = busca[1]
+		cadastro = [user, advs]
 		return cadastro
 	except:
 		return('erro ao procurar')
 	conn.close()
-
-def alerta(table, user_id):
-	conn = sqlite3.connect(db)
-	cursor = conn.cursor()
-	try:
-		cursor.execute("UPDATE {} SET alert=1 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
-		conn.commit()
-		conn.close()
-	except:
-		return 'erro ao inserir alerta'
-
-def remAlerta(table, user_id):
-	conn = sqlite3.connect(db)
-	cursor = conn.cursor()
-	try:
-		cursor.execute("UPDATE {} SET alert=0 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
-		conn.commit()
-		conn.close()
-	except:
-		return 'erro ao remover alerta'	
 
 def advertir(table, nome):
 
