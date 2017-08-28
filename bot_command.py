@@ -16,7 +16,7 @@ class command_user(control, keyboard):
 				if resultado[3] == 1:
 					user = resultado[2]
 					msg = int(self.msg['message_id'])
-					return self.bot.forwardMessage(user, self.chat_id, msg)
+					return self.bot.forwardMessage(user, self.chat_id, msg), self.bot.sendMessage(user,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']))
 
 	@log
 	def start(self):
