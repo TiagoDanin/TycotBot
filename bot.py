@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import telepot
 from telepot.loop import MessageLoop
 import sys
@@ -81,7 +80,7 @@ if __name__ == '__main__':
 
 	while 1:
 		sleep(100)
-=======
+
 import telepot
 from telepot.loop import MessageLoop
 import sys
@@ -105,15 +104,14 @@ def handle(msg):
 		inst_command_admin.unwarn(data=msg['data'])
 	else:
 		try:
-			#************************************************************
+		
 			frase = msg['text']
 			result = re.search('(?<=@)\w+',frase)
 
 			if(result != None):
 				usuario=result.group(0)
 				inst_commnand_user.buscarAlerta(usuario=usuario)
-			#	
-			#************************************************************
+
 			text = msg['text'].split(' ')
 			ctext = text[0].lower()
 		except:
@@ -167,4 +165,3 @@ if __name__ == '__main__':
 
 	while 1:
 		sleep(100)
->>>>>>> 2233a5225477d08b7889288881b621213968719e
