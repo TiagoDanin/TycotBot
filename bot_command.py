@@ -5,14 +5,25 @@ import sql
 import telepot
 
 class command_user(control, keyboard):
+	def buscarAlerta(self,usuario=None):
+		if self.chat_type=='private':
+			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+		else:
+			if(sql.procurarUserNome(self.chat_id,usuario)=='erro ao procurar'):
+				print('usuário não existe')
+			else:
+				resultado = sql.procurarUserNome(self.chat_id,usuario)
+				if resultado[3] == 1:
+					return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
 
 	@log
 	def start(self):
-		return self.bot.sendMessage(
-			self.chat_id,
-			('Oi! Por favor, inicie uma conversa privada.'
-			' Bots funcionam apenas desta forma.'),
-			reply_markup=self.start_key()
+		if self.chat_type != 'private':
+			return self.bot.sendMessage(
+				self.chat_id,
+				('Oi! Por favor, inicie uma conversa privada.'
+				' Bots funcionam apenas desta forma.'),
+				reply_markup=self.start_key()
 		)
 
 	@decor_info_ajuda
@@ -45,13 +56,51 @@ class command_user(control, keyboard):
 			self.UserID, ('''
 			Olá, sou o Tycot!
 			Segue minha lista de comandos:
+			/alert -> ativar serviço de alertas
+			/alertoff -> desativar serviço de alertas
 			/info -> informações do grupo
 			/link -> link do grupo
 			/regras -> regras do grupo
 			/leave -> sair do grupo
 			''')
 		)
+	def aceitarAlerta(self):
+		if self.chat_type=='private':
+			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+		else:
+			if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
+				retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
+				if(retornoIns=='erro ao inserir'):
+					print('erro ao inserir')
+				retorno=sql.alerta(self.chat_id,self.UserID)
+				if(retorno=='erro ao inserir alerta'):
+					print('erro ao inserir alerta')
+				return self.bot.sendMessage(self.UserID,('Usuário adicionado. Alerta ativado'))
+			else:
+				retorno=sql.alerta(self.chat_id,self.UserID)
+				if(retorno=='erro ao inserir alerta'):
+					print('erro ao inserir alerta')
+				else:
+					return self.bot.sendMessage(self.UserID,('Alerta ativado'))
 
+	def remAlerta(self):
+			if self.chat_type=='private':
+				return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+			else:
+				if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
+					retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
+					if(retornoIns=='erro ao inserir'):
+						print('erro ao remover')
+					retorno=sql.remAlerta(self.chat_id,self.UserID)
+					if(retorno=='erro ao remover alerta'):
+						print('erro ao remover alerta')
+					return self.bot.sendMessage(self.UserID,('Usuário adicionado. Alerta desativado'))
+				else:
+					retorno=sql.remAlerta(self.chat_id,self.UserID)
+					if(retorno=='erro ao remover alerta'):
+						print('erro ao remover alerta')
+					else:
+						return self.bot.sendMessage(self.UserID,('Alerta desativado'))
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
@@ -70,7 +119,6 @@ class command_user(control, keyboard):
 
 	def new_member(self):
 		user_first_name = self.msg['new_chat_member']['first_name']
-		user_username   = self.msg['new_chat_member']['username']
 		id_user         = self.msg['new_chat_member']['id']
 		get_bot_name    = self.bot.getMe()
 		bot_name        = get_bot_name['first_name']
@@ -80,12 +128,14 @@ class command_user(control, keyboard):
 			sql.criar_table(self.chat_id)
 		else:
 			try:
+				retorno = sql.inserir(chat, user_first_name, id_user)
+				if(retorno=='erro ao inserir'):
+					print('erro ao inserir')
 				with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
 					welcome = welcome.read()	
 					welcome = welcome.replace('$name', user_first_name)
 					self.bot.sendMessage(self.chat_id, welcome)
-					if 'username' in msg['new_chat_member']:
-						sql.inserir(self.chat_id, user_username)
+					
 			except FileNotFoundError:
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
 			except telepot.exception.TelegramError:
@@ -141,9 +191,9 @@ class command_admin(control, keyboard):
 			try:
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 			except:
-				sql.inserir(self.chat_id, user_reply_id)
+				sql.inserir(self.chat_id, first_name_reply, user_reply_id)
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
-
+			sql.advertir(self.chat_id, user_reply_id)
 			self.bot.sendMessage(
 				self.chat_id,
 				'{user} <b>has been warned</b> ({advs}/3).'.format(
@@ -153,7 +203,6 @@ class command_admin(control, keyboard):
 				parse_mode='HTML',
 				reply_markup=self.keyboard_warn(user_reply_id)
 			)
-			sql.advertir(self.chat_id, user_reply_id)
 			if advs >= 3:
 				self.bot.sendMessage(
 					self.chat_id,
@@ -217,7 +266,7 @@ class command_admin(control, keyboard):
 	def add(self):
 		sql.criar_table(self.chat_id)
 		if sql.procurar(self.chat_id, self.msg['from']['id']) == 'erro ao procurar':
-			sql.inserir(self.chat_id, self.msg['from']['id'])
+			sql.inserir(self.chat_id, self.msg['from']['first_name'], self.msg['from']['id'])
 		else:
 			pass
 
