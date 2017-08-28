@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from control_bot import control
 from keyboard import keyboard
 from decorators import *
@@ -296,7 +295,7 @@ class command_admin(control, keyboard):
 			self.chat_id,
 			'As mensagens de boas-vindas foram alteradas com sucesso!'
 		)
-=======
+
 from control_bot import control
 from keyboard import keyboard
 from decorators import *
@@ -305,7 +304,6 @@ import telepot
 
 
 class command_user(control, keyboard):	
-	#***************************************************************************************************
 	def buscarAlerta(self,usuario=None):
 		if self.chat_type=='private':
 			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
@@ -314,7 +312,6 @@ class command_user(control, keyboard):
 				print('usuário não existe')
 			else:
 				return self.bot.sendMessage(self.UserID,('Você foi marcado no grupo {}').format(self.msg['chat']['title']))
-	#**************************************************************************************************
 	@log
 	def start(self):
 		if self.chat_type !='private':
@@ -362,7 +359,7 @@ class command_user(control, keyboard):
 			/leave -> sair do grupo
 			''')
 		)
-#******************************************************************
+
 	def aceitarAlerta(self):
 		if self.chat_type=='private':
 			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
@@ -381,7 +378,7 @@ class command_user(control, keyboard):
 					print('erro ao inserir alerta')
 				else:
 					return self.bot.sendMessage(self.UserID,('Alerta ativado'))
-#********************************************************************
+
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
 			user_first_name = str(self.msg['left_chat_member']['first_name'])
@@ -575,4 +572,3 @@ class command_admin(control, keyboard):
 			self.chat_id,
 			'As mensagens de boas-vindas foram alteradas com sucesso!'
 		)
->>>>>>> 2233a5225477d08b7889288881b621213968719e
