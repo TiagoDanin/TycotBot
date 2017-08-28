@@ -16,7 +16,7 @@ def criar_table(table):
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(nome VARCHAR(50) NOT NULL PRIMARY KEY, advs INT NOT NULL DEFAULT 0);""".format(str(table).replace('-', 'T')))
+		cursor.execute("""CREATE TABLE IF NOT EXISTS {}(Id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) NOT NULL, user_id INT, advs INT NOT NULL DEFAULT 0, alert INT DEFAULT 0);""".format(str(table).replace('-', 'T')))
 		conn.commit()
 		return 'Table {} criado'.format(str(table).replace('-', 'T'))
 	except:
@@ -25,12 +25,12 @@ def criar_table(table):
 	conn.close()
 
 
-def inserir(table, name):
+def inserir(table, nome, user_id):
 
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
-		cursor.execute("INSERT INTO {} (nome) VALUES ('{}');".format(str(table).replace('-', 'T'), str(name)))
+		cursor.execute("INSERT INTO {} (nome, user_id) VALUES ('{}','{}');".format(str(table).replace('-', 'T'), str(nome), str(user_id)))
 		conn.commit()
 		return 'inserido'
 	except:
@@ -75,12 +75,34 @@ def procurar(table, nome):
 		for busca in cursor.fetchall():
 			print(busca)
 			user = busca[0]
-			advs = busca[1]
-		cadastro = [user, advs]
+			user_id = busca[1]
+			advs = busca[2]
+			alerta = busca[3]
+		cadastro = [user, user_id, advs, alerta]
 		return cadastro
 	except:
 		return('erro ao procurar')
 	conn.close()
+
+def alerta(table, user_id):
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		cursor.execute("UPDATE {} SET alert=1 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
+		conn.commit()
+		conn.close()
+	except:
+		return 'erro ao inserir alerta'
+
+def remAlerta(table, user_id):
+	conn = sqlite3.connect(db)
+	cursor = conn.cursor()
+	try:
+		cursor.execute("UPDATE {} SET alert=0 WHERE user_id={}".format(str(table).replace('-','T'),user_id))
+		conn.commit()
+		conn.close()
+	except:
+		return 'erro ao remover alerta'	
 
 def advertir(table, nome):
 
