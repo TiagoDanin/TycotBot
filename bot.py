@@ -4,7 +4,6 @@ import sys
 from control_bot import control
 from bot_command import *
 from time import sleep
-import re
 
 TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
@@ -20,12 +19,6 @@ def handle(msg):
 		inst_command_admin.unwarn(data=msg['data'])
 	else:
 		try:
-			frase = msg['text']
-			result = re.search('(?<=@)\w+',frase)
-			if(result != None):
-				usuario=result.group(0)
-				inst_commnand_user.buscarAlerta(usuario=usuario)
-
 			text = msg['text'].split(' ')
 			ctext = text[0].lower()
 		except:
@@ -43,8 +36,6 @@ def handle(msg):
 		}
 
 		user_command = {
-			'/alertoff'   :inst_commnand_user.remAlerta,
-			'/alert'						:inst_commnand_user.aceitarAlerta,
 			'/start'      :inst_commnand_user.start,
 			'/info'       :inst_commnand_user.info,
 			'/ajuda'      :inst_commnand_user.ajuda,
