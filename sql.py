@@ -1,8 +1,8 @@
-import sqlite3, sys
+import sqlite3
+import sys
 db = 'banco.db'
 
 def refazer(table):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -61,7 +61,6 @@ def inserir(table, nome, user_id):
 	conn.close()
 
 def mostrar(table):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	resposta = ''
@@ -77,7 +76,6 @@ def mostrar(table):
 	conn.close()
 
 def delete(table, user_id):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -89,7 +87,6 @@ def delete(table, user_id):
 	conn.close()
 
 def procurarUserNome(table, nome):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -106,7 +103,6 @@ def procurarUserNome(table, nome):
 	conn.close()
 
 def procurar(table, user_id):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -140,10 +136,9 @@ def remAlerta(table, user_id):
 		conn.commit()
 		conn.close()
 	except:
-		return 'erro ao remover alerta'	
+		return 'erro ao remover alerta'
 
 def advertir(table, user_id):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -157,7 +152,6 @@ def advertir(table, user_id):
 	conn.close
 
 def desadvertir(table, user_id, quantidade):
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	try:
@@ -172,7 +166,6 @@ def desadvertir(table, user_id, quantidade):
 
 
 def tabelas():
-
 	conn = sqlite3.connect(db)
 	cursor = conn.cursor()
 	tabelas = ''
