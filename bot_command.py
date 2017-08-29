@@ -148,9 +148,9 @@ class command_user(control, keyboard):
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
 			except telepot.exception.TelegramError:
 				self.bot.sendMessage(chat_id=self.chat_id, 
-                                                     parse_mode='Markdown', 
-                                                     text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
-                                                     disable_web_page_preview=True
+    parse_mode='Markdown', 
+    text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
+    disable_web_page_preview=True
 								)
 
 		return True
@@ -166,9 +166,7 @@ class command_user(control, keyboard):
 		return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
 
 	def _book_info(self):
-		'''
-	    Retorna a url da imagem do livro, o nome do livro e o link
-		'''
+
 		packt = 'https://www.packtpub.com/packt/offers/free-learning'
 		page = urllib.urlopen(packt)
 		soup = BeautifulSoup(page)
@@ -179,8 +177,7 @@ class command_user(control, keyboard):
 
 	def verify_book(self):
 		book_url_image, book_title, packt_url = self._book_info()
-		self.bot.sendPhoto(self.UserID, 'http:{}'.format(book_url_image), '{}:{}'.format(book_title,
-                                                                                             packt_url))
+		self.bot.sendPhoto(self.UserID, 'http:{}'.format(book_url_image), '{}:{}'.format(book_title, packt_url))
 
 class command_admin(control, keyboard):
 

@@ -10,7 +10,6 @@ TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
 
 def handle(msg):
-	print(msg)
 	main = control(msg, bot)
 	inst_command_user = command_user(msg=msg, bot=bot)
 	inst_command_admin = command_admin(msg=msg, bot=bot)
@@ -23,9 +22,9 @@ def handle(msg):
 		try:
 			frase = msg['text']
 			result = re.search('(?<=@)\w+', frase)
-			if(result is not None):
+			if(result != None):
 				usuario = result.group(0)
-				inst_commnand_user.buscarAlerta(usuario=usuario)
+				inst_command_user.buscarAlerta(usuario=usuario)
 
 			text = msg['text'].split(' ')
 			ctext = text[0].lower()
