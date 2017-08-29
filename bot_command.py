@@ -26,7 +26,8 @@ class command_user(control, keyboard):
 					), self.bot.sendMessage(
 						user,
 						('Mensagem enviada no grupo {}').format(
-						self.msg['chat']['title'])
+							self.msg['chat']['title']
+						)
 					)
 
 	@log
@@ -82,19 +83,21 @@ class command_user(control, keyboard):
 	def aceitarAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo'))
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
 				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
-				if(retornoIns == 'erro ao inserir'):
+				print(retornoIns)
+				if(retornoIns == 'erro'):
 					print('erro ao inserir')
 				retorno = sql.alerta(self.chat_id, self.UserID)
-				if(retorno == 'erro ao inserir alerta'):
+				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
 				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado'))
 			else:
 				retorno = sql.alerta(self.chat_id, self.UserID)
-				if(retorno == 'erro ao inserir alerta'):
+				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
 				else:
 					return self.bot.sendMessage(self.UserID, ('Alerta ativado'))
@@ -102,7 +105,8 @@ class command_user(control, keyboard):
 	def remAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo'))
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
 				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
@@ -134,12 +138,17 @@ class command_user(control, keyboard):
 			return True
 
 	def regras(self):
-		try:
-			with open('.tmp/regras' + str(self.chat_id) + '.txt', 'r') as rules:
-				rules = rules.read()
-		except FileNotFoundError:
-			rules = 'Sem regras!'
-		return self.bot.sendMessage(self.chat_id, rules, parse_mode='HTML')
+		if self.chat_type == 'private':
+			return self.bot.sendMessage(
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+			)
+		else:
+			try:
+				with open('.tmp/regras' + str(self.chat_id) + '.txt', 'r') as rules:
+					rules = rules.read()
+			except FileNotFoundError:
+				rules = 'Sem regras!'
+			return self.bot.sendMessage(self.chat_id, rules, parse_mode='HTML')
 
 	def new_member(self):
 		user_first_name = self.msg['new_chat_member']['first_name']
@@ -174,14 +183,19 @@ class command_user(control, keyboard):
 		return True
 
 	def link(self):
-		info_chat = self.msg['chat']['title']
-		try:
-			with open('.tmp/link' + str(self.chat_id) + '.txt', 'r') as link_:
-				link_tg = link_.read()
-		except FileNotFoundError:
-			link_tg = 'Sem link!'
-		link_msg = '<a href="{}">{}</a>'.format(link_tg, info_chat)
-		return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
+		if self.chat_type == 'private':
+			return self.bot.sendMessage(
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+			)
+		else:
+			info_chat = self.msg['chat']['title']
+			try:
+				with open('.tmp/link' + str(self.chat_id) + '.txt', 'r') as link_:
+					link_tg = link_.read()
+			except FileNotFoundError:
+				link_tg = 'Sem link!'
+			link_msg = '<a href="{}">{}</a>'.format(link_tg, info_chat)
+			return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
 
 	def book_info(self):
 		packt = 'https://www.packtpub.com/packt/offers/free-learning'
