@@ -3,25 +3,31 @@ from keyboard import keyboard
 from decorators import *
 import sql
 import telepot
-try:
-	from bs4 import BeautifulSoup
-except:
-	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+from bs4 import BeautifulSoup
 import urllib.request as urllib
 
 class command_user(control, keyboard):
-	def buscarAlerta(self,usuario=None):
-		if self.chat_type=='private':
-			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+	def buscarAlerta(self, usuario=None):
+		if self.chat_type == 'private':
+			return self.bot.sendMessage(
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo'))
 		else:
-			if(sql.procurarUserNome(self.chat_id,usuario)=='erro ao procurar'):
+			if(sql.procurarUserNome(self.chat_id, usuario) == 'erro ao procurar'):
 				print('usuário não existe')
 			else:
-				resultado = sql.procurarUserNome(self.chat_id,usuario)
+				resultado = sql.procurarUserNome(self.chat_id, usuario)
 				if resultado[3] == 1:
 					user = resultado[2]
 					msg = int(self.msg['message_id'])
-					return self.bot.forwardMessage(user, self.chat_id, msg), self.bot.sendMessage(user,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']))
+					return self.bot.forwardMessage(
+						user,
+						self.chat_id,
+						msg
+					), self.bot.sendMessage(
+						user,
+						('Mensagem enviada no grupo {}').format(
+						self.msg['chat']['title'])
+					)
 
 	@log
 	def start(self):
@@ -31,7 +37,7 @@ class command_user(control, keyboard):
 				('Oi! Por favor, inicie uma conversa privada.'
 				' Bots funcionam apenas desta forma.'),
 				reply_markup=self.start_key()
-		)
+			)
 
 	@decor_info_ajuda
 	def info(self):
@@ -72,49 +78,59 @@ class command_user(control, keyboard):
 			/verifybook -> verifica o ultimo livro do packtpub
 			''')
 		)
+
 	def aceitarAlerta(self):
-		if self.chat_type=='private':
-			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+		if self.chat_type == 'private':
+			return self.bot.sendMessage(
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo'))
 		else:
-			if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
-				retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
-				if(retornoIns=='erro ao inserir'):
+			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
+				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
+				if(retornoIns == 'erro ao inserir'):
 					print('erro ao inserir')
-				retorno=sql.alerta(self.chat_id,self.UserID)
-				if(retorno=='erro ao inserir alerta'):
+				retorno = sql.alerta(self.chat_id, self.UserID)
+				if(retorno == 'erro ao inserir alerta'):
 					print('erro ao inserir alerta')
-				return self.bot.sendMessage(self.UserID,('Usuário adicionado. Alerta ativado'))
+				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado'))
 			else:
-				retorno=sql.alerta(self.chat_id,self.UserID)
-				if(retorno=='erro ao inserir alerta'):
+				retorno = sql.alerta(self.chat_id, self.UserID)
+				if(retorno == 'erro ao inserir alerta'):
 					print('erro ao inserir alerta')
 				else:
-					return self.bot.sendMessage(self.UserID,('Alerta ativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta ativado'))
 
 	def remAlerta(self):
-			if self.chat_type=='private':
-				return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+		if self.chat_type == 'private':
+			return self.bot.sendMessage(
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo'))
+		else:
+			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
+				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
+				if(retornoIns == 'erro ao inserir'):
+					print('erro ao remover')
+				retorno = sql.remAlerta(self.chat_id, self.UserID)
+				if(retorno == 'erro ao remover alerta'):
+					print('erro ao remover alerta')
+				return self.bot.sendMessage(
+					self.UserID, ('Usuário adicionado. Alerta desativado'))
 			else:
-				if(sql.procurar(self.chat_id,self.UserID)=='erro ao procurar'):
-					retornoIns=sql.inserir(self.chat_id, self.user, self.UserID)
-					if(retornoIns=='erro ao inserir'):
-						print('erro ao remover')
-					retorno=sql.remAlerta(self.chat_id,self.UserID)
-					if(retorno=='erro ao remover alerta'):
-						print('erro ao remover alerta')
-					return self.bot.sendMessage(self.UserID,('Usuário adicionado. Alerta desativado'))
+				retorno = sql.remAlerta(self.chat_id, self.UserID)
+				if(retorno == 'erro ao remover alerta'):
+					print('erro ao remover alerta')
 				else:
-					retorno=sql.remAlerta(self.chat_id,self.UserID)
-					if(retorno=='erro ao remover alerta'):
-						print('erro ao remover alerta')
-					else:
-						return self.bot.sendMessage(self.UserID,('Alerta desativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta desativado'))
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
 			user_first_name = str(self.msg['left_chat_member']['first_name'])
-			self.bot.sendMessage(self.chat_id, "Tchau, {}".format(user_first_name))
-			self.bot.sendVideo(self.chat_id, "https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4")
+			self.bot.sendMessage(
+				self.chat_id,
+				"Tchau, {}".format(user_first_name)
+			)
+			self.bot.sendVideo(
+				self.chat_id,
+				'https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4'
+			)
 			return True
 
 	def regras(self):
@@ -127,9 +143,9 @@ class command_user(control, keyboard):
 
 	def new_member(self):
 		user_first_name = self.msg['new_chat_member']['first_name']
-		id_user         = self.msg['new_chat_member']['id']
-		get_bot_name    = self.bot.getMe()
-		bot_name        = get_bot_name['first_name']
+		id_user = self.msg['new_chat_member']['id']
+		get_bot_name = self.bot.getMe()
+		bot_name = get_bot_name['first_name']
 
 		if(user_first_name == bot_name):
 			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
@@ -137,22 +153,24 @@ class command_user(control, keyboard):
 		else:
 			try:
 				retorno = sql.inserir(chat, user_first_name, id_user)
-				if(retorno=='erro ao inserir'):
+				if(retorno == 'erro ao inserir'):
 					print('erro ao inserir')
 				with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
-					welcome = welcome.read()	
+					welcome = welcome.read()
 					welcome = welcome.replace('$name', user_first_name)
 					self.bot.sendMessage(self.chat_id, welcome)
-					
 			except FileNotFoundError:
 				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
 			except telepot.exception.TelegramError:
-				self.bot.sendMessage(chat_id=self.chat_id, 
-    parse_mode='Markdown', 
-    text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(user_first_name,id_user),
-    disable_web_page_preview=True
-								)
-
+				self.bot.sendMessage(
+					chat_id=self.chat_id,
+					parse_mode='Markdown',
+					text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(
+						user_first_name,
+						id_user
+					),
+					disable_web_page_preview=True
+				)
 		return True
 
 	def link(self):
@@ -165,22 +183,30 @@ class command_user(control, keyboard):
 		link_msg = '<a href="{}">{}</a>'.format(link_tg, info_chat)
 		return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
 
-	def _book_info(self):
-
+	def book_info(self):
 		packt = 'https://www.packtpub.com/packt/offers/free-learning'
 		page = urllib.urlopen(packt)
 		soup = BeautifulSoup(page)
 
-		book_url_image = soup.find('img', class_='bookimage imagecache imagecache-dotd_main_image')
+		book_url_image = soup.find(
+			'img',
+			class_='bookimage imagecache imagecache-dotd_main_image'
+		)
 		book_title = soup.find('div', class_='dotd-title').h2.text
 		return book_url_image.attrs['src'], book_title.strip(), packt
 
 	def verify_book(self):
-		book_url_image, book_title, packt_url = self._book_info()
-		self.bot.sendPhoto(self.UserID, 'http:{}'.format(book_url_image), '{}:{}'.format(book_title, packt_url))
+		book_url_image, book_title, packt_url = self.book_info()
+		self.bot.sendPhoto(
+			self.UserID,
+			'http:{}'.format(book_url_image),
+			'{}:{}'.format(
+				book_title,
+				packt_url
+			)
+		)
 
 class command_admin(control, keyboard):
-
 	@admin
 	def ban(self):
 		first_name_reply = self.msg['reply_to_message']['from']['first_name']
@@ -194,11 +220,12 @@ class command_admin(control, keyboard):
 			)
 			try:
 				sql.delete(self.chat_id, reply_id)
-			except:
+			except BaseException:
 				pass
 			return True
 		else:
-			return self.bot.sendMessage(self.chat_id,
+			return self.bot.sendMessage(
+				self.chat_id,
 				'<b>{}</b> é um dos administradores. Não posso remover administradores.'.format(first_name_reply),
 				parse_mode='HTML'
 			)
@@ -212,7 +239,7 @@ class command_admin(control, keyboard):
 		if user_reply_id not in self.get_admin_list(user_reply=True):
 			try:
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
-			except:
+			except BaseException:
 				sql.inserir(self.chat_id, first_name_reply, user_reply_id)
 				advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
 			sql.advertir(self.chat_id, user_reply_id)
@@ -220,7 +247,7 @@ class command_admin(control, keyboard):
 				self.chat_id,
 				'{user} <b>has been warned</b> ({advs}/3).'.format(
 					user=first_name_reply,
-					advs=advs+1
+					advs=advs + 1
 				),
 				parse_mode='HTML',
 				reply_markup=self.keyboard_warn(user_reply_id)
@@ -239,26 +266,24 @@ class command_admin(control, keyboard):
 			return self.bot.sendMessage(
 				self.chat_id,
 				'<b>{}</b> é um dos administradores. Não posso advertir administradores.'.format(first_name_reply),
-				parse_mode='HTML'
-			)
-
+				parse_mode='HTML')
 
 	@admin
 	@log
 	def unwarn(self, data=None):
 		user_reply_id = data
-		if not(data != None):
+		if not(data is not None):
 			first_name_reply = self.msg['reply_to_message']['from']['first_name']
 			user_reply_id = self.msg['reply_to_message']['from']['id']
 
 		try:
 			advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
-		except:
+		except BaseException:
 			pass
 
-		if data != None:
+		if data is not None:
 			int(data)
-			sql.desadvertir(self.chat_id,data, advs)
+			sql.desadvertir(self.chat_id, data, advs)
 		else:
 			if user_reply_id not in self.get_admin_list(user_reply=True):
 				self.bot.sendMessage(
@@ -268,8 +293,8 @@ class command_admin(control, keyboard):
 				)
 				sql.desadvertir(self.chat_id, user_reply_id, advs)
 			else:
-				return self.bot.sendMessage(self.chat_id,'Administradores não possuem advertências.')
-
+				return self.bot.sendMessage(
+					self.chat_id, 'Administradores não possuem advertências.')
 
 	@admin
 	@log
@@ -282,16 +307,19 @@ class command_admin(control, keyboard):
 			'O novo link foi salvou com sucesso!'
 		)
 
-
 	@admin
 	@log
 	def add(self):
 		sql.criar_table(self.chat_id)
-		if sql.procurar(self.chat_id, self.msg['from']['id']) == 'erro ao procurar':
-			sql.inserir(self.chat_id, self.msg['from']['first_name'], self.msg['from']['id'])
+		if sql.procurar(
+				self.chat_id,
+				self.msg['from']['id']) == 'erro ao procurar':
+			sql.inserir(
+				self.chat_id,
+				self.msg['from']['first_name'],
+				self.msg['from']['id'])
 		else:
 			pass
-
 
 	@admin
 	@log
@@ -304,7 +332,6 @@ class command_admin(control, keyboard):
 			self.chat_id,
 			'As novas regras foram salvas com sucesso!'
 		)
-
 
 	@admin
 	@log

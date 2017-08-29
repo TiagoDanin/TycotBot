@@ -6,8 +6,9 @@ from bot_command import *
 from time import sleep
 import re
 
-TOKEN = sys.argv[1] 
+TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
+
 
 def handle(msg):
 	main = control(msg, bot)
@@ -20,42 +21,43 @@ def handle(msg):
 		inst_command_admin.unwarn(data=msg['data'])
 	else:
 		try:
-			frase = msg['text']
-			result = re.search('(?<=@)\w+', frase)
-			if(result != None):
-				usuario = result.group(0)
-				inst_command_user.buscarAlerta(usuario=usuario)
+			if 'text' in msg:
+				frase = msg['text']
+				result = re.search('(?<=@)\w+', frase)
+				if(result is not None):
+					usuario = result.group(0)
+					inst_command_user.buscarAlerta(usuario=usuario)
 
-			text = msg['text'].split(' ')
-			ctext = text[0].lower()
-		except:
+				text = msg['text'].split(' ')
+				ctext = text[0].lower()
+		except BaseException:
 			text = None
 			ctext = None
 
 		admin_commands = {
-			'/ban'        :inst_command_admin.ban,
-			'/warn'       :inst_command_admin.warn,
-			'/unwarn'     :inst_command_admin.unwarn,
-			'/deflink'	  :inst_command_admin.deflink,
-			'/defregras'  :inst_command_admin.defregras,
-			'/welcome'	  :inst_command_admin.defwelcome,
-			'/addb'       :inst_command_admin.add
+			'/ban': inst_command_admin.ban,
+			'/warn': inst_command_admin.warn,
+			'/unwarn': inst_command_admin.unwarn,
+			'/deflink': inst_command_admin.deflink,
+			'/defregras': inst_command_admin.defregras,
+			'/welcome': inst_command_admin.defwelcome,
+			'/addb': inst_command_admin.add
 		}
 
 		user_command = {
-			'/start'      :inst_command_user.start,
-			'/info'       :inst_command_user.info,
-			'/ajuda'      :inst_command_user.ajuda,
-			'/link'       :inst_command_user.link,
-			'/regras'     :inst_command_user.regras,
-			'/verifybook' :inst_command_user.verify_book,
-			'/alertoff'   :inst_command_user.remAlerta,
-			'/alert'      :inst_command_user.aceitarAlerta,
+			'/start': inst_command_user.start,
+			'/info': inst_command_user.info,
+			'/ajuda': inst_command_user.ajuda,
+			'/link': inst_command_user.link,
+			'/regras': inst_command_user.regras,
+			'/verifybook': inst_command_user.verify_book,
+			'/alertoff': inst_command_user.remAlerta,
+			'/alert': inst_command_user.aceitarAlerta,
 		}
 
 		others = {
-			'left_chat_member' :inst_command_user.goodbye,
-			'new_chat_member'  :inst_command_user.new_member
+			'left_chat_member': inst_command_user.goodbye,
+			'new_chat_member': inst_command_user.new_member
 		}
 
 		if admin_commands.get(ctext):
@@ -76,8 +78,8 @@ def handle(msg):
 		elif msg.get('new_chat_member'):
 			others['new_chat_member']()
 
+
 if __name__ == '__main__':
 	MessageLoop(bot, handle).run_as_thread()
-
-	while 1:
+	while True:
 		sleep(100)
