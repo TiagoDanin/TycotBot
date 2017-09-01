@@ -26,7 +26,7 @@ class control:
 		self.user = msg['from']['first_name']
 		self.UserID = msg['from']['id']
 		self.msg = msg
-		
+
 
 	def get_admin_list(self, query=False, user_reply=False):
 		admin = self.bot.getChatAdministrators(self.chat_id)

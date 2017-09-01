@@ -81,6 +81,7 @@ def handle(msg):
 		
 
 
+
 if __name__ == '__main__':
 	MessageLoop(bot, handle).run_as_thread()
 

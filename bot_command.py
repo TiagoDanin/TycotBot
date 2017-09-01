@@ -39,6 +39,7 @@ class command_user(control, keyboard):
 				' Bots funcionam apenas desta forma.'),
 				reply_markup=self.start_key(),
 				reply_to_message_id=self.msg_id
+
 			)
 
 	@decor_info_ajuda
@@ -183,7 +184,6 @@ class command_user(control, keyboard):
 					disable_web_page_preview=True,
 					reply_to_message_id=self.msg_id
 				)
-				
 		return True
 
 	def link(self):
