@@ -37,7 +37,9 @@ class command_user(control, keyboard):
 				self.chat_id,
 				('Oi! Por favor, inicie uma conversa privada.'
 				' Bots funcionam apenas desta forma.'),
-				reply_markup=self.start_key()
+				reply_markup=self.start_key(),
+				reply_to_message_id=self.msg_id
+
 			)
 
 	@decor_info_ajuda
@@ -49,7 +51,8 @@ class command_user(control, keyboard):
 				text='''<b>ID INFO</b>\n<code>NOME</code>: {0}\n<code>ID</code>: {1}'''.format(
 					self.user,
 					self.UserID
-				)
+				),
+				reply_to_message_id=self.msg_id
 			)
 		else:
 			info_chat = self.msg['chat']['title']
@@ -61,7 +64,8 @@ class command_user(control, keyboard):
 					self.UserID,
 					info_chat,
 					self.chat_id
-				)
+				),
+				reply_to_message_id=self.msg_id
 			)
 
 	@decor_info_ajuda
@@ -77,7 +81,8 @@ class command_user(control, keyboard):
 			/regras -> regras do grupo
 			/leave -> sair do grupo
 			/verifybook -> verifica o ultimo livro do packtpub
-			''')
+			'''),
+			reply_to_message_id=self.msg_id
 		)
 
 	def aceitarAlerta(self):
@@ -161,7 +166,7 @@ class command_user(control, keyboard):
 			sql.criar_table(self.chat_id)
 		else:
 			try:
-				retorno = sql.inserir(chat, user_first_name, id_user)
+				retorno = sql.inserir(self.chat_id, user_first_name, id_user)
 				if(retorno == 'erro ao inserir'):
 					print('erro ao inserir')
 				with open('.tmp/welcome' + str(self.chat_id) + '.txt', 'r') as welcome:
@@ -169,8 +174,6 @@ class command_user(control, keyboard):
 					welcome = welcome.replace('$name', user_first_name)
 					self.bot.sendMessage(self.chat_id, welcome)
 			except FileNotFoundError:
-				print('Grupo sem um welcome' + str(self.chat_id) + '.txt')
-			except telepot.exception.TelegramError:
 				self.bot.sendMessage(
 					chat_id=self.chat_id,
 					parse_mode='Markdown',
@@ -178,7 +181,8 @@ class command_user(control, keyboard):
 						user_first_name,
 						id_user
 					),
-					disable_web_page_preview=True
+					disable_web_page_preview=True,
+					reply_to_message_id=self.msg_id
 				)
 		return True
 
@@ -195,7 +199,7 @@ class command_user(control, keyboard):
 			except FileNotFoundError:
 				link_tg = 'Sem link!'
 			link_msg = '<a href="{}">{}</a>'.format(link_tg, info_chat)
-			return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML')
+			return self.bot.sendMessage(self.chat_id, link_msg, parse_mode='HTML',reply_to_message_id=self.msg_id)
 
 	def book_info(self):
 		packt = 'https://www.packtpub.com/packt/offers/free-learning'
@@ -225,12 +229,14 @@ class command_admin(control, keyboard):
 	def ban(self):
 		first_name_reply = self.msg['reply_to_message']['from']['first_name']
 		reply_id = self.msg['reply_to_message']['from']['id']
+		id_msg_replyed = self.msg['reply_to_message']['message_id']
 		if reply_id not in self.get_admin_list(user_reply=True):
 			self.bot.kickChatMember(self.chat_id, reply_id)
 			self.bot.sendMessage(
 				self.chat_id,
 				'<b>{}</b> foi retirado do grupo.'.format(first_name_reply),
-				parse_mode='HTML'
+				parse_mode='HTML',
+				reply_to_message_id=id_msg_replyed
 			)
 			try:
 				sql.delete(self.chat_id, reply_id)
@@ -241,7 +247,8 @@ class command_admin(control, keyboard):
 			return self.bot.sendMessage(
 				self.chat_id,
 				'<b>{}</b> é um dos administradores. Não posso remover administradores.'.format(first_name_reply),
-				parse_mode='HTML'
+				parse_mode='HTML',
+				reply_to_message_id=self.msg_id
 			)
 
 	@admin
@@ -249,6 +256,7 @@ class command_admin(control, keyboard):
 	def warn(self):
 		first_name_reply = self.msg['reply_to_message']['from']['first_name']
 		user_reply_id = self.msg['reply_to_message']['from']['id']
+		id_msg_replyed = self.msg['reply_to_message']['message_id']
 
 		if user_reply_id not in self.get_admin_list(user_reply=True):
 			try:
@@ -264,13 +272,15 @@ class command_admin(control, keyboard):
 					advs=advs + 1
 				),
 				parse_mode='HTML',
-				reply_markup=self.keyboard_warn(user_reply_id)
+				reply_markup=self.keyboard_warn(user_reply_id),
+				reply_to_message_id=id_msg_replyed
 			)
 			if advs >= 3:
 				self.bot.sendMessage(
 					self.chat_id,
 					'<b>{}</b> expulso por atingir o limite de advertencias.'.format(first_name_reply),
-					parse_mode='HTML'
+					parse_mode='HTML',
+					reply_to_message_id=id_msg_replyed
 				)
 				self.bot.kickChatMember(self.chat_id, user_reply_id)
 				sql.delete(self.chat_id, user_reply_id)
@@ -289,6 +299,7 @@ class command_admin(control, keyboard):
 		if not(data is not None):
 			first_name_reply = self.msg['reply_to_message']['from']['first_name']
 			user_reply_id = self.msg['reply_to_message']['from']['id']
+			id_msg_replyed = self.msg['reply_to_message']['message_id']
 
 		try:
 			advs = int(sql.procurar(self.chat_id, user_reply_id)[1])
@@ -303,12 +314,15 @@ class command_admin(control, keyboard):
 				self.bot.sendMessage(
 					self.chat_id,
 					'<b>{}</b> perdoado.'.format(first_name_reply),
-					parse_mode='HTML'
+					parse_mode='HTML',
+					reply_to_message_id=id_msg_replyed
 				)
 				sql.desadvertir(self.chat_id, user_reply_id, advs)
 			else:
 				return self.bot.sendMessage(
-					self.chat_id, 'Administradores não possuem advertências.')
+					self.chat_id, 'Administradores não possuem advertências.',
+					reply_to_message_id=self.msg_id
+				)
 
 	@admin
 	@log
@@ -318,7 +332,8 @@ class command_admin(control, keyboard):
 			link_.write(text)
 		return self.bot.sendMessage(
 			self.chat_id,
-			'O novo link foi salvou com sucesso!'
+			'O novo link foi salvou com sucesso!',
+			reply_to_message_id=self.msg_id
 		)
 
 	@admin
@@ -344,7 +359,8 @@ class command_admin(control, keyboard):
 
 		return self.bot.sendMessage(
 			self.chat_id,
-			'As novas regras foram salvas com sucesso!'
+			'As novas regras foram salvas com sucesso!',
+			reply_to_message_id=self.msg_id
 		)
 
 	@admin
@@ -355,5 +371,6 @@ class command_admin(control, keyboard):
 			welcome.write(text)
 		return self.bot.sendMessage(
 			self.chat_id,
-			'As mensagens de boas-vindas foram alteradas com sucesso!'
+			'As mensagens de boas-vindas foram alteradas com sucesso!',
+			reply_to_message_id=self.msg_id
 		)

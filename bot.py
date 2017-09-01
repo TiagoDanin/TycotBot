@@ -60,6 +60,11 @@ def handle(msg):
 			'new_chat_member': inst_command_user.new_member
 		}
 
+		if msg.get('left_chat_member'):
+			others['left_chat_member']()
+		elif msg.get('new_chat_member'):
+			others['new_chat_member']()
+
 		if admin_commands.get(ctext):
 			if ctext.startswith('/deflink'):
 				admin_commands[ctext](msg['text'])
@@ -73,10 +78,8 @@ def handle(msg):
 		elif user_command.get(ctext):
 			user_command[ctext]()
 
-		if msg.get('left_chat_member'):
-			others['left_chat_member']()
-		elif msg.get('new_chat_member'):
-			others['new_chat_member']()
+		
+
 
 
 if __name__ == '__main__':

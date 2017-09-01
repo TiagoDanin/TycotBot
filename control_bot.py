@@ -27,6 +27,7 @@ class control:
 		self.UserID = msg['from']['id']
 		self.msg = msg
 
+
 	def get_admin_list(self, query=False, user_reply=False):
 		admin = self.bot.getChatAdministrators(self.chat_id)
 		AdminID_list = [adminID['user']['id'] for adminID in admin]
@@ -52,6 +53,7 @@ class control:
 			self.bot.sendMessage(
 				chat_id=self.chat_id,
 				parse_mode='HTML',
-				text='<b>Apenas administradores podem usar este comando.</b>'
+				text='<b>Apenas administradores podem usar este comando.</b>',
+				reply_to_message_id=self.msg_id
 			)
 			return False
