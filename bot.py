@@ -4,7 +4,6 @@ import sys
 from control_bot import control
 from bot_command import *
 from time import sleep
-import re
 
 TOKEN = sys.argv[1] 
 bot = telepot.Bot(TOKEN)
@@ -13,18 +12,33 @@ def handle(msg):
 	main = control(msg, bot)
 	inst_command_user = command_user(msg=msg, bot=bot)
 	inst_command_admin = command_admin(msg=msg, bot=bot)
-
 	if msg.get('data'):
-		text = 'None'
-		ctext = 'None'
-		inst_command_admin.unwarn(data=msg['data'])
+		msgDataSplit = msg['data'].split()
+		if msgDataSplit[0] == 'unwarn':
+				text = 'None'
+				ctext = 'None'
+				inst_command_admin.unwarn(data=msgDataSplit[1])
+		elif msgDataSplit[0] == 'alerta':
+			inst_command_user.enviarAlerta(chat_id=msgDataSplit[1], data=msgDataSplit[2], usuario=msgDataSplit[3])
+		else:
+			pass
+		
 	else:
 		try:
-			frase = msg['text']
-			result = re.search('(?<=@)\w+', frase)
-			if(result != None):
-				usuario = result.group(0)
-				inst_command_user.buscarAlerta(usuario=usuario)
+			try:
+				if(msg['reply_to_message'] != None):
+					user_id = msg['reply_to_message']['from']['id']
+					inst_command_user.buscarAlerta(user_id=user_id)
+			except:
+					pass
+			try:
+				msgEntidade = msg['entities']
+				msgArray = msgEntidade[0]
+				if(msgArray['type'] == 'text_mention'):
+					user_id = msgArray['user']['id']
+					inst_command_user.buscarAlerta(user_id=user_id)
+			except:
+					pass
 
 			text = msg['text'].split(' ')
 			ctext = text[0].lower()

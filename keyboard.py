@@ -13,8 +13,12 @@ class keyboard():
 				]
 			]
 		)
+	def keyboard_alert(self, chat_id, msg, usuario):
+		return InlineKeyboardMarkup(inline_keyboard=[
+			[InlineKeyboardButton(text="Ver mensagem", callback_data='alerta '+ str(chat_id)+' '+str(msg)+' '+str(usuario))]
+			])
 
 	def keyboard_warn(self, user_id):
 			return InlineKeyboardMarkup(inline_keyboard=[
-				[InlineKeyboardButton(text="Remove Warn", callback_data=str(user_id))]
+				[InlineKeyboardButton(text="Remove Warn", callback_data='unwarn '+ str(user_id))]
 			])

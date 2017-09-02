@@ -3,6 +3,7 @@ from keyboard import keyboard
 from decorators import *
 import sql
 import telepot
+
 try:
 	from bs4 import BeautifulSoup
 except:
@@ -10,18 +11,24 @@ except:
 import urllib.request as urllib
 
 class command_user(control, keyboard):
-	def buscarAlerta(self,usuario=None):
+	def enviarAlerta(self, chat_id, data, usuario):
+		chat = chat_id
+		msg = data
+		user = usuario
+		return self.bot.sendMessage(chat, parse_mode='HTML', text='<i>sua marcação {}</i>'.format(usuario), reply_to_message_id=msg)
+
+	def buscarAlerta(self, user_id):
 		if self.chat_type=='private':
 			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
 		else:
-			if(sql.procurarUserNome(self.chat_id,usuario)=='erro ao procurar'):
+			if(sql.procurar(self.chat_id,user_id)=='erro ao procurar'):
 				print('usuário não existe')
 			else:
-				resultado = sql.procurarUserNome(self.chat_id,usuario)
+				resultado = sql.procurar(self.chat_id,user_id)
 				if resultado[3] == 1:
-					user = resultado[2]
+					first_name = resultado[0]
 					msg = int(self.msg['message_id'])
-					return self.bot.forwardMessage(user, self.chat_id, msg), self.bot.sendMessage(user,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']))
+					return self.bot.forwardMessage(user_id, self.chat_id, msg), self.bot.sendMessage(user_id,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']), reply_markup=self.keyboard_alert(self.chat_id, msg, first_name))
 
 	@log
 	def start(self):
@@ -169,7 +176,7 @@ class command_user(control, keyboard):
 
 		packt = 'https://www.packtpub.com/packt/offers/free-learning'
 		page = urllib.urlopen(packt)
-		soup = BeautifulSoup(page)
+		soup = BeautifulSoup(page,"html.parser")
 
 		book_url_image = soup.find('img', class_='bookimage imagecache imagecache-dotd_main_image')
 		book_title = soup.find('div', class_='dotd-title').h2.text
