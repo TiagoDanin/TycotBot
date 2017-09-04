@@ -3,12 +3,33 @@ from telepot.loop import MessageLoop
 import sys
 from control_bot import control
 from bot_command import *
-from time import sleep
-import re
+from time import time, sleep
+from datetime import date
+from keyboard import keyboard
+try:
+	import schedule
+except:
+	print('Precisa install schedule\npip install schedule')
 
 TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
 
+def msgDia():
+	inst_keyboard = keyboard()
+	msg = ['Coders', 'Jedi\'s', 'Programeiros']
+	hj = date.today().weekday()
+	#podem mudar as frases. Não sou tão criativo. ^^
+	if hj == 0:
+		hoje = ' Força que hoje é só o primeiro dia da semana!'
+	elif hj == 2:
+		hoje = ' Estamos no meio da semana. Tycot deseja-lhes muita sabedoria e paciência'
+	elif hj == 4:
+		hoje = ' Hoje é sexta! Não façam besteira ou vão perder o FDS!'
+		#infelizmente, como está fora do handle, não há como pegar o ID do grupo. Se alguém souber, fique a vontade.
+	bot.sendMessage(-1001068576090, parse_mode='HTML', 
+		text='<i>Bom dia {}!{}</i>'.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
+	bot.sendVideo(-1001068576090,
+		'https://media.giphy.com/media/W4IY7zQdRh7Ow/giphy.gif')
 
 def handle(msg):
 	main = control(msg, bot)
@@ -16,20 +37,34 @@ def handle(msg):
 	inst_command_admin = command_admin(msg=msg, bot=bot)
 
 	if msg.get('data'):
-		text = 'None'
-		ctext = 'None'
-		inst_command_admin.unwarn(data=msg['data'])
+		msgDataSplit = msg['data'].split()
+		if msgDataSplit[0] == 'unwarn':
+				text = 'None'
+				ctext = 'None'
+				inst_command_admin.unwarn(data=msgDataSplit[1])
+		elif msgDataSplit[0] == 'alerta':
+			inst_command_user.enviarAlerta(chat_id=msgDataSplit[1], data=msgDataSplit[2], usuario=msgDataSplit[3])
+		elif msgDataSplit[0] == 'sugestao':
+			inst_command_user.verify_book()	
+		else:
+			pass
+		
 	else:
 		try:
-			if 'text' in msg:
-				frase = msg['text']
-				result = re.search('(?<=@)\w+', frase)
-				if(result is not None):
-					usuario = result.group(0)
-					inst_command_user.buscarAlerta(usuario=usuario)
+			if(msg['reply_to_message'] != None):
+				user_id = msg['reply_to_message']['from']['id']
+				inst_command_user.buscarAlerta(user_id=user_id)
+		except:
+				pass
+		try:
+			msgEntidade = msg['entities']
+			msgArray = msgEntidade[0]
+			if(msgArray['type'] == 'text_mention'):
+				user_id = msgArray['user']['id']
+				inst_command_user.buscarAlerta(user_id=user_id)
 
-				text = msg['text'].split(' ')
-				ctext = text[0].lower()
+			text = msg['text'].split(' ')
+			ctext = text[0].lower()
 		except BaseException:
 			text = None
 			ctext = None
@@ -78,12 +113,11 @@ def handle(msg):
 		elif user_command.get(ctext):
 			user_command[ctext]()
 
-		
-
-
-
 if __name__ == '__main__':
 	MessageLoop(bot, handle).run_as_thread()
-
+	schedule.every().monday.at('07:00').do(msgDia)
+	schedule.every().wednesday.at('07:00').do(msgDia)
+	schedule.every().friday.at('07:00').do(msgDia)
 while True:
+	schedule.run_pending()
 	sleep(100)
