@@ -12,12 +12,12 @@ Crie um fork do repositório e ajude nas issues propostas.
 
 Use o plugin [EditorCofig](http://editorconfig.org/#download) no seu editor de texto preferido para fazer as modificações.
 
-### Instalação de módulos necessarios
+### Instalação de módulos necessários  
 ```sh
 $ pip3 install -r requirements.txt
 ```
 
-### Executado bot
+### Executando o bot
 ```sh
 $ python3 bot.py SEU:TOKEN
 ```
