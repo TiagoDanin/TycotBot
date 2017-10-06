@@ -22,7 +22,6 @@ $ pip3 install -r requirements.txt
 $ python3 bot.py SEU:TOKEN
 ```
 
----
-**Grupo Telegram**
+### Contribuidores
+[![Danrley](https://s.gravatar.com/avatar/6854dd9f3f8fc5f363ef5d5f9db1da8c?s=80)](https://github.com/dansenpir)
 
-https://goo.gl/m0h2eQ
