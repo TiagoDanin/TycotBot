@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import telepot
 from telepot.loop import MessageLoop
 import sys
@@ -15,16 +16,16 @@ def msgDia():
 	inst_keyboard = keyboard()
 	msg = ['Coders', 'Jedi\'s', 'Programeiros']
 	hj = date.today().weekday()
-	#podem mudar as frases. Não sou tão criativo. ^^
+	#Podem mudar as frases. Não sou tão criativo. ^^
 	if hj == 0:
-		hoje = ' Força que hoje é só o primeiro dia da semana!'
+		hoje = 'Força que hoje é só o primeiro dia da semana!'
 	elif hj == 2:
-		hoje = ' Estamos no meio da semana. Tycot deseja-lhes muita sabedoria e paciência'
+		hoje = 'Estamos no meio da semana. Tycot deseja-lhes muita sabedoria e paciência'
 	elif hj == 4:
-		hoje = ' Hoje é sexta! Não façam besteira ou vão perder o FDS!'
-		#infelizmente, como está fora do handle, não há como pegar o ID do grupo. Se alguém souber, fique a vontade.
-	bot.sendMessage(-1001068576090, parse_mode='HTML', 
-		text='<i>Bom dia {}!{}</i>'.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
+		hoje = 'Hoje é sexta! Não façam besteira ou vão perder o FDS!'
+	#Infelizmente, como está fora do handle, não há como pegar o ID do grupo. Se alguém souber, fique a vontade.
+	bot.sendMessage(-1001055199361, parse_mode='HTML', 
+		text='<i>Bom dia {}!{}</i> '.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
 	bot.sendVideo(-1001068576090,
 		'https://media.giphy.com/media/W4IY7zQdRh7Ow/giphy.gif')
 

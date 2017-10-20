@@ -38,6 +38,13 @@ class command_user(control, keyboard):
 				reply_to_message_id=self.msg_id
 
 			)
+		else:
+			return self.bot.sendMessage(
+				chat_id=self.chat_id,
+				parse_mode='HTML',
+				text='Olá, sou o Tycot!\nVeja minha lista de comandos em /ajuda',
+				reply_to_message_id=self.msg_id
+			)
 
 	@decor_info_ajuda
 	def info(self):
@@ -68,16 +75,16 @@ class command_user(control, keyboard):
 	@decor_info_ajuda
 	def ajuda(self):
 		return self.bot.sendMessage(
-			self.UserID, ('''
-			Olá, sou o Tycot!
-			Segue minha lista de comandos:
-			/alert -> ativar serviço de alertas
-			/alertoff -> desativar serviço de alertas
-			/info -> informações do grupo
-			/link -> link do grupo
-			/regras -> regras do grupo
-			/leave -> sair do grupo
-			/verifybook -> verifica o ultimo livro do packtpub
+			self.UserID, ('''Olá, sou o Tycot!
+Segue minha lista de comandos:
+
+/alert -> Ativar serviço de alertas
+/alertoff -> Desativar serviço de alertas
+/info -> Informações do grupo
+/link -> Link do grupo
+/regras -> Regras do grupo
+/leave -> Sair do grupo
+/verifybook -> Verifica o ultimo livro do packtpub
 			'''),
 			reply_to_message_id=self.msg_id
 		)
