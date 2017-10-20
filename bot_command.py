@@ -4,11 +4,7 @@ from decorators import *
 import sql
 import telepot
 import random
-
-try:
-	from bs4 import BeautifulSoup
-except:
-	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+from bs4 import BeautifulSoup
 import urllib.request as urllib
 
 class command_user(control, keyboard):

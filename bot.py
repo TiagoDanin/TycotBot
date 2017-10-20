@@ -6,10 +6,7 @@ from bot_command import *
 from time import time, sleep
 from datetime import date
 from keyboard import keyboard
-try:
-	import schedule
-except:
-	print('Precisa install schedule\npip install schedule')
+import schedule
 
 TOKEN = sys.argv[1]
 bot = telepot.Bot(TOKEN)
