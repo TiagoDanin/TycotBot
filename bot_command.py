@@ -92,7 +92,7 @@ Segue minha lista de comandos:
 	def aceitarAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
@@ -103,18 +103,18 @@ Segue minha lista de comandos:
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
-				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado'))
+				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado;'))
 			else:
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta ativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta ativado;'))
 
 	def remAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
@@ -125,13 +125,13 @@ Segue minha lista de comandos:
 				if(retorno == 'erro ao remover alerta'):
 					print('erro ao remover alerta')
 				return self.bot.sendMessage(
-					self.UserID, ('Usuário adicionado. Alerta desativado'))
+					self.UserID, ('Usuário adicionado. Alerta desativado;'))
 			else:
 				retorno = sql.remAlerta(self.chat_id, self.UserID)
 				if(retorno == 'erro ao remover alerta'):
 					print('erro ao remover alerta')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta desativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta desativado;'))
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
@@ -149,7 +149,7 @@ Segue minha lista de comandos:
 	def regras(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
 			)
 		else:
 			try:
@@ -193,7 +193,7 @@ Segue minha lista de comandos:
 	def link(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			info_chat = self.msg['chat']['title']

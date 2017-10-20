@@ -24,8 +24,8 @@ def msgDia():
 	elif hj == 4:
 		hoje = 'Hoje é sexta! Não façam besteira ou vão perder o FDS!'
 	#Infelizmente, como está fora do handle, não há como pegar o ID do grupo. Se alguém souber, fique a vontade.
-	bot.sendMessage(-1001055199361, parse_mode='HTML', 
-		text='<i>Bom dia {}!{}</i> '.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
+	bot.sendMessage(-1001068576090, parse_mode='HTML', 
+		text='<i>Bom dia {}! {}</i>'.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
 	bot.sendVideo(-1001068576090,
 		'https://media.giphy.com/media/W4IY7zQdRh7Ow/giphy.gif')
 
