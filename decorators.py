@@ -29,8 +29,7 @@ def log(func):
 					level=logging.INFO
 				)
 				logging.info("log [{}]".format(day_date_hour))
-				logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(
-					args[0].user, args[0].UserID, args[0].msg['text'].split(' ')[0])
+				logging.info(" | Username: {} | ID: {} | Comando usado: {}\n".format(args[0].user, args[0].UserID, args[0].msg['text'].split(' ')[0])
 				)
 				print("@{} Iniciou o Bot - Dados salvos!".format(args[0].user))
 			elif(args[0].msg['text'].startswith('/') and args[0].msg['text'] != '/start'):

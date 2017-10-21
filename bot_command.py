@@ -4,11 +4,7 @@ from decorators import *
 import sql
 import telepot
 import random
-
-try:
-	from bs4 import BeautifulSoup
-except:
-	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+from bs4 import BeautifulSoup
 import urllib.request as urllib
 
 class command_user(control, keyboard):
@@ -16,20 +12,20 @@ class command_user(control, keyboard):
 		chat = chat_id
 		msg = data
 		user = usuario
-		return self.bot.sendMessage(chat, parse_mode='HTML', text='<i>sua marcação {}</i>'.format(usuario), reply_to_message_id=msg)
+		return self.bot.sendMessage(chat, parse_mode='HTML', text='<i>Sua marcação {}</i>'.format(usuario), reply_to_message_id=msg)
 
 	def buscarAlerta(self, user_id):
 		if self.chat_type=='private':
-			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo.'))
 		else:
 			if(sql.procurar(self.chat_id,user_id)=='erro ao procurar'):
-				print('usuário não existe')
+				print('Usuário não existe')
 			else:
 				resultado = sql.procurar(self.chat_id,user_id)
 				if resultado[3] == 1:
 					first_name = resultado[0]
 					msg = int(self.msg['message_id'])
-					return self.bot.forwardMessage(user_id, self.chat_id, msg), self.bot.sendMessage(user_id,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']), reply_markup=self.keyboard_alert(self.chat_id, msg, first_name))
+					return self.bot.forwardMessage(user_id, self.chat_id, msg), self.bot.sendMessage(user_id,('Mensagem enviada no grupo {}.').format(self.msg['chat']['title']), reply_markup=self.keyboard_alert(self.chat_id, msg, first_name))
 	
 	@log
 	def start(self):
@@ -41,6 +37,13 @@ class command_user(control, keyboard):
 				reply_markup=self.start_key(),
 				reply_to_message_id=self.msg_id
 
+			)
+		else:
+			return self.bot.sendMessage(
+				chat_id=self.chat_id,
+				parse_mode='HTML',
+				text='Olá, sou o Tycot!\nVeja minha lista de comandos em /ajuda',
+				reply_to_message_id=self.msg_id
 			)
 
 	@decor_info_ajuda
@@ -72,16 +75,16 @@ class command_user(control, keyboard):
 	@decor_info_ajuda
 	def ajuda(self):
 		return self.bot.sendMessage(
-			self.UserID, ('''
-			Olá, sou o Tycot!
-			Segue minha lista de comandos:
-			/alert -> ativar serviço de alertas
-			/alertoff -> desativar serviço de alertas
-			/info -> informações do grupo
-			/link -> link do grupo
-			/regras -> regras do grupo
-			/leave -> sair do grupo
-			/verifybook -> verifica o ultimo livro do packtpub
+			self.UserID, ('''Olá, sou o Tycot!
+Segue minha lista de comandos:
+
+/alert -> Ativar serviço de alertas
+/alertoff -> Desativar serviço de alertas
+/info -> Informações do grupo
+/link -> Link do grupo
+/regras -> Regras do grupo
+/leave -> Sair do grupo
+/verifybook -> Verifica o ultimo livro do packtpub
 			'''),
 			reply_to_message_id=self.msg_id
 		)
@@ -89,7 +92,7 @@ class command_user(control, keyboard):
 	def aceitarAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
@@ -100,35 +103,35 @@ class command_user(control, keyboard):
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
-				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado'))
+				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado.'))
 			else:
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta ativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta ativado.'))
 
 	def remAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
 				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
 				if(retornoIns == 'erro ao inserir'):
-					print('erro ao remover')
+					print('Erro ao remover')
 				retorno = sql.remAlerta(self.chat_id, self.UserID)
 				if(retorno == 'erro ao remover alerta'):
-					print('erro ao remover alerta')
+					print('Erro ao remover alerta')
 				return self.bot.sendMessage(
-					self.UserID, ('Usuário adicionado. Alerta desativado'))
+					self.UserID, ('Usuário adicionado. Alerta desativado.'))
 			else:
 				retorno = sql.remAlerta(self.chat_id, self.UserID)
 				if(retorno == 'erro ao remover alerta'):
-					print('erro ao remover alerta')
+					print('Erro ao remover alerta.')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta desativado'))
+					return self.bot.sendMessage(self.UserID, ('Alerta desativado.'))
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
@@ -146,7 +149,7 @@ class command_user(control, keyboard):
 	def regras(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			try:
@@ -163,7 +166,7 @@ class command_user(control, keyboard):
 		bot_name = get_bot_name['first_name']
 
 		if(user_first_name == bot_name):
-			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
+			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot.')
 			sql.criar_table(self.chat_id)
 		else:
 			try:
@@ -190,7 +193,7 @@ class command_user(control, keyboard):
 	def link(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			info_chat = self.msg['chat']['title']
