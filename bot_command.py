@@ -12,20 +12,20 @@ class command_user(control, keyboard):
 		chat = chat_id
 		msg = data
 		user = usuario
-		return self.bot.sendMessage(chat, parse_mode='HTML', text='<i>sua marcação {}</i>'.format(usuario), reply_to_message_id=msg)
+		return self.bot.sendMessage(chat, parse_mode='HTML', text='<i>Sua marcação {}</i>'.format(usuario), reply_to_message_id=msg)
 
 	def buscarAlerta(self, user_id):
 		if self.chat_type=='private':
-			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo'))
+			return self.bot.sendMessage(self.UserID,('Utilização incorreta. Favor enviar no grupo.'))
 		else:
 			if(sql.procurar(self.chat_id,user_id)=='erro ao procurar'):
-				print('usuário não existe')
+				print('Usuário não existe')
 			else:
 				resultado = sql.procurar(self.chat_id,user_id)
 				if resultado[3] == 1:
 					first_name = resultado[0]
 					msg = int(self.msg['message_id'])
-					return self.bot.forwardMessage(user_id, self.chat_id, msg), self.bot.sendMessage(user_id,('Mensagem enviada no grupo {}').format(self.msg['chat']['title']), reply_markup=self.keyboard_alert(self.chat_id, msg, first_name))
+					return self.bot.forwardMessage(user_id, self.chat_id, msg), self.bot.sendMessage(user_id,('Mensagem enviada no grupo {}.').format(self.msg['chat']['title']), reply_markup=self.keyboard_alert(self.chat_id, msg, first_name))
 	
 	@log
 	def start(self):
@@ -92,7 +92,7 @@ Segue minha lista de comandos:
 	def aceitarAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
@@ -103,35 +103,35 @@ Segue minha lista de comandos:
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
-				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado;'))
+				return self.bot.sendMessage(self.UserID, ('Usuário adicionado. Alerta ativado.'))
 			else:
 				retorno = sql.alerta(self.chat_id, self.UserID)
 				if(retorno == 'erro'):
 					print('erro ao inserir alerta')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta ativado;'))
+					return self.bot.sendMessage(self.UserID, ('Alerta ativado.'))
 
 	def remAlerta(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			if(sql.procurar(self.chat_id, self.UserID) == 'erro ao procurar'):
 				retornoIns = sql.inserir(self.chat_id, self.user, self.UserID)
 				if(retornoIns == 'erro ao inserir'):
-					print('erro ao remover')
+					print('Erro ao remover')
 				retorno = sql.remAlerta(self.chat_id, self.UserID)
 				if(retorno == 'erro ao remover alerta'):
-					print('erro ao remover alerta')
+					print('Erro ao remover alerta')
 				return self.bot.sendMessage(
-					self.UserID, ('Usuário adicionado. Alerta desativado;'))
+					self.UserID, ('Usuário adicionado. Alerta desativado.'))
 			else:
 				retorno = sql.remAlerta(self.chat_id, self.UserID)
 				if(retorno == 'erro ao remover alerta'):
-					print('erro ao remover alerta')
+					print('Erro ao remover alerta.')
 				else:
-					return self.bot.sendMessage(self.UserID, ('Alerta desativado;'))
+					return self.bot.sendMessage(self.UserID, ('Alerta desativado.'))
 
 	def goodbye(self):
 		if('left_chat_member' in self.msg):
@@ -149,7 +149,7 @@ Segue minha lista de comandos:
 	def regras(self):
 		if self.chat_type == 'private':
 			return self.bot.sendMessage(
-				self.UserID, ('Utilização incorreta. Favor enviar no grupo;')
+				self.UserID, ('Utilização incorreta. Favor enviar no grupo.')
 			)
 		else:
 			try:
@@ -166,7 +166,7 @@ Segue minha lista de comandos:
 		bot_name = get_bot_name['first_name']
 
 		if(user_first_name == bot_name):
-			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
+			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot.')
 			sql.criar_table(self.chat_id)
 		else:
 			try:
