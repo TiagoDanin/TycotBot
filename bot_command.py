@@ -1,14 +1,13 @@
 from control_bot import control
 from keyboard import keyboard
 from decorators import *
-import sql
-import telepot
-import random
+import sql, os
 
 try:
 	from bs4 import BeautifulSoup
 except:
-	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+	print('BeautifulSoup4 não encontrado\ninstalando...')
+	os.system('sudo pip install beautifulsoup4')
 import urllib.request as urllib
 
 class command_user(control, keyboard):
@@ -33,15 +32,15 @@ class command_user(control, keyboard):
 	
 	@log
 	def start(self):
-		if self.chat_type != 'private':
+		if self.chat_type == 'private':
 			return self.bot.sendMessage(
 				self.chat_id,
 				('Oi! Por favor, inicie uma conversa privada.'
 				' Bots funcionam apenas desta forma.'),
 				reply_markup=self.start_key(),
-				reply_to_message_id=self.msg_id
-
-			)
+				reply_to_message_id=self.msg_id)
+		else:
+			self.sendMessage(self.chat_id, '_me chame no privado!_')
 
 	@decor_info_ajuda
 	def info(self):
@@ -73,17 +72,20 @@ class command_user(control, keyboard):
 	def ajuda(self):
 		return self.bot.sendMessage(
 			self.UserID, ('''
-			Olá, sou o Tycot!
-			Segue minha lista de comandos:
-			/alert -> ativar serviço de alertas
-			/alertoff -> desativar serviço de alertas
-			/info -> informações do grupo
-			/link -> link do grupo
-			/regras -> regras do grupo
-			/leave -> sair do grupo
-			/verifybook -> verifica o ultimo livro do packtpub
+📖Segue minha lista de comandos:
+
+*alert* -> ativar serviço de alertas.
+*alertoff* -> desativar serviço de alertas.
+*info* -> informações do grupo.
+*link* -> link do grupo.
+*regras* -> regras do grupo.
+*leave* -> sair do grupo.
+*verifybook* -> verifica o ultimo livro do packtpub.
+*_________________________*
+Ultilize `/` + o comando desejado.
+exemplo: `/info`
 			'''),
-			reply_to_message_id=self.msg_id
+			reply_to_message_id=self.msg_id,parse_mode='Markdown'
 		)
 
 	def aceitarAlerta(self):
@@ -159,10 +161,14 @@ class command_user(control, keyboard):
 	def new_member(self):
 		user_first_name = self.msg['new_chat_member']['first_name']
 		id_user = self.msg['new_chat_member']['id']
-		get_bot_name = self.bot.getMe()
-		bot_name = get_bot_name['first_name']
+		try:
+			link = '[{}](https://telegram.me/{}/)'.format(self.msg['new_chat_member']['username'])
+		except:
+			link = '*{}*'.format(user_first_name)
+		getMe = self.bot.getMe()
+		bot_id = getMe['first_name']
 
-		if(user_first_name == bot_name):
+		if(id_user == bot_id):
 			self.bot.sendMessage(self.chat_id, 'Olá, sou o Tycot!')
 			sql.criar_table(self.chat_id)
 		else:
@@ -178,9 +184,8 @@ class command_user(control, keyboard):
 				self.bot.sendMessage(
 					chat_id=self.chat_id,
 					parse_mode='Markdown',
-					text='Seja Bem Vindo(a) [{0}](https://telegram.me/{1}/)'.format(
-						user_first_name,
-						id_user
+					text='Seja Bem Vindo(a) {}!'.format(
+						link
 					),
 					disable_web_page_preview=True,
 					reply_to_message_id=self.msg_id

@@ -1,6 +1,6 @@
-import telepot
+# -*- coding:utf-8 -*-
 from telepot.loop import MessageLoop
-import sys
+import sys, os, config,telepot
 from control_bot import control
 from bot_command import *
 from time import time, sleep
@@ -9,9 +9,13 @@ from keyboard import keyboard
 try:
 	import schedule
 except:
-	print('Precisa install schedule\npip install schedule')
+	print('Lib schedule não encontrada.\ninstalando...')
+	try:
+		os.system('sudo pip3 install schedule')
+	except:
+		print('Erro ao instalar schedule')
 
-TOKEN = sys.argv[1]
+TOKEN = config.token
 bot = telepot.Bot(TOKEN)
 
 def msgDia():
@@ -26,9 +30,9 @@ def msgDia():
 	elif hj == 4:
 		hoje = ' Hoje é sexta! Não façam besteira ou vão perder o FDS!'
 		#infelizmente, como está fora do handle, não há como pegar o ID do grupo. Se alguém souber, fique a vontade.
-	bot.sendMessage(-1001068576090, parse_mode='HTML', 
+	bot.sendMessage(config.my_group, parse_mode='HTML',
 		text='<i>Bom dia {}!{}</i>'.format(msg[random.randint(0,len(msg)-1)], hoje), reply_markup = inst_keyboard.keyboard_sugestao()) 
-	bot.sendVideo(-1001068576090,
+	bot.sendVideo(config.my_group,
 		'https://media.giphy.com/media/W4IY7zQdRh7Ow/giphy.gif')
 
 def handle(msg):
