@@ -1,14 +1,13 @@
 from control_bot import control
 from keyboard import keyboard
 from decorators import *
-import sql
-import telepot
-import random
+import sql, os
 
 try:
 	from bs4 import BeautifulSoup
 except:
-	print('Precisa install BeautifulSoup4\npip install beautifulsoup4')
+	print('BeautifulSoup4 não encontrado\ninstalando...')
+	os.system('sudo pip install beautifulsoup4')
 import urllib.request as urllib
 
 class command_user(control, keyboard):
@@ -33,15 +32,15 @@ class command_user(control, keyboard):
 	
 	@log
 	def start(self):
-		if self.chat_type != 'private':
+		if self.chat_type == 'private':
 			return self.bot.sendMessage(
 				self.chat_id,
 				('Oi! Por favor, inicie uma conversa privada.'
 				' Bots funcionam apenas desta forma.'),
 				reply_markup=self.start_key(),
-				reply_to_message_id=self.msg_id
-
-			)
+				reply_to_message_id=self.msg_id)
+		else:
+			self.sendMessage(self.chat_id, '_me chame no privado!_')
 
 	@decor_info_ajuda
 	def info(self):
@@ -73,17 +72,20 @@ class command_user(control, keyboard):
 	def ajuda(self):
 		return self.bot.sendMessage(
 			self.UserID, ('''
-			Olá, sou o Tycot!
-			Segue minha lista de comandos:
-			/alert -> ativar serviço de alertas
-			/alertoff -> desativar serviço de alertas
-			/info -> informações do grupo
-			/link -> link do grupo
-			/regras -> regras do grupo
-			/leave -> sair do grupo
-			/verifybook -> verifica o ultimo livro do packtpub
+📖Segue minha lista de comandos:
+
+*alert* -> ativar serviço de alertas.
+*alertoff* -> desativar serviço de alertas.
+*info* -> informações do grupo.
+*link* -> link do grupo.
+*regras* -> regras do grupo.
+*leave* -> sair do grupo.
+*verifybook* -> verifica o ultimo livro do packtpub.
+*_________________________*
+Ultilize `/` + o comando desejado.
+exemplo: `/info`
 			'''),
-			reply_to_message_id=self.msg_id
+			reply_to_message_id=self.msg_id,parse_mode='Markdown'
 		)
 
 	def aceitarAlerta(self):

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from telepot.loop import MessageLoop
-import sys, os, config
+import sys, os, config,telepot
 from control_bot import control
 from bot_command import *
 from time import time, sleep
@@ -11,7 +11,7 @@ try:
 except:
 	print('Lib schedule não encontrada.\ninstalando...')
 	try:
-		os.system('pip3 install schedule')
+		os.system('sudo pip3 install schedule')
 	except:
 		print('Erro ao instalar schedule')
 
