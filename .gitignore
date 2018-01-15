@@ -103,3 +103,6 @@ token
 .tmp/*.txt
 .tmp*.log
 *.db
+
+
+sqlalchemy_test
