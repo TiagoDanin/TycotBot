@@ -11,3 +11,11 @@ def addto_db(table):
     Get a table and add to db
     '''
     session.add(table)
+
+
+def addsto_db(*tables):
+    '''
+    Get a list of tables and add to db
+    '''
+    for table in tables:
+        session.add(table)
