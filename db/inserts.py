@@ -19,8 +19,3 @@ def addsto_db(*tables):
     '''
     for table in tables:
         session.add(table)
-
-
-def update_db():
-    session.commit()
-    session.close()
