@@ -19,3 +19,8 @@ class Group(Base):
     group_id = Column(String)
     users = relationship("User", secondary=groups_user_association)
     max_warns = Column(Integer)
+
+    def __init__(self, group_name='', group_id='', max_warns=0):
+        self.group_name = group_name
+        self.group_id = group_id
+        self.max_warns = max_warns
