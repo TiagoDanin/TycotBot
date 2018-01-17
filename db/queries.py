@@ -15,6 +15,12 @@ def make_query(table, query):
 
 
 def get_total_warns(username='', user_id=''):
+    '''
+    Get total warns from a spefic user. You can choose which parameter to use, for filter 
+    the user.
+    username -- Name of the user
+    user_id -- id of the user
+    '''
     if username:
         return session.query(User.total_warns).filter_by(user_name=username).first()
     else:
