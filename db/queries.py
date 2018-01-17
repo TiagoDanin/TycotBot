@@ -5,7 +5,7 @@ session = Session()
 
 def make_query(table, query):
     '''
-    Make a query to the database
+    Generic method to query the database
     table -- table to query
     query -- should be like this example:
         User.name == 'kleber'
