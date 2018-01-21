@@ -6,7 +6,6 @@ class UserCmd(object):
         self.metadata = metadata
         super().__init__()
 
-
     def info(self):
         if self.metadata['chat_type'] == 'private':
             self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
