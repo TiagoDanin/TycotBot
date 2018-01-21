@@ -17,6 +17,7 @@ def handle(msg):
     main = control(msg, bot)
     inst_command_user = command_user(msg=msg, bot=bot)
     inst_command_admin = command_admin(msg=msg, bot=bot)
+    print(msg)
 
     if msg.get('data'):
         msgDataSplit = msg['data'].split()
@@ -81,7 +82,7 @@ def handle(msg):
         elif msg.get('new_chat_member'):
             others['new_chat_member']()
 
-        if admin_commands.get(ctext):
+        if admin_commands.get(msg['text'].replace('/', '')):
             if ctext.startswith('/deflink'):
                 admin_commands[ctext](msg['text'])
             elif ctext.startswith('/defregras'):
@@ -91,15 +92,15 @@ def handle(msg):
             else:
                 admin_commands[ctext]()
 
-        elif user_command.get(ctext):
+        elif user_command.get(msg['text'].replace('/', '')):
                 user_command[ctext]()
 
 
 if __name__ == '__main__':
     MessageLoop(bot, handle).run_as_thread()
-    schedule.every().monday.at('07:00').do(msgDia)
-    schedule.every().wednesday.at('07:00').do(msgDia)
-    schedule.every().friday.at('07:00').do(msgDia)
+    # schedule.every().monday.at('07:00').do(msgDia)
+    # schedule.every().wednesday.at('07:00').do(msgDia)
+    # schedule.every().friday.at('07:00').do(msgDia)
 while True:
-    schedule.run_pending()
+    # schedule.run_pending()
     sleep(100)
