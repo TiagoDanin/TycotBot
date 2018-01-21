@@ -16,7 +16,7 @@ def make_query(table, query):
 
 def get_total_warns(username='', user_id=''):
     '''
-    Get total warns from a spefic user. You can choose which parameter to use, for filter 
+    Get total warns from a spefic user. You can choose which parameter to use, for filter
     the user.
     username -- Name of the user
     user_id -- id of the user
