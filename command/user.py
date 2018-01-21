@@ -4,7 +4,7 @@ class UserCmd(object):
     def __init__(self, bot, metadata):
         self.bot = bot
         self.metadata = metadata
-        supe().__init__()
+        super().__init__()
 
 
     def info(self):
