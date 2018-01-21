@@ -44,7 +44,7 @@ def log(func):
                     args[0].user, args[0].UserID, args[0].msg['text'].split(' ')[0])
                 )
                 print("@{} Usou o Bot - Dados salvos!".format(args[0].user))
-	return wrapper
+    return wrapper
 
 
 def admin(func):
