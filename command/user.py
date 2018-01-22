@@ -1,5 +1,8 @@
 
 class UserCmd(object):
+    '''
+    This class represents the user commands
+    '''
 
     def __init__(self, bot, metadata):
         self.bot = bot
