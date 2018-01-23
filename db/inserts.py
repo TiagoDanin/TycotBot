@@ -1,4 +1,6 @@
 from models.base import Base, engine, Session
+from queries import make_query
+from models.group import Group
 
 
 Base.metadata.create_all(engine)
@@ -19,6 +21,11 @@ def addsto_db(*tables):
     '''
     for table in tables:
         session.add(table)
+
+
+def welcome_msg(group_id, text):
+    group = make_query(Group, Group.group_id == group_id)
+    group.welcome_msg = text
 
 
 def commit_and_close():
