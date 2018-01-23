@@ -24,6 +24,10 @@ def addsto_db(tables):
 
 
 def _current_session_obj(o):
+    '''
+    SqlAlchemy stuff
+    see: https://stackoverflow.com/questions/24291933/sqlalchemy-object-already-attached-to-session
+    '''
     curr_session = session.object_session(o)
     curr_session.add(o)
     curr_session.commit()
