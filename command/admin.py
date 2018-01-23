@@ -8,3 +8,6 @@ class AdminCmd(object):
         self.bot = bot
         self.metadata = metadata
         super().__init__()
+
+    def defwelcome(self, msg):
+        pass
