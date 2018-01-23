@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Table
+from sqlalchemy import Column, String, Integer, ForeignKey, Table, Text
 from sqlalchemy.orm import relationship
 
 from .base import Base
@@ -19,6 +19,7 @@ class Group(Base):
     group_id = Column(String)
     users = relationship("User", secondary=groups_user_association)
     max_warns = Column(Integer)
+    welcome_msg = Column(Text)
 
     def __init__(self, group_name='', group_id='', max_warns=0):
         self.group_name = group_name
