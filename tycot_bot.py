@@ -1,4 +1,5 @@
 from command.user import UserCmd
+from command.admin import AdminCmd
 
 
 class TycotBot(object):
@@ -13,3 +14,4 @@ class TycotBot(object):
                          'msg_id': msg['message_id']}
 
         self.usercmd = UserCmd(self.bot, self.metadata)
+        self.admcmd = AdminCmd(self.bot, self.metadata)
