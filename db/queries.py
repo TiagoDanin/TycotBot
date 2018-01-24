@@ -1,6 +1,6 @@
-from models.base import Session
-from models.user import User
-from models.group import Group
+from .models.base import Session
+from .models.user import User
+from .models.group import Group
 
 session = Session()
 

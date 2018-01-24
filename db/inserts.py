@@ -1,6 +1,6 @@
-from models.base import Base, engine, Session
-from queries import make_query
-from models.group import Group
+from .models.base import Base, engine, Session
+from .queries import make_query
+from .models.group import Group
 
 
 Base.metadata.create_all(engine)
@@ -34,7 +34,7 @@ def _current_session_obj(o):
     curr_session.close()
 
 
-def welcome_msg(group_id, text):
+def set_welcome_msg(group_id, text):
     group = make_query(Group, Group.group_id == group_id)[0]
     group.welcome_msg = text
     _current_session_obj(group)
