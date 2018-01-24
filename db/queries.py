@@ -1,5 +1,6 @@
-from models.base import Session
-from models.user import User
+from .models.base import Session
+from .models.user import User
+from .models.group import Group
 
 session = Session()
 
@@ -25,3 +26,7 @@ def get_total_warns(username='', user_id=''):
         return session.query(User.total_warns).filter_by(user_name=username).first()
     else:
         return session.query(User.total_warns).filter_by(user_id=user_id).first()
+
+
+def get_welcome_msg(group_id):
+    return session.query(Group.welcome_msg).filter_by(group_id=group_id).first()
