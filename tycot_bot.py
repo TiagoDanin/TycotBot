@@ -1,5 +1,5 @@
-from command.user import UserCmd
-from command.admin import AdminCmd
+from user_cmd import UserCmd
+from admin_cmd import AdminCmd
 
 
 class TycotBot(object):
