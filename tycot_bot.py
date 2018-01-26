@@ -26,7 +26,7 @@ class TycotBot(object):
         welcome = welcome.replace('$user', user_first_name)
         self.bot.sendMessage(self.metadata['chat_id'], welcome, parse_mode='Markdown')
 
-    def goodbye(self, msg):
+    def left_member(self, msg):
         user_first_name = msg['left_chat_member']['first_name']
         self.bot.sendMessage(self.metadata['chat_id'], "Tchau, {}".format(user_first_name))
         self.bot.sendVideo(self.metadata['chat_id'],
