@@ -1,3 +1,5 @@
+from db.queries import get_rules
+
 
 class UserCmd(object):
     '''
@@ -10,6 +12,9 @@ class UserCmd(object):
         super().__init__()
 
     def info(self):
+        '''
+        Show information about the user or group
+        '''
         self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='html',
                              text=('<b>ID INFO</b>\n'
                                    '==================\n'
@@ -29,5 +34,13 @@ Segue minha lista de comandos:
     /leave -> sair do grupo
     /verifybook -> verifica o ultimo livro do packtpub
                           '''
-        self.bot.sendMessage(self.metadata['user_id'], (help_msg),
+        self.bot.sendMessage(self.metadata['user_id'], help_msg,
                              reply_to_message_id=self.metadata['msg_id'])
+
+    def rules(self):
+        rules = get_rules(self.metadata['chat_id'])
+        if rules:
+            self.bot.sendMessage(self.metadata['chat_id'], rules, parse_mode='Markdown',
+                                 reply_to_message_id=self.metadata['msg_id'])
+        else:
+            self.bot.sendMessage(self.metadata['chat_id'], '*Sem regras!*', parse_mode='Markdown')
