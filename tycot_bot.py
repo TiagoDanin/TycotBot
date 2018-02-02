@@ -48,3 +48,20 @@ class TycotBot(object):
         self.bot.sendMessage(self.metadata['chat_id'], "Tchau, {}".format(user_first_name))
         self.bot.sendVideo(self.metadata['chat_id'],
                            'https://media.giphy.com/media/l3V0gpbjA6fD7ym9W/giphy.mp4')
+
+    @property
+    def admins(self):
+        return self.bot.getChatAdministrators(self.metadata['chat_id'])
+
+    @property
+    def admins_ids(self):
+        return [str(admin['user']['id']) for admin in self.admins]
+
+    def is_adm(self):
+        if self.metadata['user_id'] in self.admins_ids:
+            print(self.metadata['user_id'])
+            return True
+        self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='HTML',
+                             text='<b>Apenas administradores podem usar este comando.</b>',
+                             reply_to_message_id=self.metadata['msg_id'])
+        return False
