@@ -3,9 +3,19 @@ from .queries import make_query
 from .models.group import Group
 
 
-Base.metadata.create_all(engine)
-
 session = Session()
+
+
+def commit():
+    session.commit()
+
+
+def close():
+    session.close()
+
+
+def create_tables():
+    Base.metadata.create_all(engine)
 
 
 def addto_db(table):
@@ -34,12 +44,24 @@ def _current_session_obj(o):
     curr_session.close()
 
 
+def update_value(table, group_id, field, value):
+    session.query(Group).filter(Group.group_id == group_id).update({field: value})
+
+
 def set_welcome_msg(group_id, text):
+    update_value(Group, group_id, 'welcome_msg', text)
+    commit_and_close()
+    # group = make_query(Group, Group.group_id == group_id)[0]
+    # group.welcome_msg = text
+    # _current_session_obj(group)
+
+
+def set_rules(group_id, text):
     group = make_query(Group, Group.group_id == group_id)[0]
-    group.welcome_msg = text
+    group.rules = text
     _current_session_obj(group)
 
 
 def commit_and_close():
-    session.commit()
-    session.close()
+    commit()
+    close()
