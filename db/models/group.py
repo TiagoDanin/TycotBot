@@ -23,6 +23,7 @@ class Group(Base):
     max_warns = Column(Integer)
     welcome_msg = Column(Text)
     rules = Column(Text)
+    link = Column(Text)
 
     def __init__(self, group_name='', group_id=None, max_warns=0):
         self.group_name = group_name
