@@ -30,3 +30,7 @@ def get_total_warns(username='', user_id=''):
 
 def get_welcome_msg(group_id):
     return session.query(Group.welcome_msg).filter_by(group_id=group_id).first()[0]
+
+
+def get_rules(group_id):
+    return session.query(Group.rules).filter_by(group_id=group_id).first()[0]
