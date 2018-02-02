@@ -1,4 +1,4 @@
-from db.queries import get_rules
+from db.queries import get_rules, get_link
 
 
 class UserCmd(object):
@@ -44,3 +44,13 @@ Segue minha lista de comandos:
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
             self.bot.sendMessage(self.metadata['chat_id'], '*Sem regras!*', parse_mode='Markdown')
+
+    def link(self):
+        # if self.metadata['chat_type'] == 'supergroup':
+            # link = self.bot.exportChatInviteLink(self.metadata['chat_id'])
+            # self.bot.sendMessage(self.metadata['chat_id'], link,
+                                 # reply_to_message_id=self.metadata['msg_id'])
+        # else:
+        link = get_link(self.metadata['chat_id'])
+        self.bot.sendMessage(self.metadata['chat_id'], link,
+                             reply_to_message_id=self.metadata['msg_id'])
