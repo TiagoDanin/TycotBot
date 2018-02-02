@@ -9,21 +9,24 @@ bot = telepot.Bot(sys.argv[1])
 def handle(msg):
     tycot = TycotBot(bot, msg) 
     print(msg)
-    if 'new_chat_member' in msg:
-        tycot.new_member(msg)
-    elif 'left_chat_member' in msg:
-        tycot.goodbye(msg)
+    tycot.events(msg)
 
     if msg['text'] == '/info':
         tycot.usercmd.info()
     elif msg['text'] == '/link':
-        print(bot.exportChatInviteLink(msg['chat']['id']))
+        bot.sendMessage(msg['from']['id'], bot.exportChatInviteLink(msg['chat']['id']))
     elif msg['text'] == '/ajuda':
         tycot.usercmd.help()
     elif msg['text'].startswith('/defwelcome'):
         tycot.admcmd.defwelcome(msg['text'])
     elif msg['text'] == '/start':
         tycot.admcmd.start()
+    elif msg['text'].startswith('/defregras'):
+        print(msg['text'])
+        tycot.admcmd.defrules(msg['text'])
+    elif msg['text'] == '/regras':
+        print(msg['text'])
+        tycot.usercmd.rules()
 
 
 if __name__ == '__main__':
