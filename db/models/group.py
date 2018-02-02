@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, Table, Text
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from .base import Base
 
@@ -16,10 +16,13 @@ class Group(Base):
 
     id = Column(Integer, primary_key=True)
     group_name = Column(String)
-    group_id = Column(Integer)
-    users = relationship("User", secondary=groups_user_association)
-    max_warns = Column(String)
+    group_id = Column(String)
+    users = relationship("User", secondary=groups_user_association,
+                         backref=backref('groups',
+                                         uselist=True, cascade='delete,all'))
+    max_warns = Column(Integer)
     welcome_msg = Column(Text)
+    rules = Column(Text)
 
     def __init__(self, group_name='', group_id=None, max_warns=0):
         self.group_name = group_name
