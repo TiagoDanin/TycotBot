@@ -2,6 +2,7 @@
 ----
 [![PyPI](https://img.shields.io/badge/python-3.6-blue.svg)]()
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+[![Open Source Helpers](https://www.codetriage.com/programeiros/tycotbot/badges/users.svg)](https://www.codetriage.com/programeiros/tycotbot)
 
 
 ### Introdução
