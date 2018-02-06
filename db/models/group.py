@@ -16,10 +16,12 @@ class Group(Base):
 
     id = Column(Integer, primary_key=True)
     group_name = Column(String)
-    group_id = Column(String)
+    group_id = Column(String, unique=True)
+    # users = relationship("User", secondary=groups_user_association,
+                         # backref=backref('groups',
+                                         # uselist=True, cascade='delete,all'))
     users = relationship("User", secondary=groups_user_association,
-                         backref=backref('groups',
-                                         uselist=True, cascade='delete,all'))
+                         backref=backref('groups'))
     max_warns = Column(Integer)
     welcome_msg = Column(Text)
     rules = Column(Text)
