@@ -43,6 +43,8 @@ $ python3 test_bot.py SEU:TOKEN
     - `/defregras`  define as regras do grupo
     - `/deflink`    define o link do grupo, se o grupo for um supergrupo o link é definido automaticamente
     - `/ban`        bani o usúario do grupo
+    - `/warn`       adverte o usúario
+    - `/unwarn`     desadverte o usúario
 
 ### Contribuidores
 [![Danrley](https://s.gravatar.com/avatar/6854dd9f3f8fc5f363ef5d5f9db1da8c?s=80)](https://github.com/dansenpir)  
