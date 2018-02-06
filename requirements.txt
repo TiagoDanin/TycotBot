@@ -3,7 +3,6 @@ async-timeout==2.0.0
 chardet==3.0.4
 idna==2.6
 multidict==3.3.2
-Pillow==5.0.0
 psycopg2==2.7.3.2
 SQLAlchemy==1.2.0
 telepot==12.5
