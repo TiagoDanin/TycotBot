@@ -1,8 +1,6 @@
-from .models.base import Session
+from .models.base import session
 from .models.user import User
 from .models.group import Group
-
-session = Session()
 
 
 def make_query(table, query):
@@ -15,17 +13,21 @@ def make_query(table, query):
     return session.query(table).filter(query).all()
 
 
+def get_user(user_id):
+    return make_query(User, User.user_id == user_id)[0]
+
+
 def filter_by_group_id(table, value):
     return session.query(table).filter_by(group_id=value).first()
 
 
-def get_total_warns(username='', user_id=''):
+def get_max_warns(group_id):
     '''
     Get total warns from a spefic user. You can choose which parameter to use, for filter
     the user.
-    user_id -- id of the user
+    group_id -- id of the user
     '''
-    return session.query(User.total_warns).filter_by(user_id=user_id).first()[0]
+    return filter_by_group_id(Group.max_warns, group_id)[0]
 
 
 def get_welcome_msg(group_id):
