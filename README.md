@@ -31,12 +31,12 @@ $ python3 test_bot.py SEU:TOKEN
 ```
 
 ### Lista de Comandos do Bot
-- Usuário
+- Usuário:
     - `/info`   mostra informações do grupo e usuário
     - `/ajuda`  mostra a ajuda
     - `/regras` mostra as regras do grupo
     - `/link`   mostra o link do grupo
-- Admin
+- Admin:
     - `/start`      adiciona o grupo ao banco de dados do tycot, só pode ser usado uma vez
     - `/defwelcome` define a mensagem de boas-vindas do grupo
     - `/defmaxwarn` define a quantidade maxima de advertencias que um usúario pode levar
@@ -53,6 +53,6 @@ $ python3 test_bot.py SEU:TOKEN
 [![Carlos](https://s.gravatar.com/avatar/b29f6fb12e1e61f1d2a46e1ec2834696?s=80)](https://github.com/chcdc)  
 [Carlos](https://github.com/chcdc)  
 
-[![LaBatata101](https://avatars2.githubusercontent.com/u/20308796?s=460&v=4)](https://github.com/LaBatata101)
+[![LaBatata101](https://avatars2.githubusercontent.com/u/20308796?s=460&v=4)](https://github.com/LaBatata101)                    
 [LaBatata101](https://github.com/LaBatata101)
 
