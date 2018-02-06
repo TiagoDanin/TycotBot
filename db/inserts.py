@@ -1,9 +1,7 @@
-from .models.base import Base, engine, Session
+from .models.base import Base, engine, session
 from .queries import make_query
 from .models.group import Group
-
-
-session = Session()
+from .models.user import User
 
 
 def commit():
@@ -18,7 +16,7 @@ def close():
 
 def create_tables():
     '''
-    see: 
+    see:
       http://docs.sqlalchemy.org/en/latest/core/metadata.html#creating-and-dropping-database-tables
     '''
     Base.metadata.create_all(engine)
@@ -37,6 +35,13 @@ def addsto_db(tables):
     '''
     for table in tables:
         session.add(table)
+
+
+def add_user(first_name, user_id):
+    user = User(first_name, user_id)
+    addto_db(user)
+    commit_and_close()
+    return user
 
 
 def _current_session_obj(o):
@@ -72,6 +77,25 @@ def set_rules(group_id, text):
 
 def set_chat_link(group_id, link):
     update_value(group_id, 'link', link)
+    commit_and_close()
+
+
+def set_max_warn(group_id, value):
+    update_value(group_id, 'max_warns', value)
+    commit_and_close()
+
+
+def warn_user(group_id, user_id):
+    for user in make_query(Group, Group.group_id == group_id)[0].users:
+        if user.user_id == user_id:
+            user.total_warns += 1
+    commit_and_close()
+
+
+def unwarn_user(group_id, user_id):
+    for user in make_query(Group, Group.group_id == group_id)[0].users:
+        if user.user_id == user_id:
+            user.total_warns -= 1
     commit_and_close()
 
 
