@@ -6,29 +6,38 @@ from tycot_bot import TycotBot
 
 bot = telepot.Bot(sys.argv[1])
 
+
 def handle(msg):
-    tycot = TycotBot(bot, msg) 
+    tycot = TycotBot(bot, msg)
     tycot.events(msg)  # check if new users entered the chat or left
     print(msg)
 
     user_cmd = {'/info': tycot.usercmd.info,
                 '/ajuda': tycot.usercmd.help,
-                '/regras': tycot.usercmd.rules}
+                '/regras': tycot.usercmd.rules,
+                '/link': tycot.usercmd.link}
 
     adm_cmd = {'/defwelcome': tycot.admcmd.defwelcome,
+               '/defmaxwarn': tycot.admcmd.maxwarn,
+               '/warn': tycot.admcmd.warn,
+               '/unwarn': tycot.admcmd.unwarn,
                '/defregras': tycot.admcmd.defrules,
                '/ban': tycot.admcmd.ban,
-               '/deflink': tycot.admcmd.deflink}
+               '/deflink': tycot.admcmd.deflink,
+               '/start': tycot.admcmd.start}
 
+# TODO: melhorar issu
     if tycot.is_adm():
         if msg['text'] in user_cmd:
             user_cmd[msg['text']]()
         else:
             text_cmd = msg['text'].split(' ')[0]
-            adm_cmd[text_cmd](msg if msg['text'] == '/ban' else msg['text'])  # gambiarra??
+            if text_cmd == '/start':
+                adm_cmd[text_cmd]()
+            else:
+                adm_cmd[text_cmd](msg if text_cmd == '/ban' else msg['text'])  # gambiarra??
     else:
         user_cmd[msg['text']]()
-
 
     # if msg['text'] == '/info':
         # tycot.usercmd.info()
