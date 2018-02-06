@@ -15,11 +15,17 @@ class TycotBot(object):
                          'username': msg['from']['username'],
                          'first_name': msg['from']['first_name'],
                          'msg_id': msg['message_id']}
+
         if self.metadata['chat_type'] != 'private':
             self.metadata['chat_name'] = msg['chat']['title']
 
+        if 'reply_to_message' in msg:
+            self.metadata['rpl_first_name'] = msg['reply_to_message']['from']['first_name']
+            self.metadata['rpl_user_id'] = msg['reply_to_message']['from']['id']
+            self.metadata['rpl_msg_id'] = msg['reply_to_message']['message_id']
+
         self.usercmd = UserCmd(self.bot, self.metadata)
-        self.admcmd = AdminCmd(self.bot, self.metadata)
+        self.admcmd = AdminCmd(self.bot, self.metadata, self)
 
     def events(self, msg):
         '''
@@ -32,17 +38,23 @@ class TycotBot(object):
 
     def new_member(self, msg):
         '''
-        Send a mensage when a new member joined the group
+        Sends a mensage when a new member joins the group.
+        Uses a default message if none is set.
         '''
         user_first_name = msg['new_chat_member']['first_name']
+        chat_name = msg['chat']['title']
 
         welcome = get_welcome_msg(self.metadata['chat_id'])
-        welcome = welcome.replace('$user', user_first_name)
-        self.bot.sendMessage(self.metadata['chat_id'], welcome, parse_mode='Markdown')
+        if welcome:
+            welcome = welcome.replace('$user', user_first_name)
+            self.bot.sendMessage(self.metadata['chat_id'], welcome, parse_mode='Markdown')
+        else:
+            self.bot.sendMessage(self.metadata['chat_id'],
+                                 f'Seja Bem Vindo(a) ao {chat_name}, {user_first_name}')
 
     def left_member(self, msg):
         '''
-        Send a mensage when a new member left the group
+        Sends a mensage when a member leaves the group
         '''
         user_first_name = msg['left_chat_member']['first_name']
         self.bot.sendMessage(self.metadata['chat_id'], "Tchau, {}".format(user_first_name))
