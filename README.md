@@ -12,7 +12,9 @@ Crie um fork do repositório e ajude nas issues propostas.
 
 Use o plugin [EditorCofig](http://editorconfig.org/#download) no seu editor de texto preferido para fazer as modificações.
 
+
 ### Dependencias
+
 ```sh
 $ pip3 install -r requirements.txt
 ```
@@ -25,7 +27,7 @@ $ sudo pacman -S postgresql
 $ sudo apt-get install postgresql
 ```
 
-### Executado bot
+### Executando o bot
 ```sh
 $ python3 test_bot.py SEU:TOKEN
 ```
@@ -46,12 +48,14 @@ $ python3 test_bot.py SEU:TOKEN
     - `/warn`       adverte o usúario
     - `/unwarn`     desadverte o usúario
 
+
 ### Contribuidores
 [![Danrley](https://s.gravatar.com/avatar/6854dd9f3f8fc5f363ef5d5f9db1da8c?s=80)](https://github.com/dansenpir)  
 [Danrley](https://github.com/dansenpir)  
 
 [![Carlos](https://s.gravatar.com/avatar/b29f6fb12e1e61f1d2a46e1ec2834696?s=80)](https://github.com/chcdc)  
 [Carlos](https://github.com/chcdc)  
+
 
 [![LaBatata101](https://avatars2.githubusercontent.com/u/20308796?s=460&v=4)](https://github.com/LaBatata101)                    
 [LaBatata101](https://github.com/LaBatata101)
