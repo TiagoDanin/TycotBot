@@ -53,6 +53,6 @@ $ python3 test_bot.py SEU:TOKEN
 [![Carlos](https://s.gravatar.com/avatar/b29f6fb12e1e61f1d2a46e1ec2834696?s=80)](https://github.com/chcdc)  
 [Carlos](https://github.com/chcdc)  
 
-[![LaBatata101](https://avatars2.githubusercontent.com/u/20308796?s=460&v=4)](https://github.com/LaBatata101)
+[![LaBatata101](https://avatars2.githubusercontent.com/u/20308796?s=80&v=4)](https://github.com/LaBatata101)
 [LaBatata101](https://github.com/LaBatata101)
 
