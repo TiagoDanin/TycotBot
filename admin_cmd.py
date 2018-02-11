@@ -1,8 +1,7 @@
 from db.inserts import (set_welcome_msg, addto_db, commit_and_close, set_rules, set_chat_link,
                         warn_user, set_max_warn, unwarn_user, add_user)
-from db.queries import get_max_warns, get_user
+from db.queries import get_max_warns, get_user, chat_exist
 from db.models.group import Group
-from sqlalchemy.exc import IntegrityError
 
 
 class AdminCmd(object):
@@ -20,12 +19,12 @@ class AdminCmd(object):
         '''
         Register the chat into the database
         '''
-        try:
+        if not chat_exist(self.metadata['chat_id']):
             addto_db(Group(self.metadata['chat_name'], self.metadata['chat_id']))
             commit_and_close()
             self.bot.sendMessage(self.metadata['chat_id'], 'Seu grupo foi cadastrado com sucesso!',
                                  reply_to_message_id=self.metadata['msg_id'])
-        except IntegrityError:
+        else:
             self.bot.sendMessage(self.metadata['chat_id'], '*Seu grupo já está cadastrado!*',
                                  parse_mode='Markdown',
                                  reply_to_message_id=self.metadata['msg_id'])
