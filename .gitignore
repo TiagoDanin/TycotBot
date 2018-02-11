@@ -103,3 +103,9 @@ token
 .tmp/*.txt
 .tmp*.log
 *.db
+
+
+sqlalchemy_test
+tycot
+db/test_db.py
+TODO
