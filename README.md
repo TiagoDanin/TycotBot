@@ -27,7 +27,7 @@ $ sudo apt-get install postgresql
 
 ### Executando o bot
 ```sh
-$ python3 test_bot.py SEU:TOKEN
+$ python3 bot.py SEU:TOKEN
 ```
 
 ### Lista de Comandos do Bot
