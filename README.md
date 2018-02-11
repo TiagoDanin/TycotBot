@@ -25,18 +25,18 @@ $ sudo pacman -S postgresql
 $ sudo apt-get install postgresql
 ```
 
-### Executado bot
+### Executando o bot
 ```sh
 $ python3 test_bot.py SEU:TOKEN
 ```
 
 ### Lista de Comandos do Bot
-- Usuário
+- Usuário:
     - `/info`   mostra informações do grupo e usuário
     - `/ajuda`  mostra a ajuda
     - `/regras` mostra as regras do grupo
     - `/link`   mostra o link do grupo
-- Admin
+- Admin:
     - `/start`      adiciona o grupo ao banco de dados do tycot, só pode ser usado uma vez
     - `/defwelcome` define a mensagem de boas-vindas do grupo
     - `/defmaxwarn` define a quantidade maxima de advertencias que um usúario pode levar
@@ -45,6 +45,7 @@ $ python3 test_bot.py SEU:TOKEN
     - `/ban`        bani o usúario do grupo
     - `/warn`       adverte o usúario
     - `/unwarn`     desadverte o usúario
+
 
 ### Contribuidores
 [![Danrley](https://s.gravatar.com/avatar/6854dd9f3f8fc5f363ef5d5f9db1da8c?s=80)](https://github.com/dansenpir)  
