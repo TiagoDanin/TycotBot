@@ -40,3 +40,9 @@ def get_rules(group_id):
 
 def get_link(group_id):
     return filter_by_group_id(Group.link, group_id)[0]
+
+
+def chat_exist(group_id):
+    if make_query(Group, Group.group_id == group_id):
+        return True
+    return False
