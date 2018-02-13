@@ -18,11 +18,11 @@ class UserCmd(object):
         if self.metadata['chat_type'] != 'private':
             msg = ('<b>ID INFO</b>\n'
                    '==================\n'
-                   '<code>ID DO GRUPO</code> : {chat_id}\n'
-                   '<code>TOTAL DE ADVERTENCIAS</code> : {max_warn}\n'
-                   '<code>NOME</code> : {nome}\n'
-                   '<code>ID</code>   : {id}')
-            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='html',
+                   '`ID DO GRUPO` : {chat_id}\n'
+                   '`TOTAL DE ADVERTENCIAS` : {max_warn}\n'
+                   '`NOME` : {nome}\n'
+                   '`ID`   : {id}')
+            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
                                  text=msg.format(chat_id=self.metadata['chat_id'],
                                                  max_warn=get_max_warns(self.metadata['chat_id']),
                                                  nome=self.metadata['username'],
@@ -31,9 +31,9 @@ class UserCmd(object):
         else:
             msg = ('<b>ID INFO</b>\n'
                    '==================\n'
-                   '<code>NOME</code> : {nome}\n'
-                   '<code>ID</code>   : {id}') 
-            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='html',
+                   '`NOME` : {nome}\n'
+                   '`ID`   : {id}') 
+            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
                                  text=msg.format(nome=self.metadata['username'],
                                                  id=self.metadata['user_id']),
                                  reply_to_message_id=self.metadata['msg_id'])
