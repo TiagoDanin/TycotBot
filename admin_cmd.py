@@ -1,6 +1,7 @@
 from db.inserts import (set_welcome_msg, addto_db, commit_and_close, set_rules, set_chat_link,
                         warn_user, set_max_warn, unwarn_user, add_user)
 from db.queries import get_max_warns, get_user, chat_exist
+from telepot.exception import TelegramError
 from db.models.group import Group
 
 
@@ -47,10 +48,15 @@ class AdminCmd(object):
         user_first_name = self.metadata['rpl_first_name']
         user_id = self.metadata['rpl_user_id']
         msg_id = self.metadata['rpl_msg_id']
-        self.bot.kickChatMember(self.metadata['chat_id'], user_id)
-        self.bot.sendMessage(self.metadata['chat_id'],
-                             f'<b>{user_first_name}</b> foi retirado do grupo.', parse_mode='HTML',
-                             reply_to_message_id=msg_id)
+        try:
+            self.bot.kickChatMember(self.metadata['chat_id'], user_id)
+            self.bot.sendMessage(self.metadata['chat_id'],
+                                 f'*{user_first_name}* foi retirado do grupo.',
+                                 parse_mode='Markdown', reply_to_message_id=msg_id)
+        except TelegramError:
+            self.bot.sendMessage(self.metadata['chat_id'],
+                                 f'*Não posso banir administradores!*', parse_mode='Markdown',
+                                 reply_to_message_id=msg_id)
 
     def deflink(self, msg):
         ''' See: https://core.telegram.org/bots/api#exportchatinvitelink'''
