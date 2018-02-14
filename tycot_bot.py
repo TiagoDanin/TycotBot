@@ -21,7 +21,7 @@ class TycotBot(object):
 
         if 'reply_to_message' in msg:
             self.metadata['rpl_first_name'] = msg['reply_to_message']['from']['first_name']
-            self.metadata['rpl_user_id'] = msg['reply_to_message']['from']['id']
+            self.metadata['rpl_user_id'] = str(msg['reply_to_message']['from']['id'])
             self.metadata['rpl_msg_id'] = msg['reply_to_message']['message_id']
 
         self.usercmd = UserCmd(self.bot, self.metadata)
