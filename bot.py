@@ -32,10 +32,14 @@ def handle(msg):
         user_cmd[text_cmd]()
     elif text_cmd in adm_cmd:
         if tycot.is_adm():
-            if text_cmd == '/start':
+            if text_cmd == '/start' or text_cmd == '/warn':
                 adm_cmd[text_cmd]()
             else:
-                adm_cmd[text_cmd](msg if text_cmd == '/ban' else msg['text'])  # gambiarra??
+                # solução temporaria
+                if text_cmd == '/ban':
+                    adm_cmd[text_cmd](msg)
+                else:
+                    adm_cmd[text_cmd](msg['text'])
         else:
             user_cmd[msg['text']]()
 
@@ -43,4 +47,4 @@ def handle(msg):
 if __name__ == '__main__':
     MessageLoop(bot, handle).run_as_thread()
 while True:
-    sleep(100)
+    sleep(50)
