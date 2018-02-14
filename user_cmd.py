@@ -16,7 +16,7 @@ class UserCmd(object):
         Show information about the user or group
         '''
         if self.metadata['chat_type'] != 'private':
-            msg = ('<b>ID INFO</b>\n'
+            msg = ('*ID INFO*\n'
                    '==================\n'
                    '`ID DO GRUPO` : {chat_id}\n'
                    '`TOTAL DE ADVERTENCIAS` : {max_warn}\n'
@@ -29,10 +29,10 @@ class UserCmd(object):
                                                  id=self.metadata['user_id']),
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
-            msg = ('<b>ID INFO</b>\n'
+            msg = ('*ID INFO*\n'
                    '==================\n'
                    '`NOME` : {nome}\n'
-                   '`ID`   : {id}') 
+                   '`ID`   : {id}')
             self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
                                  text=msg.format(nome=self.metadata['username'],
                                                  id=self.metadata['user_id']),
@@ -56,7 +56,9 @@ Segue minha lista de comandos:
             self.bot.sendMessage(self.metadata['chat_id'], rules, parse_mode='Markdown',
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
-            self.bot.sendMessage(self.metadata['chat_id'], '*Sem regras!*', parse_mode='Markdown')
+            self.bot.sendMessage(self.metadata['chat_id'], '*Sem regras definidas no grupo!*',
+                                 parse_mode='Markdown',
+                                 reply_to_message_id=self.metadata['msg_id'])
 
     def link(self):
         if self.metadata['chat_type'] == 'supergroup':
