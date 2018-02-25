@@ -71,7 +71,6 @@ class TycotBot(object):
 
     def is_adm(self):
         if self.metadata['user_id'] in self.admins_ids:
-            print(self.metadata['user_id'])
             return True
         self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
                              text='*Apenas administradores podem usar este comando.*',
