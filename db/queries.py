@@ -19,7 +19,7 @@ def get_user(user_id):
     Return a User object. 
     user_id -- id of user
     '''
-    return make_query(User, User.user_id == user_id)[0]
+    return make_query(User, User.user_id == user_id)
 
 
 def filter_by_group_id(column, group_id):
@@ -62,4 +62,16 @@ def group_exist(group_id):
     group_id -- id of the group'''
     if make_query(Group, Group.group_id == group_id):
         return True
+    return False
+
+
+def user_exist(group_id, user_id):
+    '''
+    Verify if the user is in the database.
+    user_id -- id of the user
+    group_id -- id of the group
+    '''
+    for user in make_query(Group, Group.group_id == group_id)[0].users:
+        if user.user_id == user_id:
+            return True
     return False
