@@ -14,6 +14,20 @@ def close():
     session.close()
 
 
+def commit_and_close():
+    commit()
+    close()
+
+
+def remove_from_db(value):
+    '''
+    Remove some value from database
+    value -- value to delete
+    '''
+    session.delete(value)
+    commit_and_close()
+
+
 def create_tables():
     '''
     see:
@@ -37,14 +51,16 @@ def addsto_db(tables):
         session.add(table)
 
 
-def add_user(first_name, user_id):
+def add_user(first_name, user_id, group_id):
     '''Add a user to the db
     first_name -- name of the user
     user_id -- id of the user
+    group_id -- group id for the user to be added
     Return a user object
     '''
     user = User(first_name, user_id)
-    addto_db(user)
+    group = make_query(Group, Group.group_id == group_id)[0]
+    group.users = [user]
     commit_and_close()
     return user
 
@@ -106,8 +122,3 @@ def unwarn_user(group_id, user_id):
         if user.user_id == user_id:
             user.total_warns -= 1
     commit_and_close()
-
-
-def commit_and_close():
-    commit()
-    close()
