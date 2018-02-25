@@ -32,7 +32,7 @@ def handle(msg):
         user_cmd[text_cmd]()
     elif text_cmd in adm_cmd:
         if tycot.is_adm():
-            if text_cmd == '/start' or text_cmd == '/warn':
+            if text_cmd == '/start' or text_cmd == '/warn' or text_cmd == '/unwarn':
                 adm_cmd[text_cmd]()
             else:
                 # solução temporaria
