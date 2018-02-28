@@ -21,7 +21,7 @@ class TycotBot(object):
 
         if 'reply_to_message' in msg:
             self.metadata['rpl_first_name'] = msg['reply_to_message']['from']['first_name']
-            self.metadata['rpl_user_id'] = msg['reply_to_message']['from']['id']
+            self.metadata['rpl_user_id'] = str(msg['reply_to_message']['from']['id'])
             self.metadata['rpl_msg_id'] = msg['reply_to_message']['message_id']
 
         self.usercmd = UserCmd(self.bot, self.metadata)
@@ -71,9 +71,8 @@ class TycotBot(object):
 
     def is_adm(self):
         if self.metadata['user_id'] in self.admins_ids:
-            print(self.metadata['user_id'])
             return True
-        self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='HTML',
-                             text='<b>Apenas administradores podem usar este comando.</b>',
+        self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
+                             text='*Apenas administradores podem usar este comando.*',
                              reply_to_message_id=self.metadata['msg_id'])
         return False
