@@ -16,59 +16,55 @@ class UserCmd(object):
         '''
         Show information about the user or group
         '''
+        output = ('<b>INFO</b>\n'
+                  '==================\n')
+        chat_id = self.metadata['chat_id']
         if self.metadata['chat_type'] != 'private':
-            msg = ('*INFO*\n'
-                   '==================\n'
-                   '`ID DO GRUPO` : {chat_id}\n'
-                   '`TOTAL DE ADVERTENCIAS` : {max_warn}\n'
-                   '`SUAS ADVERTENCIAS` : {user_adv}\n'
-                   '`NOME` : {nome}\n'
-                   '`ID`   : {id}')
-            # get user warns
+            # Get user warns
             user = get_user(self.metadata['user_id'])
             if user:
                 user_adv = user[0].total_warns
             else:
                 user_adv = 0
 
-            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
-                                 text=msg.format(chat_id=self.metadata['chat_id'],
-                                                 max_warn=get_max_warns(self.metadata['chat_id']),
-                                                 user_adv=user_adv,
-                                                 nome=self.metadata['username'],
-                                                 id=self.metadata['user_id']),
-                                 reply_to_message_id=self.metadata['msg_id'])
-        else:
-            msg = ('*ID INFO*\n'
-                   '==================\n'
-                   '`NOME` : {nome}\n'
-                   '`ID`   : {id}')
-            self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
-                                 text=msg.format(nome=self.metadata['username'],
-                                                 id=self.metadata['user_id']),
-                                 reply_to_message_id=self.metadata['msg_id'])
+            max_warn = get_max_warns(self.metadata['chat_id'])
+
+            output += (f'<code>ID DO GRUPO</code> : {chat_id}\n'
+                       f'<code>TOTAL DE ADVERTENCIAS</code> : {max_warn}\n'
+                       f'<code>SUAS ADVERTENCIAS</code> : {user_adv}\n')
+
+        nome = self.metadata['username']
+        id = self.metadata['user_id']
+        output += (f'<code>NOME</code> : {nome}\n'
+                   f'<code>ID</code>   : {id}')
+
+        self.bot.sendMessage(
+            chat_id=chat_id,
+            parse_mode='HTML',
+            text=output,
+            reply_to_message_id=self.metadata['msg_id']
+        )
 
     def help(self):
         help_msg = '''
 Olá, sou o Tycot!
-Segue minha lista de comandos:
-    /ajuda -> mostra essa mensagem
-    /info -> informações do grupo
-    /link -> link do grupo
-    /regras -> regras do grupo
-    /verifybook -> verifica o ultimo livro do packtpub
-                          '''
+Segue abaixo minha lista de comandos:
+/ajuda -> Mostra essa mensagem com lista de comandos.
+/info -> Informações do grupo.
+/link -> Link do grupo.
+/regras -> Regras do grupo.
+                   '''
         self.bot.sendMessage(self.metadata['user_id'], help_msg)
 
     @group.only
     def rules(self):
         rules = get_rules(self.metadata['chat_id'])
         if rules:
-            self.bot.sendMessage(self.metadata['chat_id'], rules, parse_mode='Markdown',
+            self.bot.sendMessage(self.metadata['chat_id'], rules, parse_mode='HTML',
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
-            self.bot.sendMessage(self.metadata['chat_id'], '*Sem regras definidas no grupo!*',
-                                 parse_mode='Markdown',
+            self.bot.sendMessage(self.metadata['chat_id'], '<b>Sem regras definidas no grupo!</b>',
+                                 parse_mode='HTML',
                                  reply_to_message_id=self.metadata['msg_id'])
 
     @group.only

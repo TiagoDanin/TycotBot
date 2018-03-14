@@ -98,14 +98,15 @@ ENV/
 # mkdocs documentation
 /site
 
+# database
+sqlalchemy_test
+db/test_db.py
+postgres/
+
 # bot
 token
 .tmp/*.txt
 .tmp*.log
 *.db
-
-
-sqlalchemy_test
 tycot
-db/test_db.py
 TODO
