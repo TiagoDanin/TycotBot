@@ -16,7 +16,7 @@ class UserCmd(object):
         '''
         Show information about the user or group
         '''
-        output = ('<b>INFO</b>\n
+        output = ('<b>INFO</b>\n'
                   '==================\n')
         chat_id = self.metadata['chat_id']
         if self.metadata['chat_type'] != 'private':
@@ -29,14 +29,14 @@ class UserCmd(object):
 
             max_warn = get_max_warns(self.metadata['chat_id'])
 
-            output += (f'<pre>ID DO GRUPO</pre> : {chat_id}\n'
-                       f'<pre>TOTAL DE ADVERTENCIAS</pre> : {max_warn}\n'
-                       f'<pre>SUAS ADVERTENCIAS</pre> : {user_adv}\n')
+            output += (f'<code>ID DO GRUPO</code> : {chat_id}\n'
+                       f'<code>TOTAL DE ADVERTENCIAS</code> : {max_warn}\n'
+                       f'<code>SUAS ADVERTENCIAS</code> : {user_adv}\n')
 
         nome = self.metadata['username']
         id = self.metadata['user_id']
-        output += (f'<pre>NOME</pre> : {nome}\n'
-                   f'<pre>ID</pre>   : {id}')
+        output += (f'<code>NOME</code> : {nome}\n'
+                   f'<code>ID</code>   : {id}')
 
         self.bot.sendMessage(
             chat_id=chat_id,

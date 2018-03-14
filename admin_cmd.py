@@ -28,8 +28,8 @@ class AdminCmd(object):
             self.bot.sendMessage(self.metadata['chat_id'], 'Seu grupo foi cadastrado com sucesso!',
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
-            self.bot.sendMessage(self.metadata['chat_id'], '*Seu grupo já está cadastrado!*',
-                                 parse_mode='Markdown',
+            self.bot.sendMessage(self.metadata['chat_id'], '<b>Seu grupo já está cadastrado!</b>',
+                                 parse_mode='HTML',
                                  reply_to_message_id=self.metadata['msg_id'])
 
     @group.only
@@ -59,11 +59,11 @@ class AdminCmd(object):
         try:
             self.bot.kickChatMember(self.metadata['chat_id'], user_id)
             self.bot.sendMessage(self.metadata['chat_id'],
-                                 f'*{user_first_name}* foi retirado do grupo.',
-                                 parse_mode='Markdown', reply_to_message_id=msg_id)
+                                 f'<b>{user_first_name}</b> foi retirado do grupo.',
+                                 parse_mode='HTML', reply_to_message_id=msg_id)
         except TelegramError:
             self.bot.sendMessage(self.metadata['chat_id'],
-                                 f'*Não posso banir administradores!*', parse_mode='Markdown',
+                                 f'<b>Não posso banir administradores!</b>', parse_mode='HTML',
                                  reply_to_message_id=msg_id)
 
     @group.only
@@ -92,8 +92,8 @@ class AdminCmd(object):
         user_name = user.user_name
         if user.total_warns == group_max_warn:
             self.bot.sendMessage(self.metadata['chat_id'],
-                                 f'*{user_name}* expulso por atingir o limite de advertencias.',
-                                 parse_mode='Markdown',
+                                 f'<b>{user_name}</b> expulso por atingir o limite de advertencias.',
+                                 parse_mode='HTML',
                                  reply_to_message_id=self.metadata['rpl_msg_id'])
             remove_from_db(user)
             self.bot.kickChatMember(self.metadata['chat_id'], self.metadata['rpl_user_id'])
@@ -105,8 +105,8 @@ class AdminCmd(object):
         msg_id = self.metadata['rpl_msg_id']
         if user_id in self.tycot.admins_ids:
             self.bot.sendMessage(self.metadata['chat_id'],
-                                 (f'*{first_name}* é um dos administradores.\n'
-                                 'Não posso advertir administradores.'), parse_mode='Markdown',
+                                 (f'<b>{first_name}</b> é um dos administradores.\n'
+                                 'Não posso advertir administradores.'), parse_mode='HTML',
                                  reply_to_message_id=self.metadata['msg_id'])
         else:
             if not user_exist(self.metadata['chat_id'], user_id):
@@ -116,9 +116,9 @@ class AdminCmd(object):
             group_max_warns = get_max_warns(self.metadata['chat_id'])
             warn_user(self.metadata['chat_id'], user_id)
             self.bot.sendMessage(self.metadata['chat_id'],
-                                 (f'{first_name} *foi advertido'
-                                  f' ({user.total_warns}/{group_max_warns})*.'),
-                                 parse_mode='Markdown',
+                                 (f'{first_name} <b>foi advertido'
+                                  f' ({user.total_warns}/{group_max_warns})</b>.'),
+                                 parse_mode='HTML',
                                  # reply_markup=self.keyboard_warn(user_id),
                                  reply_to_message_id=msg_id)
             self._kick_user(user, group_max_warns)
@@ -136,11 +136,11 @@ class AdminCmd(object):
             user = get_user(user_id)[0]  # get the user from db
             if user.total_warns == 0:
                 self.bot.sendMessage(self.metadata['chat_id'],
-                                     f'*{first_name}* não possui advertencias.',
-                                     parse_mode='Markdown',
+                                     f'<b>{first_name}</b> não possui advertencias.',
+                                     parse_mode='HTML',
                                      reply_to_message_id=msg_id)
             else:
                 unwarn_user(self.metadata['chat_id'], user_id)
-                self.bot.sendMessage(self.metadata['chat_id'], f'*{first_name} foi perdoado.*',
-                                     parse_mode='Markdown',
+                self.bot.sendMessage(self.metadata['chat_id'], f'<b>{first_name} foi perdoado.</b>',
+                                     parse_mode='HTML',
                                      reply_to_message_id=msg_id)
