@@ -47,7 +47,7 @@ class TycotBot(object):
         welcome = get_welcome_msg(self.metadata['chat_id'])
         if welcome:
             welcome = welcome.replace('$user', user_first_name)
-            self.bot.sendMessage(self.metadata['chat_id'], welcome, parse_mode='Markdown')
+            self.bot.sendMessage(self.metadata['chat_id'], welcome, parse_mode='HTML')
         else:
             self.bot.sendMessage(self.metadata['chat_id'],
                                  f'Seja Bem Vindo(a) ao {chat_name}, {user_first_name}')
@@ -72,7 +72,7 @@ class TycotBot(object):
     def is_adm(self):
         if self.metadata['user_id'] in self.admins_ids:
             return True
-        self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='Markdown',
-                             text='*Apenas administradores podem usar este comando.*',
+        self.bot.sendMessage(chat_id=self.metadata['chat_id'], parse_mode='HTML',
+                             text='<b>Apenas administradores podem usar este comando.</b>',
                              reply_to_message_id=self.metadata['msg_id'])
         return False
