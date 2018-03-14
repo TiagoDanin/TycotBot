@@ -53,7 +53,6 @@ Segue abaixo minha lista de comandos:
 /info -> Informações do grupo.
 /link -> Link do grupo.
 /regras -> Regras do grupo.
-/verifybook -> Verifica o último livro do PacktPub.
                    '''
         self.bot.sendMessage(self.metadata['user_id'], help_msg)
 
