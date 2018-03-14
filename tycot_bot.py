@@ -76,3 +76,9 @@ class TycotBot(object):
                              text='<b>Apenas administradores podem usar este comando.</b>',
                              reply_to_message_id=self.metadata['msg_id'])
         return False
+
+    def is_private(self):
+        if self.metadata['chat_type'] == 'private':
+            return True
+        else:
+            return False

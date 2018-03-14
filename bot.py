@@ -28,7 +28,9 @@ def handle(msg):
 
 # TODO: melhorar issu
     text_cmd = msg['text'].split(' ')[0]
-    if text_cmd in user_cmd:
+    if text_cmd == '/start' and tycot.is_private():
+        tycot.usercmd.help()
+    elif text_cmd in user_cmd:
         user_cmd[text_cmd]()
     elif text_cmd in adm_cmd:
         if tycot.is_adm():
